@@ -1,0 +1,19 @@
+{
+  "name" : "reactor_vessel",
+  "inventory_x" : 8,
+  "inventory_y" : 84,
+  "input_slots" : [
+    {
+      "x" : 43,
+      "y" : 28,
+      "size" : 16
+    },
+    {
+      "x" : 64,
+      "y" : 28,
+      "size" : 16
+    }
+  ],
+  "output_slots" : [
+  ]
+}

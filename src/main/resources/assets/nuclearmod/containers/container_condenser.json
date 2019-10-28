@@ -1,0 +1,14 @@
+{
+  "name" : "condenser",
+  "inventory_x" : 8,
+  "inventory_y" : 84,
+  "input_slots" : [
+  ],
+  "output_slots" : [
+    {
+      "x" : 105,
+      "y" : 24,
+      "size" : 24
+    }
+  ]
+}

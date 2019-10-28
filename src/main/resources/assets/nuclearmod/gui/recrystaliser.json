@@ -1,0 +1,8 @@
+{
+  "machine" : "recrystaliser",
+  "background" : "nuclearmod:textures/gui/temp-recrystaliser.png",
+  "width" : 176,
+  "height" : 166,
+  "container" : "recrystaliser",
+  "elements" : []
+}

@@ -1,0 +1,24 @@
+{
+  "name" : "centrifuge",
+  "inventory_x" : 8,
+  "inventory_y" : 84,
+  "input_slots" : [
+    {
+      "x" : 45,
+      "y" : 31,
+      "size" : 24
+    }
+  ],
+  "output_slots" : [
+    {
+      "x" : 128,
+      "y" : 20,
+      "size" : 16
+    },
+    {
+      "x" : 128,
+      "y" : 43,
+      "size" : 16
+    }
+  ]
+}

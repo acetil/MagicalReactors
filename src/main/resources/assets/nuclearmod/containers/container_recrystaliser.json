@@ -1,0 +1,19 @@
+{
+  "name" : "recrystaliser",
+  "inventory_x" : 8,
+  "inventory_y" : 84,
+  "input_slots" : [
+    {
+      "x" : 50,
+      "y" : 24,
+      "size" : 24
+    }
+  ],
+  "output_slots" : [
+    {
+      "x" : 116,
+      "y" : 24,
+      "size" : 24
+    }
+  ]
+}

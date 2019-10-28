@@ -1,0 +1,34 @@
+{
+  "name" : "reactor_tier1",
+  "type" : "reactor",
+  "key" : {
+    "#" : "nuclearmod:rune_basic",
+    "X" : "nuclearmod:rune_stabilisation",
+    "O" : "nuclearmod:rune_transfer",
+    "x" : "nuclearmod:rune_locus",
+    "0" : "nuclearmod:reactor_controller",
+    "*" : "nuclearmod:reactor_block_new"
+  },
+  "multiblock" : [
+    [
+         "XOX",
+        "XXOXX",
+       "XX#O#XX",
+       "OOOxOOO",
+       "XX#O#XX",
+        "XXOXX",
+         "XOX"
+    ],
+    [ "   ###   ",
+      "  #   #  ",
+      " #     # ",
+      "#  # #  #",
+      "#       #",
+      "#  # #  #",
+      " #     # ",
+      "  #   #  ",
+      "   #0#   "],
+    ["# #", " * ", "# #"]
+  ],
+  "filled_air" : false
+}
