@@ -1,0 +1,7 @@
+# item
+item.nuclearmod.uranium_ingot.name=Uranium Ingot
+# block
+tile.nuclearmod.uranium_block.name=Block of Uranium
+# stuff
+tile.nuclearmod.reactor_block.name=Nuclear Reactor
+itemGroup.nuclearmod=Nuclear Mod

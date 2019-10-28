@@ -1,0 +1,22 @@
+{
+  "machine" : "centrifuge",
+  "background" : "nuclearmod:textures/gui/temp-centrifuge.png",
+  "width" : 176,
+  "height" : 166,
+  "container" : "centrifuge",
+  "elements" : [{
+    "type" : "progress",
+    "name" : "progress_bar",
+    "texture_name" : "nuclearmod:textures/gui/temp-centrifuge.png",
+    "x" : 84,
+    "y" : 32,
+    "width" : 24,
+    "height" : 17,
+    "textures" : [
+      {
+        "textureX": 176,
+        "textureY": 0
+      }
+    ]
+  }]
+}

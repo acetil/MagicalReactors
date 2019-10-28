@@ -1,0 +1,14 @@
+{
+  "name" : "fermenter",
+  "inventory_x" : 8,
+  "inventory_y" : 84,
+  "input_slots" : [
+    {
+      "x" : 41,
+      "y" : 24,
+      "size" : 24
+    }
+  ],
+  "output_slots" : [
+  ]
+}

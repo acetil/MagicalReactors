@@ -1,0 +1,23 @@
+{
+  "machine" : "centrifuge",
+  "power_required" : 10000,
+  "ingredients" : [
+    {
+      "type" : "item",
+      "item" : "nuclearmod:uranium_ingot",
+      "count" : 1
+    }
+  ],
+  "output" : [
+    {
+      "type" : "item",
+      "item" : "nuclearmod:temp2",
+      "count" : 1
+    },
+    {
+      "type" : "item",
+      "item" : "minecraft:iron_ingot",
+      "count" : 1
+    }
+  ]
+}
