@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.lib.LibMisc;
 import org.apache.logging.log4j.Level;
 
@@ -21,7 +21,7 @@ public class ModItems {
         event.getRegistry().register(URANIUM_INGOT);
         event.getRegistry().register(ITEM_TEMP2);
         ReactorItems.registerItems(event);
-        NuclearMod.logger.log(Level.INFO, "Item registry complete");
+        MagicalReactors.LOGGER.log(Level.INFO, "Item registry complete");
     }
     @SideOnly(Side.CLIENT)
     public static void initModels () {
@@ -29,7 +29,7 @@ public class ModItems {
         ITEM_TEMP2.initModel();
         ReactorItems.initModels();
 
-        NuclearMod.logger.log(Level.INFO, "Item models initialised");
+        MagicalReactors.LOGGER.log(Level.INFO, "Item models initialised");
     }
 
 }

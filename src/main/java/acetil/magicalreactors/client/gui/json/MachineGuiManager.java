@@ -3,7 +3,7 @@ package acetil.magicalreactors.client.gui.json;
 import com.google.gson.Gson;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.utils.FileUtils;
 import org.apache.logging.log4j.Level;
 
@@ -38,7 +38,7 @@ public class MachineGuiManager {
     }
     @SideOnly(Side.CLIENT)
     public static void readGuiJson (String location) {
-        NuclearMod.logger.log(Level.INFO, "Started loading of guis at " + location);
+        MagicalReactors.LOGGER.log(Level.INFO, "Started loading of guis at " + location);
         List<MachineGuiJson> guiJsonList = new ArrayList<>();
         Gson gson = new Gson();
         URI uri = FileUtils.getURI(location);
@@ -46,7 +46,7 @@ public class MachineGuiManager {
             try {
                 guiJsonList.add(gson.fromJson(Files.newBufferedReader(p), MachineGuiJson.class));
             } catch (IOException e) {
-                NuclearMod.logger.log(Level.ERROR, "Failed to load gui file " + p.getFileName());
+                MagicalReactors.LOGGER.log(Level.ERROR, "Failed to load gui file " + p.getFileName());
             }
         }
         FileUtils.closeFileSystem(uri);
@@ -55,6 +55,6 @@ public class MachineGuiManager {
                 guiMap.put(guiIdMap.get(json.machine), json);
             }
         }
-        NuclearMod.logger.log(Level.INFO, "Loaded " + guiJsonList.size() + " guis");
+        MagicalReactors.LOGGER.log(Level.INFO, "Loaded " + guiJsonList.size() + " guis");
     }
 }

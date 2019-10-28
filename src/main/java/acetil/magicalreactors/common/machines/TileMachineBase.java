@@ -14,7 +14,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import nuclear.common.capabilities.machines.*;
 import acetil.magicalreactors.common.capabilities.machines.machinehandlers.IMachineCapability;
 import acetil.magicalreactors.common.network.MessageMachineUpdate;
@@ -69,8 +69,8 @@ public class TileMachineBase extends TileEntity implements ITickable {
         try {
             machineHandler = machineRegistry.factory.call();
         } catch (Exception e) {
-            NuclearMod.logger.error("Machine \"" + machine + "\" handler factory caused an exception !");
-            NuclearMod.logger.error(e);
+            MagicalReactors.LOGGER.error("Machine \"" + machine + "\" handler factory caused an exception !");
+            MagicalReactors.LOGGER.error(e);
         }
         guiId = machineRegistry.guiId;
     }

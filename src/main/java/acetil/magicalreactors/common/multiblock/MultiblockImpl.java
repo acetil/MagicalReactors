@@ -5,7 +5,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import org.apache.logging.log4j.Level;
 
 import java.util.*;
@@ -30,7 +30,7 @@ public class MultiblockImpl implements IMultiblock{
         handleParity();
         validateOffsetPoint();
         if (!complete) {
-            NuclearMod.logger.log(Level.WARN, "Multiblock \"" + name + "\" has failed loading!");
+            MagicalReactors.LOGGER.log(Level.WARN, "Multiblock \"" + name + "\" has failed loading!");
         } else {
             getBlockOffsets();
         }
@@ -53,12 +53,12 @@ public class MultiblockImpl implements IMultiblock{
         keyMap.put(' ', getPredicate("minecraft:air"));
         for (String key : stringMap.keySet()) {
             if (key.length() > 1) {
-                NuclearMod.logger.log(Level.WARN, "Multiblock \"" + name + "\" has an invalid key \"" + key + "\"!");
+                MagicalReactors.LOGGER.log(Level.WARN, "Multiblock \"" + name + "\" has an invalid key \"" + key + "\"!");
                 complete = false;
                 continue;
             }
             if (keyMap.containsKey(key.charAt(0))) {
-                NuclearMod.logger.log(Level.WARN, "Multiblock \"" + name + "\" has duplicate key '" + key + "'");
+                MagicalReactors.LOGGER.log(Level.WARN, "Multiblock \"" + name + "\" has duplicate key '" + key + "'");
                 complete = false;
                 continue;
             }
@@ -100,7 +100,7 @@ public class MultiblockImpl implements IMultiblock{
                 for (int i = 0; i < slice.length(); i++) {
                     if (slice.charAt(i) == OFFSET_CHAR) {
                         if (hasOffsetPoint) {
-                            NuclearMod.logger.log(Level.WARN, "Multiblock \"" + name + "\" has too many offset points!");
+                            MagicalReactors.LOGGER.log(Level.WARN, "Multiblock \"" + name + "\" has too many offset points!");
                             complete = false;
                             break;
                         }
@@ -110,7 +110,7 @@ public class MultiblockImpl implements IMultiblock{
             }
         }
         if (!hasOffsetPoint) {
-            NuclearMod.logger.log(Level.WARN, "Multiblock \"" + name + "\" has no offset point!");
+            MagicalReactors.LOGGER.log(Level.WARN, "Multiblock \"" + name + "\" has no offset point!");
             complete = false;
         }
     }

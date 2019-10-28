@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import org.apache.logging.log4j.Level;
 
 import java.util.stream.Collectors;
@@ -27,7 +27,7 @@ public class MachineRecipeInput {
                 isFluid = false;
                 itemInput = Item.REGISTRY.getObject(new ResourceLocation(m.item));
                 if (itemInput == null) {
-                    NuclearMod.logger.log(Level.WARN, "Unknown item '" + m.item + "'!");
+                    MagicalReactors.LOGGER.log(Level.WARN, "Unknown item '" + m.item + "'!");
                 }
             }
             break;

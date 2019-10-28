@@ -1,6 +1,6 @@
 package acetil.magicalreactors.common.utils;
 
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import org.apache.logging.log4j.Level;
 
 import java.io.IOException;
@@ -25,23 +25,23 @@ public class FileUtils {
                         .filter(Files::isRegularFile)
                         .collect(Collectors.toList());
         } catch (IOException e) {
-            NuclearMod.logger.log(Level.ERROR,"Error walking path " + uri.getPath());
-            NuclearMod.logger.log(Level.ERROR, e);
+            MagicalReactors.LOGGER.log(Level.ERROR,"Error walking path " + uri.getPath());
+            MagicalReactors.LOGGER.log(Level.ERROR, e);
         }
         return paths;
     }
     public static URI getURI (String path) {
         URL url = FileUtils.class.getClassLoader().getResource(path);
         if (url == null) {
-            NuclearMod.logger.log(Level.ERROR, "Invalid path: " + path);
+            MagicalReactors.LOGGER.log(Level.ERROR, "Invalid path: " + path);
             return null;
         }
         URI uri = null;
         try {
             uri = url.toURI();
         } catch (URISyntaxException e) {
-            NuclearMod.logger.log(Level.ERROR, "Invalid path: " + path);
-            NuclearMod.logger.log(Level.ERROR, e);
+            MagicalReactors.LOGGER.log(Level.ERROR, "Invalid path: " + path);
+            MagicalReactors.LOGGER.log(Level.ERROR, e);
         }
         return uri;
     }
@@ -52,8 +52,8 @@ public class FileUtils {
         try {
             FileSystems.getFileSystem(uri).close();
         } catch (IOException e) {
-            NuclearMod.logger.log(Level.ERROR, "Error closing file system at path " + uri.getPath());
-            NuclearMod.logger.log(Level.ERROR, e);
+            MagicalReactors.LOGGER.log(Level.ERROR, "Error closing file system at path " + uri.getPath());
+            MagicalReactors.LOGGER.log(Level.ERROR, e);
         }
     }
 }

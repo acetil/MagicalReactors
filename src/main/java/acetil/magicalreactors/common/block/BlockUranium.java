@@ -5,7 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.core.NuclearCreativeTab;
 import acetil.magicalreactors.common.lib.LibMisc;
 import org.apache.logging.log4j.Level;
@@ -21,6 +21,6 @@ public class BlockUranium extends Block {
     }
     public void initModel () {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-        NuclearMod.logger.log(Level.INFO, "Block model init");
+        MagicalReactors.LOGGER.log(Level.INFO, "Block model init");
     }
 }

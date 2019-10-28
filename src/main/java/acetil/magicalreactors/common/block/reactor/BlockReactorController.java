@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.core.NuclearCreativeTab;
 import acetil.magicalreactors.common.lib.LibMisc;
 import acetil.magicalreactors.common.tiles.TileReactorController;
@@ -54,7 +54,7 @@ public class BlockReactorController extends Block implements ITileEntityProvider
         if (te instanceof TileReactorController) {
             //((TileReactorController)te).setPosition(worldIn, pos);
         } else {
-            NuclearMod.logger.log(Level.WARN,
+            MagicalReactors.LOGGER.log(Level.WARN,
                     String.format("Null reactor controller TE added at (%d, %d, %d)", pos.getX(), pos.getY(), pos.getZ()));
         }
     }
@@ -63,7 +63,7 @@ public class BlockReactorController extends Block implements ITileEntityProvider
                                   EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof TileReactorController) {
-            NuclearMod.logger.log(Level.INFO, "Checking multiblock");
+            MagicalReactors.LOGGER.log(Level.INFO, "Checking multiblock");
             ((TileReactorController) te).updateMultiblock();
             return true;
         }

@@ -2,7 +2,7 @@ package acetil.magicalreactors.common.core;
 
 import acetil.magicalreactors.common.items.reactor.ReactorItems;
 import net.minecraftforge.common.config.Configuration;
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 
 public class Config {
     private static final String CATEGORY_GENERAL = "general";
@@ -12,7 +12,7 @@ public class Config {
             config.load();
             initGeneralConfigs(config);
         } catch (Exception e) {
-            NuclearMod.logger.error("Error loading general config file: " + e);
+            MagicalReactors.LOGGER.error("Error loading general config file: " + e);
         } finally {
             if (config.hasChanged()) {
                 config.save();
@@ -27,7 +27,7 @@ public class Config {
             config.load();
             ReactorItems.readConfigs(config);
         } catch (Exception e) {
-            NuclearMod.logger.error("Error loading reactor items config file: " + e);
+            MagicalReactors.LOGGER.error("Error loading reactor items config file: " + e);
         } finally {
             if (config.hasChanged()) {
                 config.save();

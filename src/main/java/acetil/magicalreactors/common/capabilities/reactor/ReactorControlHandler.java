@@ -1,6 +1,6 @@
 package acetil.magicalreactors.common.capabilities.reactor;
 
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.block.reactor.IReactorBuildingBlock;
 import acetil.magicalreactors.common.capabilities.CapabilityReactorInterface;
 import acetil.magicalreactors.common.capabilities.CapabilityReactorNew;
@@ -120,12 +120,12 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
             validator.validate();
             if (validator.isValid()) {
                 currentValidator = validator;
-                NuclearMod.logger.log(Level.INFO, "Multilock is valid!");
+                MagicalReactors.LOGGER.log(Level.INFO, "Multilock is valid!");
                 isValid = true;
                 break;
             } else {
                 for (BlockPos pos : validator.getInvalidBlocks()) {
-                    NuclearMod.logger.log(Level.INFO, String.format("Invalid block: (%d, %d, %d)", pos.getX(), pos.getY(), pos.getZ()));
+                    MagicalReactors.LOGGER.log(Level.INFO, String.format("Invalid block: (%d, %d, %d)", pos.getX(), pos.getY(), pos.getZ()));
                 }
             }
         }
@@ -135,7 +135,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
                                          .get();
         }
         if (!isValid) {
-            NuclearMod.logger.log(Level.INFO, "Multiblock is invalid!");
+            MagicalReactors.LOGGER.log(Level.INFO, "Multiblock is invalid!");
         }
         for (BlockPos pos : currentValidator.getPositionsOfType(IReactorBuildingBlock.class)) {
             ((IReactorBuildingBlock) world.getBlockState(pos)

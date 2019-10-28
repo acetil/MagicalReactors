@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import acetil.magicalreactors.client.gui.json.MachineGuiManager;
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.items.ModItems;
 
@@ -23,7 +23,7 @@ public class ClientProxy implements IProxy {
 
     @Override
     public void init(FMLInitializationEvent event) {
-        NetworkRegistry.INSTANCE.registerGuiHandler(NuclearMod.instance, new GuiProxy());
+        NetworkRegistry.INSTANCE.registerGuiHandler(MagicalReactors.instance, new GuiProxy());
         MachineGuiManager.readGuiJson("assets/nuclearmod/gui");
     }
 

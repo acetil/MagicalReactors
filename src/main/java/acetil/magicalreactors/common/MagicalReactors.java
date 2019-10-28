@@ -1,48 +1,61 @@
 package acetil.magicalreactors.common;
 
+import acetil.magicalreactors.client.core.proxy.ClientProxy;
 import acetil.magicalreactors.common.capabilities.*;
 import acetil.magicalreactors.common.containers.json.MachineContainerManager;
 import acetil.magicalreactors.common.core.Config;
 import acetil.magicalreactors.common.core.proxy.IProxy;
+import acetil.magicalreactors.common.core.proxy.ServerProxy;
 import acetil.magicalreactors.common.lib.LibMisc;
 import acetil.magicalreactors.common.multiblock.MultiblockLoader;
 import acetil.magicalreactors.common.network.PacketHandler;
 import acetil.magicalreactors.common.recipes.MachineRecipeManager;
 import acetil.magicalreactors.common.worldgen.OreGen;
-import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import nuclear.common.capabilities.*;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
 
-@Mod(modid = NuclearMod.MODID, name = NuclearMod.MODNAME, version=NuclearMod.VERSION, useMetadata = true)
-public class NuclearMod {
+@Mod("magicalreactors")
+public class MagicalReactors {
     public static final String MODID = LibMisc.MODID;
     public static final String MODNAME = LibMisc.MODNAME;
     public static final String VERSION = LibMisc.VERSION;
 
-    @Mod.Instance(MODID)
-    public static NuclearMod instance;
-
-    @SidedProxy(serverSide = "nuclear.common.core.proxy.ServerProxy", clientSide = "nuclear.client.core.proxy.ClientProxy")
-    public static IProxy proxy;
+    public static IProxy proxy = DistExecutor.runForDist(()-> ClientProxy::new, ()-> ServerProxy::new);
 
 
-    public static Logger logger;
+    public static final Logger LOGGER = LogManager.getLogger();
 
-    public Configuration configGeneral;
-    public Configuration configReactor;
+    public MagicalReactors () {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
+    }
+    private void setup (final FMLCommonSetupEvent event) {
 
+    }
+    private void clientSetup (final FMLClientSetupEvent event) {
+
+    }
+    private void enqueueIMC (final InterModEnqueueEvent event) {
+
+    }
+    private void processIMC (final InterModProcessEvent event) {
+
+    }/*
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        logger = event.getModLog();
         proxy.preInit(event);
         initCapabilities();
         File directory = event.getModConfigurationDirectory();
@@ -78,5 +91,5 @@ public class NuclearMod {
         CapabilityMachine.register();
         CapabilityReactorNew.register();
         CapabilityReactorController.register();
-    }
+    }*/
 }

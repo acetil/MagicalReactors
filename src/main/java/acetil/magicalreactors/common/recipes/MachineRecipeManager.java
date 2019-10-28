@@ -1,7 +1,7 @@
 package acetil.magicalreactors.common.recipes;
 
 import com.google.gson.Gson;
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.utils.FileUtils;
 
 import java.io.*;
@@ -31,7 +31,7 @@ public class MachineRecipeManager {
         return recipe;
     }
     public static void readRecipes (String location) {
-        NuclearMod.logger.info("Started loading of recipes at " + location);
+        MagicalReactors.LOGGER.info("Started loading of recipes at " + location);
         List<MachineRecipeJson> jsonRecipes = new LinkedList<>();
         URI uri = FileUtils.getURI(location);
         Gson gson = new Gson();
@@ -41,13 +41,13 @@ public class MachineRecipeManager {
             try {
                 jsonRecipes.add(gson.fromJson(Files.newBufferedReader(p), MachineRecipeJson.class));
             } catch (IOException e) {
-                NuclearMod.logger.error("Error reading recipe file " + p.getFileName());
+                MagicalReactors.LOGGER.error("Error reading recipe file " + p.getFileName());
             }
         }
         FileUtils.closeFileSystem(uri);
         machineRecipes.addAll(jsonRecipes.stream()
                 .map(MachineRecipe::new)
                 .collect(Collectors.toList()));
-        NuclearMod.logger.info("Completed loading of " + machineRecipes.size() + " recipes.");
+        MagicalReactors.LOGGER.info("Completed loading of " + machineRecipes.size() + " recipes.");
     }
 }

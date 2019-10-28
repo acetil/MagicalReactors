@@ -1,6 +1,6 @@
 package acetil.magicalreactors.common.capabilities.reactor;
 
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.reactor.IReactorFuel;
 import acetil.magicalreactors.common.reactor.ReactorFuelRegistry;
 import net.minecraft.item.ItemStack;
@@ -123,7 +123,7 @@ public class ReactorHandlerNew implements IReactorHandlerNew {
     }
     public void setFuels (IReactorFuel[] mats) {
         if (numSlots != mats.length) {
-            NuclearMod.logger.log(Level.INFO, "Incorrect number of materials for reactor. Should be " + numSlots
+            MagicalReactors.LOGGER.log(Level.INFO, "Incorrect number of materials for reactor. Should be " + numSlots
                     + ", encountered " + mats.length);
         } else {
             for (int i = 0; i < numSlots; i++) {

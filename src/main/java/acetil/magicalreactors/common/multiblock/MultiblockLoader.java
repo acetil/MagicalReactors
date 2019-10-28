@@ -2,7 +2,7 @@ package acetil.magicalreactors.common.multiblock;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.utils.FileUtils;
 import org.apache.logging.log4j.Level;
 
@@ -24,18 +24,18 @@ public class MultiblockLoader {
                 MultiblockRegistry.registerMultiblock(json.name, impl);
             }
         } catch (IOException e) {
-            NuclearMod.logger.log(Level.WARN,  "Failed to load \"" + p.getFileName().toString() + "\".");
+            MagicalReactors.LOGGER.log(Level.WARN,  "Failed to load \"" + p.getFileName().toString() + "\".");
         }
     }
     public static void loadMultiblocks (String location) {
-        NuclearMod.logger.log(Level.INFO, "Loading multiblocks.");
+        MagicalReactors.LOGGER.log(Level.INFO, "Loading multiblocks.");
         List<Path> paths = FileUtils.getPaths(FileUtils.getURI(location));
         for (Path p : paths) {
             if (p.getFileName().toString().endsWith(".json")) {
                 loadMultiblock(p);
             }
         }
-        NuclearMod.logger.log(Level.INFO, "Finished loading multiblocks");
+        MagicalReactors.LOGGER.log(Level.INFO, "Finished loading multiblocks");
     }
     public static class MultiblockJson {
         // Idea stolen from Vaskii's Patchouli mod

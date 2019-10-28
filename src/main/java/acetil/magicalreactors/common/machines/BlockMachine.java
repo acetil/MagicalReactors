@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.core.NuclearCreativeTab;
 import acetil.magicalreactors.common.lib.LibMisc;
 
@@ -52,7 +52,7 @@ public class BlockMachine extends Block implements ITileEntityProvider {
         if (!(te instanceof TileMachineBase)) {
             return false;
         }
-        player.openGui(NuclearMod.instance, ((TileMachineBase)te).getGuiId(), world, pos.getX(), pos.getY(), pos.getZ());
+        player.openGui(MagicalReactors.instance, ((TileMachineBase)te).getGuiId(), world, pos.getX(), pos.getY(), pos.getZ());
         return true;
     }
     public void onBlockAdded (World worldIn, BlockPos pos, IBlockState state) {

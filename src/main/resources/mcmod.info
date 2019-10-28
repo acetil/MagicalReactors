@@ -1,0 +1,16 @@
+[
+{
+  "modid": "magicalreactors",
+  "name": "Magical Reactors",
+  "description": "A mod which adds magical reactors that generate RF/FE",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["acetil"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

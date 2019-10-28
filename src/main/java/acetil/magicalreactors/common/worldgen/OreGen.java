@@ -10,7 +10,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.fml.common.IWorldGenerator;
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.block.ModBlocks;
 
 import java.util.Random;
@@ -37,7 +37,7 @@ public class OreGen implements IWorldGenerator {
     public void runGenerator (IBlockState blockToGen, int blockAmount, int chancesToSpawn, int minHeight, int maxHeight,
                               Predicate<IBlockState> blocksToReplace, World world, Random rand, int chunkX, int chunkZ) {
         if (minHeight < 0 || minHeight > 256 || maxHeight < 0 || maxHeight > 256) {
-            NuclearMod.logger.error("Invalid height arguments in worldgen for block " + blockToGen.getBlock().getUnlocalizedName());
+            MagicalReactors.LOGGER.error("Invalid height arguments in worldgen for block " + blockToGen.getBlock().getUnlocalizedName());
             return;
         }
         WorldGenMinable generator = new WorldGenMinable(blockToGen, blockAmount, blocksToReplace);

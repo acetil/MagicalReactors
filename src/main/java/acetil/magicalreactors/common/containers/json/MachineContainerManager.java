@@ -1,7 +1,7 @@
 package acetil.magicalreactors.common.containers.json;
 
 import com.google.gson.Gson;
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.utils.FileUtils;
 import org.apache.logging.log4j.Level;
 
@@ -31,10 +31,10 @@ public class MachineContainerManager {
                 MachineContainerJson containerJson = gson.fromJson(Files.newBufferedReader(p), MachineContainerJson.class);
                 registry.put(containerJson.name, containerJson);
             } catch (IOException e) {
-                NuclearMod.logger.log(Level.ERROR,"Error reading file " + p.getFileName());
+                MagicalReactors.LOGGER.log(Level.ERROR,"Error reading file " + p.getFileName());
             }
         }
         FileUtils.closeFileSystem(uri);
-        NuclearMod.logger.log(Level.INFO, "Finished loading " + registry.size() + " containers");
+        MagicalReactors.LOGGER.log(Level.INFO, "Finished loading " + registry.size() + " containers");
     }
 }

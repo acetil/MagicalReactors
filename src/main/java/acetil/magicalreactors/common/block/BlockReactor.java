@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import acetil.magicalreactors.common.NuclearMod;
+import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.core.NuclearCreativeTab;
 import acetil.magicalreactors.common.lib.LibGui;
 import acetil.magicalreactors.common.lib.LibMisc;
@@ -60,7 +60,7 @@ public class BlockReactor extends Block implements ITileEntityProvider {
             return false;
         }
         //System.out.println("Opening reactor gui");
-        player.openGui(NuclearMod.instance, GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
+        player.openGui(MagicalReactors.instance, GUI_ID, world, pos.getX(), pos.getY(), pos.getZ());
         return true; //TODO
     }
     public void onBlockAdded (World worldIn, BlockPos pos, IBlockState state) {
