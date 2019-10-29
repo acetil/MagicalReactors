@@ -1,7 +1,7 @@
 package acetil.magicalreactors.common.reactor;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public interface IReactorFuel {
     int getCurrentDurability ();
@@ -9,8 +9,8 @@ public interface IReactorFuel {
     int getEnergyProduced (int heat, int maxHeat);
     int getHeatProduced ();
     void damage ();
-    void readNBT (NBTTagCompound nbt);
+    void readNBT (CompoundNBT nbt);
     ItemStack getByproduct ();
     String getName ();
-    NBTTagCompound writeNBT ();
+    CompoundNBT writeNBT ();
 }
