@@ -7,19 +7,31 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.core.NuclearCreativeTab;
 import acetil.magicalreactors.common.lib.LibMisc;
+import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,8 +48,9 @@ public class BlockMachine extends Block {
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileMachineBase(machineName);
     }
-    public boolean onBlockActivated (World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-                                     EnumFacing side, float hitX, float hitY, float hitZ) {
+    @SuppressWarnings("deprecation")
+    public boolean onBlockActivated (BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
+                                     BlockRayTraceResult rayTrace) {
 
         if (world.isRemote) {
             return true;
@@ -46,7 +59,21 @@ public class BlockMachine extends Block {
         if (!(te instanceof TileMachineBase)) {
             return false;
         }
-        player.openGui(MagicalReactors.instance, ((TileMachineBase)te).getGuiId(), world, pos.getX(), pos.getY(), pos.getZ());
+        ITextComponent localisedName = this.getNameTextComponent();
+        NetworkHooks.openGui((ServerPlayerEntity) player, new INamedContainerProvider() {
+            @Override
+            public ITextComponent getDisplayName() {
+                return localisedName;
+            }
+
+            @Nullable
+            @Override
+            public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
+                ItemStackHandler itemHandler = ((TileMachineBase) te).itemHandler;
+
+                return null;
+            }
+        }, pos);
         return true;
     }
     /*public void onBlockAdded (World worldIn, BlockPos pos, BlockState state) {

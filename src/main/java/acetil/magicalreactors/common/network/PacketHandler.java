@@ -1,22 +1,33 @@
 package acetil.magicalreactors.common.network;
 
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.Side;
+import acetil.magicalreactors.common.MagicalReactors;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 import acetil.magicalreactors.common.lib.LibMisc;
 
-public class PacketHandler{
-    public static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(LibMisc.NETWORK_CHANNEL);
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+public class PacketHandler {
+    public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
+            new ResourceLocation(LibMisc.MODID, "main"), () -> LibMisc.PROTOCOL_VERSION,
+            LibMisc.PROTOCOL_VERSION::equals, LibMisc.PROTOCOL_VERSION::equals);
     private static int id = 0;
     public static void initMessages () {
-        initMessage(MessageMachineUpdate.MessageMachineUpdateHandler.class, MessageMachineUpdate.class, Side.CLIENT);
+        registerMessage(MessageMachineUpdate.class, MessageMachineUpdate::fromBytes);
+    }
+    public static <MSG extends IMessage> void registerMessage (Class<MSG> msg, Function<PacketBuffer, MSG> fromBytes) {
+        registerMessage(msg, MSG::toBytes, fromBytes, MSG::handle);
     }
 
-    public static <REQ extends IMessage, REPLY extends IMessage> void initMessage (Class<? extends IMessageHandler<REQ, REPLY>> handler,
-                                                                                   Class<REQ> message, Side side) {
-        INSTANCE.registerMessage(handler, message, id, side);
-        id++;
+    private static <MSG extends IMessage> void registerMessage(Class<MSG> msg, BiConsumer<MSG, PacketBuffer> encode, Function<PacketBuffer,MSG> decode, BiConsumer<MSG, Supplier<NetworkEvent.Context>> handle) {
+        INSTANCE.registerMessage(id++, msg, encode, decode, handle);
     }
+
+
+
 }

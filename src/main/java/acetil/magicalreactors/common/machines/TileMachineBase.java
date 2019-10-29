@@ -4,13 +4,11 @@ import acetil.magicalreactors.common.capabilities.CapabilityMachine;
 import acetil.magicalreactors.common.capabilities.EnergyHandler;
 import acetil.magicalreactors.common.capabilities.machines.MachineFluidHandler;
 import acetil.magicalreactors.common.lib.LibMisc;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -18,13 +16,12 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import acetil.magicalreactors.common.MagicalReactors;
 import net.minecraftforge.registries.ForgeRegistries;
-import nuclear.common.capabilities.machines.*;
 import acetil.magicalreactors.common.capabilities.machines.machinehandlers.IMachineCapability;
 import acetil.magicalreactors.common.network.MessageMachineUpdate;
 import acetil.magicalreactors.common.network.PacketHandler;
@@ -177,10 +174,9 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
     public String getMachine () {
         return machine;
     }
-    private void sendMessage () {
-        PacketHandler.INSTANCE.sendToAllTracking(new MessageMachineUpdate(pos.getX(), pos.getY(), pos.getZ(),
-                        machineHandler.isOn(), machineHandler.getEnergyPerTick(),
-                        machineHandler.energyToCompletion(), machineHandler.energyRequired()),
-                new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), TRACKING_RANGE));
+    private void sendMessage (){
+        PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)),
+                new MessageMachineUpdate(pos.getX(), pos.getY(), pos.getZ(), machineHandler.isOn(),
+                        machineHandler.getEnergyPerTick(), machineHandler.energyToCompletion(), machineHandler.energyRequired()));
     }
 }
