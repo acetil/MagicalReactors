@@ -25,7 +25,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 
 
-@Mod("magicalreactors")
+@Mod(LibMisc.MODID)
 public class MagicalReactors {
     public static final String MODID = LibMisc.MODID;
     public static final String MODNAME = LibMisc.MODNAME;

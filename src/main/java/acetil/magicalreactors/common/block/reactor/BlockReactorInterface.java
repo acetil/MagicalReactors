@@ -1,19 +1,21 @@
 package acetil.magicalreactors.common.block.reactor;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import java.util.function.Supplier;
 
-public class BlockReactorInterface extends BlockRuneBase implements ITileEntityProvider {
+public class BlockReactorInterface extends BlockRuneBase {
     private Supplier<TileEntity> tileEntitySupplier;
     public BlockReactorInterface(String registryName, Supplier<TileEntity> teSupplier) {
         super(registryName);
         tileEntitySupplier = teSupplier;
     }
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return tileEntitySupplier.get();
     }
 }

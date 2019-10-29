@@ -2,22 +2,19 @@ package acetil.magicalreactors.common.block.reactor;
 
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.core.NuclearCreativeTab;
 import acetil.magicalreactors.common.lib.LibMisc;
@@ -26,29 +23,21 @@ import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 
-public class BlockReactorController extends Block implements ITileEntityProvider {
+public class BlockReactorController extends Block{
 
     public BlockReactorController () {
-        super(Material.ROCK);
-        setUnlocalizedName(LibMisc.MODID + ".reactor_controller");
+        super(Properties.create(Material.ROCK));
         setRegistryName("reactor_controller");
-        setHardness(4F);
-        setCreativeTab(NuclearCreativeTab.INSTANCE);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void initModel () {
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0,
-                new ModelResourceLocation(getRegistryName(), "inventory"));
+        //setCreativeTab(NuclearCreativeTab.INSTANCE);
     }
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileReactorController();
     }
     @Override
-    public void onBlockPlacedBy (World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public void onBlockPlacedBy (World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
         // TODO: add other details
         TileEntity te =  worldIn.getTileEntity(pos);
         if (te instanceof TileReactorController) {
@@ -58,9 +47,10 @@ public class BlockReactorController extends Block implements ITileEntityProvider
                     String.format("Null reactor controller TE added at (%d, %d, %d)", pos.getX(), pos.getY(), pos.getZ()));
         }
     }
+    // TODO: figure out deprecation
     @Override
-    public boolean onBlockActivated (World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-                                  EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated (BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn,
+                                     Hand hand, BlockRayTraceResult hit) {
         TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof TileReactorController) {
             MagicalReactors.LOGGER.log(Level.INFO, "Checking multiblock");
