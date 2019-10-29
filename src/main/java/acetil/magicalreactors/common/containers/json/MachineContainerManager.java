@@ -1,14 +1,20 @@
 package acetil.magicalreactors.common.containers.json;
 
+import acetil.magicalreactors.common.containers.GuiContainerFactory;
 import com.google.gson.Gson;
 import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.utils.FileUtils;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraftforge.common.extensions.IForgeContainerType;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.apache.logging.log4j.Level;
 
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.rmi.registry.Registry;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,5 +42,13 @@ public class MachineContainerManager {
         }
         FileUtils.closeFileSystem(uri);
         MagicalReactors.LOGGER.log(Level.INFO, "Finished loading " + registry.size() + " containers");
+    }
+    @SubscribeEvent
+    public static void registerContainers (final RegistryEvent.Register<ContainerType<?>> event) {
+        MagicalReactors.LOGGER.info("Starting registering containers!");
+        readContainers("assets/magicalreactors/containers");
+        for (String key : registry.keySet()) {
+            event.getRegistry().register(IForgeContainerType.create(new GuiContainerFactory(registry.get(key))).setRegistryName(key));
+        }
     }
 }

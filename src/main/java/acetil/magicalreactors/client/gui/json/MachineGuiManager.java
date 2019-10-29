@@ -1,10 +1,19 @@
 package acetil.magicalreactors.client.gui.json;
 
+import acetil.magicalreactors.client.gui.ContainerGui;
+import acetil.magicalreactors.common.containers.GuiContainer;
+import acetil.magicalreactors.common.lib.LibMisc;
 import com.google.gson.Gson;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.utils.FileUtils;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.Level;
 
 import java.io.IOException;
@@ -19,7 +28,7 @@ import java.util.Map;
 public class MachineGuiManager {
     private static Map<String, Integer> guiIdMap = new HashMap<>();
     private static int currentId = 3;
-    private static Map<Integer, MachineGuiJson> guiMap = new HashMap<>();
+    private static Map<String, MachineGuiJson> guiMap = new HashMap<>();
     public static int addGuiId (String machine) {
         guiIdMap.put(machine, currentId);
         currentId++;
@@ -28,15 +37,11 @@ public class MachineGuiManager {
     public static int getGuiId (String machine) {
         return guiIdMap.get(machine);
     }
-    @SideOnly(Side.CLIENT)
-    public static MachineGuiJson getGui (int id) {
-        return guiMap.get(id);
-    }
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void addGui (String machine, MachineGuiJson gui) {
-        guiMap.put(guiIdMap.get(machine), gui);
+        guiMap.put(machine, gui);
     }
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void readGuiJson (String location) {
         MagicalReactors.LOGGER.log(Level.INFO, "Started loading of guis at " + location);
         List<MachineGuiJson> guiJsonList = new ArrayList<>();
@@ -51,10 +56,16 @@ public class MachineGuiManager {
         }
         FileUtils.closeFileSystem(uri);
         for (MachineGuiJson json : guiJsonList) {
-            if (guiIdMap.containsKey(json.machine)) {
-                guiMap.put(guiIdMap.get(json.machine), json);
-            }
+            guiMap.put(json.machine, json);
         }
         MagicalReactors.LOGGER.log(Level.INFO, "Loaded " + guiJsonList.size() + " guis");
+    }
+    public static void registerGuis () {
+        readGuiJson("assets/magicalreactors/gui");
+        for (String key : guiMap.keySet()) {
+            ScreenManager.registerFactory((ContainerType<GuiContainer>) ForgeRegistries.CONTAINERS
+                            .getValue(new ResourceLocation(LibMisc.MODID, key)),
+                    (GuiContainer gui, PlayerInventory inv, ITextComponent name) -> new ContainerGui(gui, inv, name, guiMap.get(key)));
+        }
     }
 }

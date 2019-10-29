@@ -8,11 +8,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import acetil.magicalreactors.client.gui.MachineGui;
-import acetil.magicalreactors.client.gui.MachineGuiNew;
-import acetil.magicalreactors.client.gui.ReactorGui;
 import acetil.magicalreactors.client.gui.json.MachineGuiManager;
-import acetil.magicalreactors.common.containers.MachineContainerNew;
 import acetil.magicalreactors.common.machines.TileMachineBase;
 import acetil.magicalreactors.common.lib.LibGui;
 
