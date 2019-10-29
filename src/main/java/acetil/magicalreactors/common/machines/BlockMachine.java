@@ -97,7 +97,8 @@ public class BlockMachine extends Block {
     @Override
     public void spawnAdditionalDrops(BlockState state, World worldIn, BlockPos pos, ItemStack stack) {
         if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).isPresent()) {
-            IItemHandler itemStackHandler = worldIn.getTileEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).;
+            IItemHandler itemStackHandler = worldIn.getTileEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)
+                    .orElse(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.getDefaultInstance());
             for (int i = 0; i < itemStackHandler.getSlots(); i++) {
                 if (!itemStackHandler.getStackInSlot(i).isEmpty()) {
                     spawnAsEntity(worldIn, pos, itemStackHandler.getStackInSlot(i));

@@ -54,7 +54,7 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
         this.machine = machine;
         initHandlers(MachineRegistry.getMachine(machine));
     }
-    private void initHandlers (MachineRegistryItem machineRegistry) {
+    protected void initHandlers (MachineRegistryItem machineRegistry) {
 
         energyHandler = new EnergyHandler(machineRegistry.energyCapacity, machineRegistry.maxReceive,
                 machineRegistry.energyUseRate, true, false);

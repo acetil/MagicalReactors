@@ -1,6 +1,7 @@
 package acetil.magicalreactors.common.machines;
 
 import acetil.magicalreactors.common.capabilities.CapabilityMachine;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -15,12 +16,19 @@ import javax.annotation.Nullable;
 public class TileMachineDistiller extends TileMachineBase {
     private EnumDistillState distillState = EnumDistillState.NONE;
     private TileMachineDistiller controller;
-    private LazyOptional<IFluidHandler> bottomOptional;
-    private LazyOptional<IFluidHandler> topOptional;
+    private LazyOptional<IFluidHandler> bottomOptional = LazyOptional.empty();
+    private LazyOptional<IFluidHandler> topOptional = LazyOptional.empty();
     private int bottomSlots;
     public TileMachineDistiller(String machine, int bottomSlots) {
         super(machine);
         this.bottomSlots = bottomSlots;
+    }
+    public TileMachineDistiller () {
+        super();
+    }
+    @Override
+    protected void initHandlers (MachineRegistryItem registryItem) {
+        super.initHandlers(registryItem);
         bottomOptional = LazyOptional.of(() -> new MachineFluidDistillHandler(machineFluidHandler, bottomSlots, true));
         topOptional  = LazyOptional.of(() -> new MachineFluidDistillHandler(machineFluidHandler, bottomSlots, true));
     }
@@ -61,5 +69,17 @@ public class TileMachineDistiller extends TileMachineBase {
     public TileMachineDistiller setBottomSlots (int bottomSlots) {
         this.bottomSlots = bottomSlots;
         return this;
+    }
+    @Override
+    public void read (CompoundNBT nbt) {
+        super.read(nbt);
+        if (nbt.contains("bottom_slots")) {
+            setBottomSlots(nbt.getInt("bottom_slots"));
+        }
+    }
+    @Override
+    public CompoundNBT write (CompoundNBT nbt) {
+        nbt.putInt("bottoms_slots", bottomSlots);
+        return super.write(nbt);
     }
 }
