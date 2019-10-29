@@ -2,6 +2,7 @@ package acetil.magicalreactors.common;
 
 import acetil.magicalreactors.client.core.proxy.ClientProxy;
 import acetil.magicalreactors.client.gui.json.MachineGuiManager;
+import acetil.magicalreactors.common.capabilities.*;
 import acetil.magicalreactors.common.core.proxy.IProxy;
 import acetil.magicalreactors.common.core.proxy.ServerProxy;
 import acetil.magicalreactors.common.lib.LibMisc;
@@ -34,7 +35,7 @@ public class MagicalReactors {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
     }
     private void setup (final FMLCommonSetupEvent event) {
-
+        registerCapabilities();
     }
     private void clientSetup (final FMLClientSetupEvent event) {
         MachineGuiManager.registerGuis();
@@ -45,7 +46,13 @@ public class MagicalReactors {
     private void processIMC (final InterModProcessEvent event) {
 
     }
-
+    private void registerCapabilities () {
+        CapabilityMachine.register();
+        CapabilityReactor.register();
+        CapabilityReactorController.register();
+        CapabilityReactorFuel.register();
+        CapabilityReactorInterface.register();
+    }
     /*
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {

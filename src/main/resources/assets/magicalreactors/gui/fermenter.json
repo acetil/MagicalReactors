@@ -1,6 +1,6 @@
 {
   "machine" : "fermenter",
-  "background" : "nuclearmod:textures/gui/temp-fermenter.png",
+  "background" : "magicalreactors:textures/gui/temp-fermenter.png",
   "width" : 176,
   "height" : 166,
   "container" : "fermenter",

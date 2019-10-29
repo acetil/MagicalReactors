@@ -1,13 +1,13 @@
 {
   "machine" : "centrifuge",
-  "background" : "nuclearmod:textures/gui/temp-centrifuge.png",
+  "background" : "magicalreactors:textures/gui/temp-centrifuge.png",
   "width" : 176,
   "height" : 166,
   "container" : "centrifuge",
   "elements" : [{
     "type" : "progress",
     "name" : "progress_bar",
-    "texture_name" : "nuclearmod:textures/gui/temp-centrifuge.png",
+    "texture_name" : "magicalreactors:textures/gui/temp-centrifuge.png",
     "x" : 84,
     "y" : 32,
     "width" : 24,

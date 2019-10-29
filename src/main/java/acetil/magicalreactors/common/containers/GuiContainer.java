@@ -28,13 +28,23 @@ public class GuiContainer extends Container {
     private static final int HOTBAR_OFFSET = 58;
     private static final int INVENTORY_SLOT_SIZE = 18;
     private BlockPos tePos;
+    private IItemHandler itemHandler;
     public GuiContainer (MachineContainerJson json, String containerTypeName, int windowId, PlayerInventory inv, PacketBuffer data) {
-        this(json, containerTypeName, windowId, inv, inv.player.world.getTileEntity(data.readBlockPos())
-                .getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-                .orElse(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.getDefaultInstance()));
-    }
-    public GuiContainer (MachineContainerJson json, String containerTypeName, int windowId, PlayerInventory inv, IItemHandler handler) {
         super(ForgeRegistries.CONTAINERS.getValue(new ResourceLocation(containerTypeName)), windowId);
+        tePos = data.readBlockPos();
+        this.itemHandler = inv.player.world.getTileEntity(tePos)
+                                           .getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+                                           .orElse(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.getDefaultInstance());
+        addSlots(itemHandler, inv, json);
+    }
+    public GuiContainer (MachineContainerJson json, String containerTypeName, int windowId, PlayerInventory inv, IItemHandler handler,
+                         BlockPos pos) {
+        super(ForgeRegistries.CONTAINERS.getValue(new ResourceLocation(containerTypeName)), windowId);
+        addSlots(handler, inv, json);
+        this.itemHandler = handler;
+        this.tePos = pos;
+    }
+    public void addSlots (IItemHandler handler, PlayerInventory inv, MachineContainerJson json) {
         addOwnSlots(handler, json);
         addPlayerSlots(inv, json);
     }
@@ -64,6 +74,9 @@ public class GuiContainer extends Container {
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
         return true;
+    }
+    public IItemHandler getItemHandler () {
+        return itemHandler;
     }
     public BlockPos getTileEntityPosition () {
         return tePos;

@@ -125,7 +125,7 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
             return energyOptional.cast();
         } else if (capability == CapabilityMachine.MACHINE_CAPABILITY) {
             return machineOptional.cast();
-        } else if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && machineFluidHandler != null) {
+        } else if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
             return fluidOptional.cast();
         } else {
             return super.getCapability(capability, facing);

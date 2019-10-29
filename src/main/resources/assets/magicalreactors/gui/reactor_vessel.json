@@ -1,6 +1,6 @@
 {
   "machine" : "reactor_vessel",
-  "background" : "nuclearmod:textures/gui/temp-reactor.png",
+  "background" : "magicalreactors:textures/gui/temp-reactor.png",
   "width" : 176,
   "height" : 166,
   "container" : "reactor_vessel",

@@ -1,6 +1,6 @@
 {
   "machine" : "condenser",
-  "background" : "nuclearmod:textures/gui/temp-condenser.png",
+  "background" : "magicalreactors:textures/gui/temp-condenser.png",
   "width" : 176,
   "height" : 166,
   "container" : "condenser",

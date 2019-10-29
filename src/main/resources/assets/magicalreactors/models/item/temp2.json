@@ -1,6 +1,6 @@
 {
   "parent" : "item/generated",
   "textures" : {
-    "layer0" : "nuclearmod:item/temp_crystal"
+    "layer0" : "magicalreactors:item/temp_crystal"
   }
 }
