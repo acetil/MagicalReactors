@@ -1,14 +1,14 @@
 {
   "forge_marker" : 1,
   "defaults" : {
-    "model" : "magicalreactors:rune_basic"
+    "model" : "magicalreactors:block/rune_basic"
   },
   "variants" : {
-    "inventory" : [{"model" : "magicalreactors:rune_basic"}],
+    "inventory" : [{"model" : "magicalreactors:block/rune_basic"}],
     "normal" : [{}],
     "completed_multiblock" : {
-      "false": {"model" : "magicalreactors:rune_basic"},
-      "true": {"model" : "magicalreactors:rune_basic_multi"}
+      "false": {"model" : "magicalreactors:block/rune_basic"},
+      "true": {"model" : "magicalreactors:block/rune_basic_multi"}
     }
   }
 }
