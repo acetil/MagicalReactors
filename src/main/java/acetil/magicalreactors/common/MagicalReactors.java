@@ -1,19 +1,11 @@
 package acetil.magicalreactors.common;
 
 import acetil.magicalreactors.client.core.proxy.ClientProxy;
-import acetil.magicalreactors.common.capabilities.*;
-import acetil.magicalreactors.common.containers.json.MachineContainerManager;
-import acetil.magicalreactors.common.core.Config;
 import acetil.magicalreactors.common.core.proxy.IProxy;
 import acetil.magicalreactors.common.core.proxy.ServerProxy;
 import acetil.magicalreactors.common.lib.LibMisc;
-import acetil.magicalreactors.common.multiblock.MultiblockLoader;
-import acetil.magicalreactors.common.network.PacketHandler;
-import acetil.magicalreactors.common.recipes.MachineRecipeManager;
-import acetil.magicalreactors.common.worldgen.OreGen;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -21,8 +13,6 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.File;
 
 
 @Mod(LibMisc.MODID)

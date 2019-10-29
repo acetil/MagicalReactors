@@ -2,10 +2,8 @@ package acetil.magicalreactors.common.event;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +12,6 @@ import java.util.List;
 @Mod.EventBusSubscriber
 public class MultiblockEventHandler {
     public static HashMap<BlockPos, List<UpdateListener>> hashMap = new HashMap<>();
-    @SideOnly(Side.SERVER)
     public static void updateController (BlockPos pos) {
         if (hashMap.containsKey(pos)) {
             hashMap.get(pos).forEach((UpdateListener l) -> l.onBlockUpdate(pos));
@@ -23,14 +20,14 @@ public class MultiblockEventHandler {
     @SubscribeEvent
     public static void blockPlaceEvent (BlockEvent.EntityPlaceEvent event) {
         System.out.println("On block place!");
-        if (event.getWorld().isRemote) {
+        if (event.getWorld().isRemote()) {
             updateController(event.getPos());
         }
     }
     @SubscribeEvent
     public static void blockBreakEvent (BlockEvent.BreakEvent event) {
         System.out.println("On block break!");
-        if (event.getWorld().isRemote) {
+        if (event.getWorld().isRemote()) {
             updateController(event.getPos());
         }
     }
