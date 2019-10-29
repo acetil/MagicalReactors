@@ -1,5 +1,6 @@
 package acetil.magicalreactors.common.tiles;
 
+import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.capabilities.CapabilityReactorInterface;
 import acetil.magicalreactors.common.capabilities.EnergyHandler;
 import acetil.magicalreactors.common.capabilities.reactor.IReactorInterfaceHandler;
@@ -28,7 +29,7 @@ public class TileReactorInterfaceEnergy extends TileEntity implements ITickableT
     private int capacity;
     private int energyOutputRate;
     public TileReactorInterfaceEnergy (int capacity, int energyOutputRate) {
-        super(ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation(LibMisc.MODID, "energy_interface_entity")));
+        super(ModBlocks.ENERGY_INTERFACE);
         energyHandler = new EnergyHandler(capacity, 0, energyOutputRate, false, true);
         reactorInterface = new ReactorEnergyInterface(energyHandler);
         energyOptional = LazyOptional.of(() -> energyHandler);
@@ -37,7 +38,7 @@ public class TileReactorInterfaceEnergy extends TileEntity implements ITickableT
         this.energyOutputRate = energyOutputRate;
     }
     public TileReactorInterfaceEnergy () {
-        super(ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation(LibMisc.MODID, "energy_interface_entity")));
+        super(ModBlocks.ENERGY_INTERFACE);
         energyHandler = null;
         reactorInterface = null;
     }

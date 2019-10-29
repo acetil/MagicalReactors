@@ -1,5 +1,6 @@
 package acetil.magicalreactors.common.machines;
 
+import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.capabilities.CapabilityMachine;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
@@ -20,11 +21,11 @@ public class TileMachineDistiller extends TileMachineBase {
     private LazyOptional<IFluidHandler> topOptional = LazyOptional.empty();
     private int bottomSlots;
     public TileMachineDistiller(String machine, int bottomSlots) {
-        super(machine);
+        super(machine, MachineBlocks.MACHINE_DISTILLER);
         this.bottomSlots = bottomSlots;
     }
     public TileMachineDistiller () {
-        super();
+        super(MachineBlocks.MACHINE_DISTILLER);
     }
     @Override
     protected void initHandlers (MachineRegistryItem registryItem) {

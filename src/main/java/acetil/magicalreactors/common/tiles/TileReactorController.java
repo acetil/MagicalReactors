@@ -1,5 +1,6 @@
 package acetil.magicalreactors.common.tiles;
 
+import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.capabilities.CapabilityReactorController;
 import acetil.magicalreactors.common.capabilities.reactor.IReactorControlCapability;
 import acetil.magicalreactors.common.lib.LibMisc;
@@ -20,7 +21,7 @@ public class TileReactorController extends TileEntity implements ITickableTileEn
     private ReactorControlHandler reactorhandler;
     private LazyOptional<IReactorControlCapability> reactorOptional;
     public TileReactorController () {
-        super(ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation(LibMisc.MODID, "reactor_controller_entity")));
+        super(ModBlocks.REACTOR_CONTROLLER_TILE_ENTITY);
         reactorhandler = new ReactorControlHandler();
         reactorOptional = LazyOptional.of(() -> reactorhandler);
     }

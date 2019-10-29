@@ -1,5 +1,6 @@
 package acetil.magicalreactors.common.tiles;
 
+import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.capabilities.CapabilityReactorInterface;
 import acetil.magicalreactors.common.capabilities.reactor.IReactorInterfaceHandler;
 import acetil.magicalreactors.common.lib.LibMisc;
@@ -21,7 +22,7 @@ public class TileReactorInterfaceFuelLoader extends TileEntity {
     private LazyOptional<IItemHandler> itemOptional;
     private LazyOptional<IReactorInterfaceHandler> interfaceOptional;
     public TileReactorInterfaceFuelLoader() {
-        super(ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation(LibMisc.MODID, "fuel_loader_entity")));
+        super(ModBlocks.FUEL_INTERFACE);
         itemHandler = new ItemStackHandler(1) {
             @Override
             protected void onContentsChanged (int slot) {

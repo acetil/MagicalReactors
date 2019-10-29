@@ -27,6 +27,11 @@ public class MachineBlocks {
     public static BlockMachine CONDENSER = null;
     @ObjectHolder("distiller")
     public static BlockDistiller DISTILLER = null;
+    @ObjectHolder("machine_base")
+    public static TileEntityType<?> MACHINE_BASE = null;
+    @ObjectHolder("machine_distiller")
+    public static TileEntityType<?> MACHINE_DISTILLER = null;
+
     public static void registerMachineBlocks (RegistryEvent.Register<Block> event) {
         event.getRegistry().register(new BlockMachine("centrifuge", "centrifuge"));
         event.getRegistry().register(new BlockMachine("recrystaliser", "recrystaliser"));
@@ -67,6 +72,9 @@ public class MachineBlocks {
         ModBlocks.registerItemBlock(event, DISTILLER);
     }
     public static void registerTileEntities (RegistryEvent.Register<TileEntityType<?>> event) {
-        event.getRegistry().register(TileEntityType.Builder.create(TileMachineBase::new).build(null));
+        event.getRegistry().register(TileEntityType.Builder.create(TileMachineBase::new).build(null)
+                .setRegistryName(new ResourceLocation(LibMisc.MODID, "machine_base")));
+        event.getRegistry().register(TileEntityType.Builder.create(TileMachineDistiller::new).build(null)
+                .setRegistryName(new ResourceLocation(LibMisc.MODID, "machine_distiller")));
     }
 }

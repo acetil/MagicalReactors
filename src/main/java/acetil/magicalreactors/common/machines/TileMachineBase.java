@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
@@ -43,16 +44,22 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
     private int pastEnergyTickRate = 0;
     protected static final double TRACKING_RANGE = 30;
     public TileMachineBase () {
-        super(ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation(LibMisc.MODID + ":machine_entity")));
+        this(MachineBlocks.MACHINE_BASE);
+    }
+    public TileMachineBase (String machine) {
+        this(machine, MachineBlocks.MACHINE_BASE);
+    }
+    public TileMachineBase(String machine, TileEntityType<?> type) {
+        super(MachineBlocks.MACHINE_BASE);
+        this.machine = machine;
+        initHandlers(MachineRegistry.getMachine(machine));
+    }
+    public TileMachineBase (TileEntityType<?> type) {
+        super(type);
         itemHandler = null;
         energyHandler = null;
         machineHandler = null;
         machineFluidHandler = null;
-    }
-    public TileMachineBase(String machine) {
-        super(ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation(LibMisc.MODID + ":machine_entity")));
-        this.machine = machine;
-        initHandlers(MachineRegistry.getMachine(machine));
     }
     protected void initHandlers (MachineRegistryItem machineRegistry) {
 

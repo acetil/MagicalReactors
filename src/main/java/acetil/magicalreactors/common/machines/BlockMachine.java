@@ -41,20 +41,27 @@ public class BlockMachine extends Block {
         setRegistryName(name);
         this.machineName = machineName;
     }
+    @Override
+    public boolean hasTileEntity (BlockState state) {
+        return true;
+    }
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        System.out.println("Created tile entity!");
         return new TileMachineBase(machineName);
     }
+    @Override
     @SuppressWarnings("deprecation")
     public boolean onBlockActivated (BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
                                      BlockRayTraceResult rayTrace) {
-
+        System.out.println("Machine block activated!");
         if (world.isRemote) {
             return true;
         }
         TileEntity te = world.getTileEntity(pos);
         if (!(te instanceof TileMachineBase)) {
+            System.out.println("Tile entity not instance of tileMachineBase!");
             return false;
         }
         ITextComponent localisedName = this.getNameTextComponent();

@@ -5,38 +5,52 @@ import acetil.magicalreactors.common.block.reactor.BlockReactorController;
 import acetil.magicalreactors.common.block.reactor.BlockReactor;
 import acetil.magicalreactors.common.block.reactor.BlockRuneBase;
 import acetil.magicalreactors.common.machines.MachineBlocks;
+import acetil.magicalreactors.common.tiles.*;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import acetil.magicalreactors.common.lib.LibMisc;
 import net.minecraftforge.registries.ObjectHolder;
 
+import java.util.function.Supplier;
+
 @Mod.EventBusSubscriber(modid = LibMisc.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 @SuppressWarnings("unused")
 @ObjectHolder(LibMisc.MODID)
 public class ModBlocks {
     @ObjectHolder("temp_ore")
-    public static BlockOre TEMP_ORE1 = null; //TODO
+    public static Block TEMP_ORE1 = null; //TODO
     @ObjectHolder("temp_ore_b")
-    public static BlockOre TEMP_ORE2 = null; //TODO
+    public static Block TEMP_ORE2 = null; //TODO
     @ObjectHolder("reactor_controller")
-    public static BlockReactorController REACTOR_CONTROLLER = null;
+    public static Block REACTOR_CONTROLLER = null;
     @ObjectHolder("rune_basic")
-    public static BlockRuneBase RUNE_BASIC = null;
+    public static Block RUNE_BASIC = null;
     @ObjectHolder("rune_stabilisation")
-    public static BlockRuneBase RUNE_STABILISATION = null;
+    public static Block RUNE_STABILISATION = null;
     @ObjectHolder("rune_transfer")
-    public static BlockRuneBase RUNE_TRANSFER = null;
+    public static Block RUNE_TRANSFER = null;
     @ObjectHolder("rune_harmonic")
-    public static BlockRuneBase RUNE_HARMONIC = null;
+    public static Block RUNE_HARMONIC = null;
     @ObjectHolder("rune_locus")
-    public static BlockRuneBase RUNE_LOCUS = null;
+    public static Block RUNE_LOCUS = null;
     @ObjectHolder("reactor_block")
-    public static BlockReactor REACTOR_BLOCK = null;
+    public static Block REACTOR_BLOCK = null;
 
+    @ObjectHolder("reactor")
+    public static TileEntityType<?> REACTOR_TILE_ENTITY = null;
+    @ObjectHolder("reactor_controller")
+    public static TileEntityType<?> REACTOR_CONTROLLER_TILE_ENTITY = null;
+    public static TileEntityType<?> BYPRODUCT_INTERFACE;
+    public static TileEntityType<?> COOLING_INTERFACE;
+    public static TileEntityType<?> ENERGY_INTERFACE;
+    public static TileEntityType<?> FUEL_INTERFACE;
     @SubscribeEvent
     public static void registerBlocks (RegistryEvent.Register<Block> event) {
         event.getRegistry().register(new BlockOre("temp_ore", 4f));
@@ -71,5 +85,21 @@ public class ModBlocks {
     public static void registerItemBlock (RegistryEvent.Register<Item> event, Block b) {
         MagicalReactors.LOGGER.info("Registered itemblock for {}", b.getRegistryName());
         event.getRegistry().register(new BlockItem(b, new Item.Properties()).setRegistryName(b.getRegistryName()));
+    }
+    @SubscribeEvent
+    public static void registerTileEntities (RegistryEvent.Register<TileEntityType<?>> event) {
+        registerTileEntity(event, TileReactor::new, "reactor");
+        registerTileEntity(event, TileReactorController::new, "reactor_controller");
+        registerTileEntity(event, TileReactorInterfaceByproduct::new, "byproduct_interface");
+        registerTileEntity(event, TileReactorInterfaceCooling::new, "cooling_interface");
+        registerTileEntity(event, TileReactorInterfaceEnergy::new, "energy_interface");
+        registerTileEntity(event, TileReactorInterfaceFuelLoader::new, "fuel_interface");
+        MachineBlocks.registerTileEntities(event);
+        MagicalReactors.LOGGER.info("Registered tile entities!");
+    }
+    public static void registerTileEntity (RegistryEvent.Register<TileEntityType<?>> event, Supplier<? extends TileEntity> factory,
+                                           String name) {
+        event.getRegistry().register(TileEntityType.Builder.create(factory).build(null)
+                .setRegistryName(new ResourceLocation(LibMisc.MODID, name)));
     }
 }
