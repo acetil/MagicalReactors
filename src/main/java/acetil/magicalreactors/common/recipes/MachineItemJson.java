@@ -5,6 +5,6 @@ public class MachineItemJson {
     public String item;
     public String fluid;
     public int count;
-    public String ore;
+    public String tag;
     public int data;
 }

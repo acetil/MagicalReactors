@@ -15,7 +15,6 @@ import acetil.magicalreactors.client.gui.json.MachineGuiManager;
 import acetil.magicalreactors.common.containers.MachineContainer;
 import acetil.magicalreactors.common.containers.MachineContainerNew;
 import acetil.magicalreactors.common.machines.TileMachineBase;
-import acetil.magicalreactors.common.tiles.TileReactor;
 import acetil.magicalreactors.common.containers.ReactorContainer;
 import acetil.magicalreactors.common.lib.LibGui;
 

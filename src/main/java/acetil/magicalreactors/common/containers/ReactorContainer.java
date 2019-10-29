@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
-import acetil.magicalreactors.common.tiles.TileReactor;
 
 public class ReactorContainer extends Container {
     private TileReactor te;

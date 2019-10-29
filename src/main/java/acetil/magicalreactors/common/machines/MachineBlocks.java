@@ -5,8 +5,6 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.lib.LibGui;
 import acetil.magicalreactors.common.lib.LibMisc;

@@ -42,7 +42,7 @@ public class MachineRecipe {
                     System.out.println("Item is " + m.getItemInput().getRegistryName());
                 }
                 if (m.isFluid()) {
-                    System.out.println("Fluid name is " + m.getFluidInput().getName());
+                    System.out.println("Fluid name is " + m.getFluidInput());
                 }
                 doesMatch = false;
                 break;

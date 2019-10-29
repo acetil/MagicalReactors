@@ -2,44 +2,57 @@ package acetil.magicalreactors.common.tiles;
 
 import acetil.magicalreactors.common.capabilities.CapabilityReactorInterface;
 import acetil.magicalreactors.common.capabilities.EnergyHandler;
-import net.minecraft.nbt.NBTTagCompound;
+import acetil.magicalreactors.common.capabilities.reactor.IReactorInterfaceHandler;
+import acetil.magicalreactors.common.lib.LibMisc;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
+import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import acetil.magicalreactors.common.capabilities.reactor.ReactorEnergyInterface;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class TileReactorInterfaceEnergy extends TileEntity implements ITickable {
+public class TileReactorInterfaceEnergy extends TileEntity implements ITickableTileEntity {
     private EnergyHandler energyHandler;
     private ReactorEnergyInterface reactorInterface;
+    private LazyOptional<IEnergyStorage> energyOptional = LazyOptional.empty();
+    private LazyOptional<IReactorInterfaceHandler> interfaceOptional = LazyOptional.empty();
     private int capacity;
     private int energyOutputRate;
     public TileReactorInterfaceEnergy (int capacity, int energyOutputRate) {
+        super(ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation(LibMisc.MODID, "energy_interface_entity")));
         energyHandler = new EnergyHandler(capacity, 0, energyOutputRate, false, true);
         reactorInterface = new ReactorEnergyInterface(energyHandler);
+        energyOptional = LazyOptional.of(() -> energyHandler);
+        interfaceOptional = LazyOptional.of(() -> reactorInterface);
         this.capacity = capacity;
         this.energyOutputRate = energyOutputRate;
     }
     public TileReactorInterfaceEnergy () {
+        super(ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation(LibMisc.MODID, "energy_interface_entity")));
         energyHandler = null;
         reactorInterface = null;
     }
 
     @Override
-    public void update() {
+    public void tick() {
         if (this.world.isRemote) {
             giveEnergy(Math.min(energyOutputRate, energyHandler.getEnergyStored()));
         }
     }
     private void giveEnergy (int energy) {
-        HashMap<EnumFacing, TileEntity> tiles = new HashMap<>();
-        for (EnumFacing side : EnumFacing.VALUES) {
+        HashMap<Direction, TileEntity> tiles = new HashMap<>();
+        for (Direction side : Direction.values()) {
             TileEntity te = world.getTileEntity(pos.offset(side));
-            if (te != null && te.hasCapability(CapabilityEnergy.ENERGY, side)) {
+            if (te != null && te.getCapability(CapabilityEnergy.ENERGY, side).isPresent()) {
                 tiles.put(side, te);
             }
         }
@@ -48,10 +61,10 @@ public class TileReactorInterfaceEnergy extends TileEntity implements ITickable 
         }
         int energyPerSide = energy / tiles.size();
         int extraEnergy = 0;
-        for (Map.Entry<EnumFacing, TileEntity> entry : tiles.entrySet()) {
-            EnumFacing side = entry.getKey();
+        for (Map.Entry<Direction, TileEntity> entry : tiles.entrySet()) {
+            Direction side = entry.getKey();
             TileEntity te = entry.getValue();
-            int energyGiven = te.getCapability(CapabilityEnergy.ENERGY, side)
+            int energyGiven = te.getCapability(CapabilityEnergy.ENERGY, side).orElse(energyHandler)
                     .receiveEnergy(energyPerSide, false);
             if (energyGiven < energyPerSide) {
                 extraEnergy += energyPerSide - energyGiven;
@@ -61,45 +74,38 @@ public class TileReactorInterfaceEnergy extends TileEntity implements ITickable 
         markDirty();
     }
     @Override
-    public boolean hasCapability (Capability<?> capability, EnumFacing facing) {
+    public <T> LazyOptional<T> getCapability (Capability<T> capability, Direction facing) {
         if (capability == CapabilityEnergy.ENERGY) {
-            return true;
+            return energyOptional.cast();
         } else if (capability == CapabilityReactorInterface.REACTOR_INTERFACE) {
-            return true;
-        }
-        return super.hasCapability(capability, facing);
-    }
-    @Override
-    public <T> T getCapability (Capability<T> capability, EnumFacing facing) {
-        if (capability == CapabilityEnergy.ENERGY) {
-            return CapabilityEnergy.ENERGY.cast(energyHandler);
-        } else if (capability == CapabilityReactorInterface.REACTOR_INTERFACE) {
-            return CapabilityReactorInterface.REACTOR_INTERFACE.cast(reactorInterface);
+            return interfaceOptional.cast();
         }
         return super.getCapability(capability, facing);
     }
     @Override
-    public void readFromNBT (NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
-        if (nbt.hasKey("energy")) {
-            NBTTagCompound energyCompound = nbt.getCompoundTag("energy");
-            capacity = energyCompound.getInteger("capacity");
-            energyOutputRate = energyCompound.getInteger("output_rate");
+    public void read (CompoundNBT nbt) {
+        super.read(nbt);
+        if (nbt.contains("energy")) {
+            CompoundNBT energyCompound = nbt.getCompound("energy");
+            capacity = energyCompound.getInt("capacity");
+            energyOutputRate = energyCompound.getInt("output_rate");
             energyHandler = new EnergyHandler(capacity, 0, energyOutputRate, false, true);
             reactorInterface = new ReactorEnergyInterface(energyHandler);
-            if (nbt.hasKey("handler")) {
-                energyHandler.readNBT(nbt.getCompoundTag("handler"));
+            energyOptional = LazyOptional.of(() -> energyHandler);
+            interfaceOptional = LazyOptional.of(() -> reactorInterface);
+            if (nbt.contains("handler")) {
+                energyHandler.readNBT(nbt.getCompound("handler"));
             }
         }
     }
     @Override
-    public NBTTagCompound writeToNBT (NBTTagCompound nbt) {
-        super.writeToNBT(nbt);
-        NBTTagCompound energyCompound = new NBTTagCompound();
-        energyCompound.setInteger("capacity", capacity);
-        energyCompound.setInteger("output_rate", energyOutputRate);
-        energyCompound.setTag("handler", energyHandler.writeNBT());
-        nbt.setTag("energy", energyCompound);
+    public CompoundNBT write (CompoundNBT nbt) {
+        super.write(nbt);
+        CompoundNBT energyCompound = new CompoundNBT();
+        energyCompound.putInt("capacity", capacity);
+        energyCompound.putInt("output_rate", energyOutputRate);
+        energyCompound.put("handler", energyHandler.writeNBT());
+        nbt.put("energy", energyCompound);
         return nbt;
     }
 }

@@ -1,31 +1,32 @@
 package acetil.magicalreactors.common.recipes;
 
-import net.minecraft.init.Items;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 import acetil.magicalreactors.common.MagicalReactors;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.Level;
 
 import java.util.stream.Collectors;
 
 public class MachineRecipeInput {
     // TODO: refactor to interface/impl pattern
+    // TODO: refactor to use ItemStack
     private Item itemInput;
     private Fluid fluidInput;
-    private String ore;
+    private String tag;
     private boolean isFluid;
     private int quantity;
     public MachineRecipeInput (MachineItemJson m) {
         switch (m.type) {
             case "item": {
                 fluidInput = null;
-                ore = null;
+                tag = null;
                 isFluid = false;
-                itemInput = Item.REGISTRY.getObject(new ResourceLocation(m.item));
+                itemInput = ForgeRegistries.ITEMS.getValue(new ResourceLocation(m.item));
                 if (itemInput == null) {
                     MagicalReactors.LOGGER.log(Level.WARN, "Unknown item '" + m.item + "'!");
                 }
@@ -33,14 +34,14 @@ public class MachineRecipeInput {
             break;
             case "fluid": {
                 itemInput = null;
-                ore = null;
+                tag = null;
                 isFluid = true;
-                fluidInput = FluidRegistry.getFluid(m.fluid);
+                fluidInput = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(m.fluid));
             }
             break;
             case "ore": {
                 fluidInput = null;
-                ore = m.ore;
+                tag = m.tag;
                 itemInput = null;
                 isFluid = false;
             }
@@ -67,13 +68,12 @@ public class MachineRecipeInput {
             if (isFluid && m.isFluid) {
                 return fluidInput == m.fluidInput;
             } else if (!isFluid && !m.isFluid) {
-                if (m.ore != null || ore != null) {
+                if (m.tag != null || tag != null) {
                     // God help us if both aren't null
-                    String oreDict = m.ore == null ? ore : m.ore;
-                    return OreDictionary.getOres(oreDict).stream()
-                            .map(ItemStack::getItem)
-                            .collect(Collectors.toList())
-                            .contains(m.ore == null ? m.itemInput : itemInput);
+                    String oreDict = m.tag == null ? tag : m.tag;
+                    return ItemTags.getCollection()
+                                   .getOrCreate(new ResourceLocation(oreDict))
+                                   .contains(m.tag == null ? m.itemInput : itemInput);
                 } else {
                     return itemInput == m.itemInput;
                 }
@@ -88,7 +88,7 @@ public class MachineRecipeInput {
     public boolean isEmpty () {
         if (isFluid) {
             return fluidInput == null;
-        } else if (ore == null) {
+        } else if (tag == null) {
             return itemInput == Items.AIR || itemInput == null;
         } else {
             return false; // can never be false if is ore dictionary

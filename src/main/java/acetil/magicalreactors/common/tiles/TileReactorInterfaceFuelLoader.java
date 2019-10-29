@@ -1,19 +1,27 @@
 package acetil.magicalreactors.common.tiles;
 
 import acetil.magicalreactors.common.capabilities.CapabilityReactorInterface;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
+import acetil.magicalreactors.common.capabilities.reactor.IReactorInterfaceHandler;
+import acetil.magicalreactors.common.lib.LibMisc;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import acetil.magicalreactors.common.capabilities.reactor.ReactorFuelInputInterface;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class TileReactorInterfaceFuelLoader extends TileEntity {
     private ItemStackHandler itemHandler;
     private ReactorFuelInputInterface reactorInterface;
+    private LazyOptional<IItemHandler> itemOptional;
+    private LazyOptional<IReactorInterfaceHandler> interfaceOptional;
     public TileReactorInterfaceFuelLoader() {
+        super(ForgeRegistries.TILE_ENTITIES.getValue(new ResourceLocation(LibMisc.MODID, "fuel_loader_entity")));
         itemHandler = new ItemStackHandler(1) {
             @Override
             protected void onContentsChanged (int slot) {
@@ -21,37 +29,30 @@ public class TileReactorInterfaceFuelLoader extends TileEntity {
             }
         };
         reactorInterface = new ReactorFuelInputInterface(itemHandler);
+        itemOptional = LazyOptional.of(() -> itemHandler);
+        interfaceOptional = LazyOptional.of(() -> reactorInterface);
     }
 
     @Override
-    public boolean hasCapability (Capability<?> capability, EnumFacing facing) {
+    public <T> LazyOptional<T> getCapability (Capability<T> capability, Direction facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return true;
+            return itemOptional.cast();// TODO: update
         } else if (capability == CapabilityReactorInterface.REACTOR_INTERFACE) {
-            return true;
-        }
-        return super.hasCapability(capability, facing);
-    }
-    @Override
-    public <T> T getCapability (Capability<T> capability, EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemHandler); // TODO: update
-        } else if (capability == CapabilityReactorInterface.REACTOR_INTERFACE) {
-            return CapabilityReactorInterface.REACTOR_INTERFACE.cast(reactorInterface);
+            return interfaceOptional.cast();
         }
         return super.getCapability(capability, facing);
     }
     @Override
-    public NBTTagCompound writeToNBT (NBTTagCompound nbt) {
-        super.writeToNBT(nbt);
-        nbt.setTag("items", itemHandler.serializeNBT());
+    public CompoundNBT write (CompoundNBT nbt) {
+        super.write(nbt);
+        nbt.put("items", itemHandler.serializeNBT());
         return nbt;
     }
     @Override
-    public void readFromNBT (NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
-        if (nbt.hasKey("items")) {
-            itemHandler.deserializeNBT(nbt.getCompoundTag("items"));
+    public void read (CompoundNBT nbt) {
+        super.read(nbt);
+        if (nbt.contains("items")) {
+            itemHandler.deserializeNBT(nbt.getCompound("items"));
         }
     }
 }

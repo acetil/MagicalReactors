@@ -1,7 +1,6 @@
 package acetil.magicalreactors.client.gui;
 
 import acetil.magicalreactors.common.containers.ReactorContainer;
-import acetil.magicalreactors.common.tiles.TileReactor;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
 
