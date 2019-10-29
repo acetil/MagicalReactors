@@ -1,13 +1,12 @@
 package acetil.magicalreactors.common.capabilities.machines;
 
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraftforge.event.terraingen.OreGenEvent;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,145 +16,66 @@ public class MachineFluidHandler implements IFluidHandler {
     private int inputSlots;
     private int outputSlots;
     private int fluidCapacity;
-    private List<FluidStack> fluidStacks;
+    private FluidStack[] fluidStacks;
     public MachineFluidHandler (int inputSlots, int outputSlots, int fluidCapacity) {
         this.inputSlots = inputSlots;
         this.outputSlots = outputSlots;
-        fluidStacks = new ArrayList<>();
+        fluidStacks = new FluidStack[inputSlots + outputSlots];
         for (int i = 0; i < inputSlots + outputSlots; i++) {
-            fluidStacks.add(null);
-        }
+            fluidStacks[i] = FluidStack.EMPTY;
+    }
         this.fluidCapacity = fluidCapacity;
     }
-    @Override
-    public IFluidTankProperties[] getTankProperties() {
-        //System.out.println("Attempted to get tank properties");
-        IFluidTankProperties[] properties = new IFluidTankProperties[inputSlots + outputSlots];
-        for (int i = 0; i < fluidStacks.size(); i++) {
-            properties[i] = new FluidProperties(i < inputSlots, fluidStacks.get(i), fluidCapacity);
-        }
-        return properties;
-    }
-    public FluidStack getContents (int slot) {
-        return fluidStacks.get(slot);
-    }
-    @Override
-    public int fill(FluidStack resource, boolean doFill) {
-        //System.out.println("Attempted fill");
-        for (int i = 0; i < inputSlots; i++) {
-            if (fluidStacks.get(i) == null) {
-                int amountFilled = Math.min(resource.amount, fluidCapacity);
-                if (doFill) {
-                    fluidStacks.remove(i);
-                    fluidStacks.add(i, new FluidStack(resource.getFluid(), amountFilled, resource.tag));
-                }
-                //System.out.println("Filled " + amountFilled + " into an empty slot!");
-                onContentsChanged(i, amountFilled);
-                return amountFilled;
-            } else if (resource.isFluidEqual(fluidStacks.get(i))) {
-                int amountFilled = Math.min(resource.amount, fluidCapacity - fluidStacks.get(i).amount);
-                if (doFill) {
-                    fluidStacks.get(i).amount += amountFilled;
-                }
-                //System.out.println("Filled " + amountFilled + " into a slot with fluid in it!");
-                onContentsChanged(i, amountFilled);
-                return amountFilled;
-            }
-        }
-        return 0;
-    }
-
-    @Nullable
-    @Override
-    public FluidStack drain(FluidStack resource, boolean doDrain) {
-        for (int i = inputSlots; i < fluidStacks.size(); i++) {
-            if (fluidStacks.get(i) != null && resource.isFluidEqual(fluidStacks.get(i))) {
-                int amountDrained = Math.min(resource.amount, fluidStacks.get(i).amount);
-                if (doDrain) {
-                    fluidStacks.get(i).amount -= amountDrained;
-                    if (fluidStacks.get(i).amount <= 0) {
-                        fluidStacks.remove(i);
-                        fluidStacks.add(i, null);
-                    }
-                    onContentsChanged(i, amountDrained * -1);
-                }
-                return new FluidStack(resource.getFluid(), amountDrained, resource.tag);
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public FluidStack drain(int maxDrain, boolean doDrain) {
-        for (int i = inputSlots; i < fluidStacks.size(); i++) {
-            if (fluidStacks.get(i) != null) {
-                int amountDrained = Math.min(maxDrain, fluidStacks.get(i).amount);
-                Fluid fluidType = fluidStacks.get(i).getFluid();
-                CompoundNBT tag = fluidStacks.get(i).tag;
-                if (doDrain) {
-                    fluidStacks.get(i).amount -= amountDrained;
-                    if (fluidStacks.get(i).amount <= 0) {
-
-                        fluidStacks.remove(i);
-                        fluidStacks.add(i, null);
-                    }
-                    onContentsChanged(i, amountDrained * -1);
-                }
-                return new FluidStack(fluidType, amountDrained, tag);
-            }
-        }
-        return null;
-    }
     public int addFluid (FluidStack resource, int slot, boolean simulate) {
-        if (fluidStacks.get(slot) == null) {
-            int amountAdded = Math.min(resource.amount, fluidCapacity);
-            fluidStacks.remove(slot);
-            fluidStacks.add(slot, new FluidStack(resource.getFluid(), amountAdded, resource.tag));
-            onContentsChanged(slot, amountAdded);
+        if (fluidStacks[slot] == FluidStack.EMPTY) {
+            int amountAdded = Math.min(resource.getAmount(), fluidCapacity);
+            if (!simulate) {
+                fluidStacks[slot] = new FluidStack(resource.getFluid(), amountAdded, resource.getTag());
+                onContentsChanged(slot, amountAdded);
+            }
             return amountAdded;
         }
-        if (resource.isFluidEqual(fluidStacks.get(slot))) {
-            int amountAdded = Math.min(resource.amount, fluidCapacity - fluidStacks.get(slot).amount);
+        if (resource.isFluidEqual(fluidStacks[slot])) {
+            int amountAdded = Math.min(resource.getAmount(), fluidCapacity - fluidStacks[slot].getAmount());
             if (!simulate) {
-                fluidStacks.get(slot).amount += amountAdded;
+                fluidStacks[slot].grow(amountAdded);
+                onContentsChanged(slot, amountAdded);
             }
-            onContentsChanged(slot, amountAdded);
             return amountAdded;
         }
         return 0;
     }
     public int removeFluid (int amount, int slot, boolean simulate) {
-        if (fluidStacks.get(slot) == null) {
+        if (fluidStacks[slot] == FluidStack.EMPTY) {
             return 0;
         }
-        int amountRemoved = Math.min(amount, fluidStacks.get(slot).amount);
+        int amountRemoved = Math.min(amount, fluidStacks[slot].getAmount());
         if (!simulate) {
-            fluidStacks.get(slot).amount -= amountRemoved;
-            if (fluidStacks.get(slot).amount <= 0) {
-                fluidStacks.remove(slot);
-                fluidStacks.add(slot, null);
+            fluidStacks[slot].shrink(amountRemoved);
+            if (fluidStacks[slot].getAmount() <= 0) {
+                fluidStacks[slot] = FluidStack.EMPTY;
                 onContentsChanged(slot, amountRemoved * -1);
             }
-            return amountRemoved;
+
         }
-        return 0;
+        return amountRemoved;
     }
     public FluidStack getFluid (int slot) {
-        return fluidStacks.get(slot);
+        return fluidStacks[slot];
     }
     public void readNBT (CompoundNBT nbt) {
         if (nbt.getInt("num_inputs") != inputSlots && nbt.getInt("num_outputs") != outputSlots) {
             throw new IllegalArgumentException("Wrong number of inputs or outputs, probably a different tile entity!");
         }
-        fluidStacks.clear();
         CompoundNBT fluids = nbt.getCompound("fluids");
         for (int i = 0; i < inputSlots + outputSlots; i++) {
-            CompoundNBT fluidTag = fluids.getCompound("fluid" + i);
-            fluidStacks.add(new FluidStack(FluidRegistry.getFluid(fluidTag.getString("name")),
-                    fluidTag.getInt("amount")));
-            if (fluidTag.contains("nbt")) {
-                fluidStacks.get(i).tag = fluidTag.getCompound("tag");
+            if (fluids.contains("fluid" + i)) {
+                CompoundNBT fluidTag = fluids.getCompound("fluid" + i);
+                fluidStacks[i] = new FluidStack(ForgeRegistries.FLUIDS.getValue(new ResourceLocation(fluidTag.getString("name"))),
+                        fluidTag.getInt("amount"));
+                if (fluidTag.contains("nbt")) {
+                    fluidStacks[i].setTag(fluidTag.getCompound("nbt"));
+                }
             }
         }
     }
@@ -164,8 +84,8 @@ public class MachineFluidHandler implements IFluidHandler {
         nbt.putInt("num_inputs", inputSlots + outputSlots);
         CompoundNBT fluids = new CompoundNBT();
         for (int i = 0; i < inputSlots + outputSlots; i++) {
-            FluidStack stack = fluidStacks.get(i);
-            if (stack == null) {
+            FluidStack stack = fluidStacks[i];
+            if (stack == FluidStack.EMPTY) {
                 continue;
             }
             CompoundNBT fluidTag = new CompoundNBT();
@@ -182,60 +102,78 @@ public class MachineFluidHandler implements IFluidHandler {
     protected void onContentsChanged (int slot, int amount) {
 
     }
-}
-class FluidProperties implements IFluidTankProperties {
-    public boolean isInput;
-    public boolean isOutput;
-    FluidStack fluidStack;
-    int capacity;
-    Predicate<FluidStack> canFill;
-    Predicate<FluidStack> canDrain;
-    FluidProperties (boolean isInput, FluidStack fluidStack, int capacity, Predicate<FluidStack> canFill, Predicate<FluidStack> canDrain) {
-        this.isInput = isInput;
-        this.isOutput = !isInput;
-        this.fluidStack = fluidStack;
-        this.capacity = capacity;
-        this.canFill = canFill;
-        this.canDrain = canDrain;
-    }
-    FluidProperties (boolean isInput, FluidStack fluidStack, int capacity) {
-        this(isInput, fluidStack, capacity, null, null);
+
+    @Override
+    public int getTanks() {
+        return inputSlots + outputSlots;
     }
 
-    @Nullable
+    @Nonnull
     @Override
-    public FluidStack getContents() {
-        return fluidStack;
+    public FluidStack getFluidInTank(int tank) {
+        return fluidStacks[tank];
     }
 
     @Override
-    public int getCapacity() {
-        return capacity;
+    public int getTankCapacity(int tank) {
+        return fluidCapacity;
     }
 
     @Override
-    public boolean canFill() {
-        return isInput;
+    public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
+        return true; //TODO: update
     }
 
     @Override
-    public boolean canDrain() {
-        return isOutput ;
-    }
-
-    @Override
-    public boolean canFillFluidType(FluidStack fluidStack) {
-        if (canFill == null) {
-            return true;
+    public int fill(FluidStack resource, FluidAction action) {
+        FluidStack resourceTemp = resource.copy();
+        int amountFilled = 0;
+        boolean simulate = action.simulate();
+        for (int i = 0; i < inputSlots; i++) {
+            int newAmountFilled = addFluid(resourceTemp, i, simulate);
+            resourceTemp.shrink(newAmountFilled);
+            amountFilled += newAmountFilled;
         }
-        return canFill.test(fluidStack);
+        return amountFilled;
     }
 
+    @Nonnull
     @Override
-    public boolean canDrainFluidType(FluidStack fluidStack) {
-        if (canDrain == null) {
-            return true;
+    public FluidStack drain(FluidStack resource, FluidAction action) {
+        FluidStack output = new FluidStack(resource.getFluid(), 0, resource.getTag());
+        int amountToDrain = resource.getAmount();
+        boolean simulate = action.simulate();
+        for (int i = inputSlots; i < inputSlots + outputSlots; i++) {
+            if (getFluidInTank(i).isFluidEqual(output)) {
+                int previousOutputAmount = output.getAmount();
+                output.grow(removeFluid(amountToDrain, i, simulate));
+                amountToDrain -= output.getAmount() - previousOutputAmount;
+            }
         }
-        return canDrain.test(fluidStack);
+        if (output.isEmpty()) {
+            return FluidStack.EMPTY;
+        }
+        return output;
+    }
+
+    @Nonnull
+    @Override
+    public FluidStack drain(int maxDrain, FluidAction action) {
+        FluidStack targetedStack = FluidStack.EMPTY;
+        int slot = inputSlots - 1;
+        while (targetedStack.isEmpty() && slot < inputSlots + outputSlots) {
+            slot++;
+            targetedStack = fluidStacks[slot];
+        }
+        if (targetedStack.isEmpty()) {
+            return FluidStack.EMPTY;
+        }
+        return drain(new FluidStack(targetedStack.getFluid(), maxDrain, targetedStack.getTag()), action);
+    }
+    public int getInputSlots () {
+        return inputSlots;
+    }
+    public int getOutputSlots () {
+        return outputSlots;
     }
 }
