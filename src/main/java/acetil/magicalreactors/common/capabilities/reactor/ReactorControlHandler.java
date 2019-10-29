@@ -2,8 +2,8 @@ package acetil.magicalreactors.common.capabilities.reactor;
 
 import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.block.reactor.IReactorBuildingBlock;
+import acetil.magicalreactors.common.capabilities.CapabilityReactor;
 import acetil.magicalreactors.common.capabilities.CapabilityReactorInterface;
-import acetil.magicalreactors.common.capabilities.CapabilityReactorNew;
 import acetil.magicalreactors.common.event.MultiblockEventHandler;
 import acetil.magicalreactors.common.multiblock.IMultiblock;
 import acetil.magicalreactors.common.multiblock.IMultiblockValidator;
@@ -146,11 +146,12 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
             reactorInterfaceHandlers = currentValidator.getPositionsWithCapability(CapabilityReactorInterface.REACTOR_INTERFACE, null)
                     .stream()
                     .map((BlockPos p) -> world.getTileEntity(p)
-                            .getCapability(CapabilityReactorInterface.REACTOR_INTERFACE, null))
+                            .getCapability(CapabilityReactorInterface.REACTOR_INTERFACE, null).orElse(CapabilityReactorInterface.REACTOR_INTERFACE.getDefaultInstance()))
                     .collect(Collectors.toList());
-            reactorHandler = world.getTileEntity(currentValidator.getPositionsWithCapability(CapabilityReactorNew.CAPABILITY_REACTOR, null)
+            reactorHandler = world.getTileEntity(currentValidator.getPositionsWithCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
                     .get(0))
-                    .getCapability(CapabilityReactorNew.CAPABILITY_REACTOR, null);
+                    .getCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
+                    .orElse(CapabilityReactor.CAPABILITY_REACTOR.getDefaultInstance());
             if (!isMulti) {
 
             }
