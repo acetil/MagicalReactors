@@ -25,6 +25,7 @@ public class ReactorFuelRegistry {
         return fuels.get(name);
     }
 
+
     @SubscribeEvent
     public static void attachCapabilities (AttachCapabilitiesEvent<ItemStack> event) {
         if (itemFuels.containsKey(event.getObject().getItem().getRegistryName().toString())) {

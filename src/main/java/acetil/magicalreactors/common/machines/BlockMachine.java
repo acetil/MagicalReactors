@@ -24,7 +24,7 @@ import acetil.magicalreactors.common.lib.LibMisc;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class BlockMachine extends Block implements ITileEntityProvider {
+public class BlockMachine extends Block {
     protected String machineName;
     public BlockMachine (String name, String machineName) {
         super(Properties.create(Material.ROCK));
@@ -49,17 +49,17 @@ public class BlockMachine extends Block implements ITileEntityProvider {
         player.openGui(MagicalReactors.instance, ((TileMachineBase)te).getGuiId(), world, pos.getX(), pos.getY(), pos.getZ());
         return true;
     }
-    public void onBlockAdded (World worldIn, BlockPos pos, IBlockState state) {
-        /*if (!worldIn.isRemote) {
+    /*public void onBlockAdded (World worldIn, BlockPos pos, BlockState state) {
+        if (!worldIn.isRemote) {
             boolean isOn = worldIn.isBlockPowered(pos);
             if (worldIn.getTileEntity(pos) instanceof TileMachineBase) {
                 ((TileMachineBase)worldIn.getTileEntity(pos)).setPoweredState(isOn);
             }
-        }*/
+        }
         super.onBlockAdded(worldIn, pos, state);
-    }
+    } */
     @SuppressWarnings("deprecation")
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         if (!worldIn.isRemote) {
             if (worldIn.getTileEntity(pos) instanceof TileMachineBase) {
                 ((TileMachineBase)worldIn.getTileEntity(pos)).setPoweredState(worldIn.isBlockPowered(pos));
@@ -67,10 +67,10 @@ public class BlockMachine extends Block implements ITileEntityProvider {
         }
     }
 
-    @Override
-    public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos,@Nonnull IBlockState state) {
-        if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
-            IItemHandler itemStackHandler = worldIn.getTileEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+    /*@Override
+    public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos,@Nonnull BlockState state) {
+        if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).isPresent()) {
+            IItemHandler itemStackHandler = worldIn.getTileEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).;
             for (int i = 0; i < itemStackHandler.getSlots(); i++) {
                 if (!itemStackHandler.getStackInSlot(i).isEmpty()) {
                     spawnAsEntity(worldIn, pos, itemStackHandler.getStackInSlot(i));
@@ -80,5 +80,5 @@ public class BlockMachine extends Block implements ITileEntityProvider {
         }
 
         super.breakBlock(worldIn, pos, state);
-    }
+    }*/
 }

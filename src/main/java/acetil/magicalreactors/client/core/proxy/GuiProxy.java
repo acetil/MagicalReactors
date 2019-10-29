@@ -12,10 +12,8 @@ import acetil.magicalreactors.client.gui.MachineGui;
 import acetil.magicalreactors.client.gui.MachineGuiNew;
 import acetil.magicalreactors.client.gui.ReactorGui;
 import acetil.magicalreactors.client.gui.json.MachineGuiManager;
-import acetil.magicalreactors.common.containers.MachineContainer;
 import acetil.magicalreactors.common.containers.MachineContainerNew;
 import acetil.magicalreactors.common.machines.TileMachineBase;
-import acetil.magicalreactors.common.containers.ReactorContainer;
 import acetil.magicalreactors.common.lib.LibGui;
 
 import javax.annotation.Nullable;

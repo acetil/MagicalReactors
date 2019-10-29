@@ -4,8 +4,8 @@ import acetil.magicalreactors.common.recipes.MachineRecipe;
 import acetil.magicalreactors.common.recipes.MachineRecipeInput;
 import acetil.magicalreactors.common.recipes.MachineRecipeManager;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemStackHandler;
 import acetil.magicalreactors.common.capabilities.machines.MachineFluidHandler;
 
@@ -239,7 +239,7 @@ public class MachineHandlerBase implements IMachineCapability {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void handlePacket(boolean isOn, int energyPerTick, int energyToCompletion, int totalEnergyRequired) {
         this.isOn = isOn;
         this.energyPerTick = energyPerTick;

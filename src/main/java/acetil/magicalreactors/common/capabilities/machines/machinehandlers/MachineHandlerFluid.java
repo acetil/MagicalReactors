@@ -45,7 +45,7 @@ public class MachineHandlerFluid extends MachineHandlerBase {
         if (f == null) {
             return null;
         } else {
-            return new MachineRecipeInput(f.getFluid(), f.amount);
+            return new MachineRecipeInput(f.getFluid(), f.getAmount());
         }
     }
     @Override
@@ -65,7 +65,7 @@ public class MachineHandlerFluid extends MachineHandlerBase {
     List<MachineRecipeInput> getOutputsAsMRI () {
         List<MachineRecipeInput> recipeOutputs = super.getOutputsAsMRI();
         recipeOutputs.addAll(fluidOutputs.stream()
-                .map((FluidStack f) -> new MachineRecipeInput(f.getFluid(), f.amount))
+                .map((FluidStack f) -> new MachineRecipeInput(f.getFluid(), f.getAmount()))
                 .collect(Collectors.toList()));
         return recipeOutputs;
     }
