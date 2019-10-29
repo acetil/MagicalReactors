@@ -6,17 +6,19 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.lib.LibMisc;
+import net.minecraftforge.registries.ObjectHolder;
 import org.apache.logging.log4j.Level;
 
 @Mod.EventBusSubscriber(modid = LibMisc.MODID)
+@ObjectHolder(LibMisc.MODID)
 public class ModItems {
 
-    public static ItemResource URANIUM_INGOT = new ItemResource("uranium_ingot");
-    public static ItemResource ITEM_TEMP2 = new ItemResource("temp2");
+    public static ItemResource URANIUM_INGOT = null;
+    public static ItemResource ITEM_TEMP2 = null;
     @SubscribeEvent
     public static void registerItems (RegistryEvent.Register<Item> event) {
-        event.getRegistry().register(URANIUM_INGOT);
-        event.getRegistry().register(ITEM_TEMP2);
+        event.getRegistry().register(new ItemResource("uranium_ingot"));
+        event.getRegistry().register(new ItemResource("item_temp2"));
         MagicalReactors.LOGGER.log(Level.INFO, "Item registry complete");
     }
 
