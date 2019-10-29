@@ -1,8 +1,7 @@
 package acetil.magicalreactors.common.multiblock;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 
@@ -20,6 +19,6 @@ public interface IMultiblockValidator {
 
     List<BlockPos> getPositionsOfBlock(Block b);
     List<BlockPos> getPositionsOfType (Class <?> blockType);
-    List<BlockPos> getPositionsWithCapability (Capability<?> capability, EnumFacing side);
+    List<BlockPos> getPositionsWithCapability (Capability<?> capability, Direction side);
 
 }

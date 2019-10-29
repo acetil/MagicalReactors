@@ -1,12 +1,11 @@
 package acetil.magicalreactors.common.multiblock;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import org.lwjgl.Sys;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -83,11 +82,11 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
                                .collect(Collectors.toList());
     }
     @Override
-    public List<BlockPos> getPositionsWithCapability(Capability<?> capability, EnumFacing side) {
+    public List<BlockPos> getPositionsWithCapability(Capability<?> capability, Direction side) {
         return getOrientation().predicates
                                .stream()
                                .filter((BlockPredicate pred) -> world.getTileEntity(pred.pos) != null &&
-                                       world.getTileEntity(pred.pos).hasCapability(capability, side))
+                                       world.getTileEntity(pred.pos).getCapability(capability, side).isPresent())
                                .map(BlockPredicate::getPos)
                                .collect(Collectors.toList());
     }
@@ -151,8 +150,8 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
     public static class BlockPredicate {
         World world;
         BlockPos pos;
-        Predicate<IBlockState> statePredicate;
-        BlockPredicate(World worldIn, BlockPos pos, Predicate<IBlockState> statePredicate) {
+        Predicate<BlockState> statePredicate;
+        BlockPredicate(World worldIn, BlockPos pos, Predicate<BlockState> statePredicate) {
             this.world = worldIn;
             this.pos = pos;
             this.statePredicate = statePredicate;

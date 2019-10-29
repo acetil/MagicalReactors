@@ -1,18 +1,20 @@
 package acetil.magicalreactors.common.multiblock;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import acetil.magicalreactors.common.MagicalReactors;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.Level;
 
 import java.util.*;
 import java.util.function.Predicate;
 
 public class MultiblockImpl implements IMultiblock{
-    private Map<Character, Predicate<IBlockState>> keyMap = new HashMap<>();
+    private Map<Character, Predicate<BlockState>> keyMap = new HashMap<>();
     private String[][] multiblock;
     private boolean allowsFilledAirBlocks;
     boolean complete = true;
@@ -68,14 +70,14 @@ public class MultiblockImpl implements IMultiblock{
             keyMap.put(OFFSET_CHAR, getPredicate("minecraft:air"));
         }
     }
-    private Predicate<IBlockState> getPredicate (String key) {
+    private Predicate<BlockState> getPredicate (String key) {
         // TODO: update to more than just blocks
-        Block b = Block.getBlockFromName(key);
+        Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key));
         System.out.println(String.format("Key: %s, name: %s", key, b.getRegistryName()));
         if (b == Blocks.AIR && allowsFilledAirBlocks) {
-            return (IBlockState state) -> true;
+            return (BlockState state) -> true;
         }
-        return (IBlockState state) -> state.getBlock() == b;
+        return (BlockState state) -> state.getBlock() == b;
     }
     private void handleParity () {
         String[] addedLayer = {" "};
@@ -166,11 +168,11 @@ public class MultiblockImpl implements IMultiblock{
         return (T[]) newList.toArray();
     }
     public static class BlockOffset {
-        Predicate<IBlockState> predicate;
+        Predicate<BlockState> predicate;
         int xOffset;
         int yOffset;
         int zOffset;
-        public BlockOffset (Predicate<IBlockState> predicate, int xOffset, int yOffset, int zOffset) {
+        public BlockOffset (Predicate<BlockState> predicate, int xOffset, int yOffset, int zOffset) {
             this.predicate = predicate;
             this.xOffset = xOffset;
             this.yOffset = yOffset;
@@ -182,7 +184,7 @@ public class MultiblockImpl implements IMultiblock{
         public BlockPos getBlockPos (BlockPos offsetPoint) {
             return new BlockPos(offsetPoint.getX() + xOffset, offsetPoint.getY() + yOffset, offsetPoint.getZ() + zOffset);
         }
-        public Predicate<IBlockState> getPredicate () {
+        public Predicate<BlockState> getPredicate () {
             return predicate;
         }
     }
