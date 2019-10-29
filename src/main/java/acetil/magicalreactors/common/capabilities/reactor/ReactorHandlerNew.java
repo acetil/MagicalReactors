@@ -4,7 +4,7 @@ import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.reactor.IReactorFuel;
 import acetil.magicalreactors.common.reactor.ReactorFuelRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.items.ItemStackHandler;
 import org.apache.logging.log4j.Level;
 
@@ -93,30 +93,30 @@ public class ReactorHandlerNew implements IReactorHandlerNew {
     }
 
     @Override
-    public NBTTagCompound writeNBT() {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setInteger("heat", heat);
-        nbt.setInteger("energy_produced", energyProduced);
-        nbt.setBoolean("finished", finished);
-        nbt.setInteger("num_slots", numSlots);
-        NBTTagCompound slotCompound = new NBTTagCompound();
+    public CompoundNBT writeNBT() {
+        CompoundNBT nbt = new CompoundNBT();
+        nbt.putInt("heat", heat);
+        nbt.putInt("energy_produced", energyProduced);
+        nbt.putBoolean("finished", finished);
+        nbt.putInt("num_slots", numSlots);
+        CompoundNBT slotCompound = new CompoundNBT();
         for (int i = 0; i < numSlots; i++) {
-            slotCompound.setString("slot" + i, slots[i].getName());
+            slotCompound.putString("slot" + i, slots[i].getName());
         }
-        nbt.setTag("slots", slotCompound);
+        nbt.put("slots", slotCompound);
         return nbt;
     }
 
     @Override
-    public void readNBT(NBTTagCompound nbt) {
-        heat = nbt.getInteger("heat");
-        energyProduced = nbt.getInteger("energy_produced");
+    public void readNBT(CompoundNBT nbt) {
+        heat = nbt.getInt("heat");
+        energyProduced = nbt.getInt("energy_produced");
         finished = nbt.getBoolean("finished");
         int tempNumSlots = numSlots;
-        if (numSlots > nbt.getInteger("num_slots")) {
-            tempNumSlots = nbt.getInteger("num_slots");
+        if (numSlots > nbt.getInt("num_slots")) {
+            tempNumSlots = nbt.getInt("num_slots");
         }
-        NBTTagCompound slotCompound = nbt.getCompoundTag("slots");
+        CompoundNBT slotCompound = nbt.getCompound("slots");
         for (int i = 0; i < tempNumSlots; i++) {
             slots[i] = ReactorFuelRegistry.getFuel(slotCompound.getString("slot" + i));
         }

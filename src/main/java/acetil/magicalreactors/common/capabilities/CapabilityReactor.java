@@ -1,31 +1,31 @@
 package acetil.magicalreactors.common.capabilities;
 
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.INBT;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import acetil.magicalreactors.common.lib.LibReactor;
+import acetil.magicalreactors.common.capabilities.reactor.IReactorHandlerNew;
+import acetil.magicalreactors.common.capabilities.reactor.ReactorHandlerNew;
+
+import javax.annotation.Nullable;
 
 public class CapabilityReactor {
-    @CapabilityInject(IReactorHandler.class)
-    public static Capability<IReactorHandler> REACTOR_HANDLER = null;
+    @CapabilityInject(IReactorHandlerNew.class)
+    public static Capability<IReactorHandlerNew> CAPABILITY_REACTOR = null;
     public static void register () {
-        CapabilityManager.INSTANCE.register(IReactorHandler.class, new Capability.IStorage<IReactorHandler>() {
-            public NBTBase writeNBT (Capability<IReactorHandler> capability, IReactorHandler instance, EnumFacing side) {
-                NBTTagCompound nbt = new NBTTagCompound();
-                nbt.setInteger("ticks", instance.getTicksSinceUpdate());
-                nbt.setBoolean("isActive", instance.isActive());
-                nbt.setInteger("heat", instance.getHullHeat());
-                return nbt;
+        CapabilityManager.INSTANCE.register(IReactorHandlerNew.class, new Capability.IStorage<IReactorHandlerNew>() {
+            @Nullable
+            @Override
+            public INBT writeNBT(Capability<IReactorHandlerNew> capability, IReactorHandlerNew instance, Direction side) {
+                // TODO: do nbt
+                return null;
             }
-            public void readNBT (Capability<IReactorHandler> capability, IReactorHandler instance, EnumFacing side, NBTBase nbt) {
-                NBTTagCompound tags = (NBTTagCompound) nbt;
-                instance.setActive(tags.getBoolean("isActive"));
-                instance.setTicksSinceUpdate(tags.getInteger("ticks"));
-                instance.setHullHeat(tags.getInteger("heat"));
+
+            @Override
+            public void readNBT(Capability<IReactorHandlerNew> capability, IReactorHandlerNew instance, Direction side, INBT nbt) {
+
             }
-        }, () -> new ReactorHandler(LibReactor.DEFAULT_MAX_HEAT, 6, 9));
+        }, ReactorHandlerNew::new);
     }
 }

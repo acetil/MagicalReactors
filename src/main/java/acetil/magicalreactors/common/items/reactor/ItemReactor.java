@@ -9,7 +9,6 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import acetil.magicalreactors.common.capabilities.ProviderReactorItem;
 import acetil.magicalreactors.common.capabilities.reactoritems.ReactorItem;
 import acetil.magicalreactors.common.core.NuclearCreativeTab;
 

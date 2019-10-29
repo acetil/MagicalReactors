@@ -4,7 +4,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.config.Configuration;
-import acetil.magicalreactors.common.capabilities.ProviderReactorItem;
 import acetil.magicalreactors.common.capabilities.reactoritems.AdvVentReactorItem;
 import acetil.magicalreactors.common.lib.LibMisc;
 import acetil.magicalreactors.common.lib.LibReactor;

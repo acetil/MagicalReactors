@@ -20,7 +20,7 @@ public class ReactorFuelInputInterface implements IReactorInterfaceHandler {
     public List<IReactorFuel> getReactorFuels () {
         List<IReactorFuel> fuels = new ArrayList<>();
         if (!itemHandler.getStackInSlot(0).isEmpty()) {
-            fuels.add(itemHandler.getStackInSlot(0).getCapability(CapabilityReactorFuel.FUEL_CAPABILITY, null).getFuel());
+            fuels.add(itemHandler.getStackInSlot(0).getCapability(CapabilityReactorFuel.FUEL_CAPABILITY, null));
             itemHandler.getStackInSlot(0).shrink(1);
         }
         return fuels;

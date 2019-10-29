@@ -1,8 +1,8 @@
 package acetil.magicalreactors.common.capabilities.machines.machinehandlers;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemStackHandler;
 import acetil.magicalreactors.common.capabilities.machines.MachineFluidHandler;
 
@@ -28,8 +28,8 @@ public interface IMachineCapability {
     void setIsInRecipe (boolean isInRecipe);
     List<ItemStack> getRecipeOutputs ();
     void setRecipeOutputs (List<ItemStack> recipeOutputs);
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     void handlePacket (boolean isOn, int energyPerTick, int energyToCompletion, int totalEnergyRequired);
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     void updateClient ();
 }

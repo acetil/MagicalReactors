@@ -1,8 +1,8 @@
 package acetil.magicalreactors.common.capabilities;
 
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -18,15 +18,15 @@ public class CapabilityReactorFuel {
         CapabilityManager.INSTANCE.register(IReactorFuelCapability.class, new Capability.IStorage<IReactorFuelCapability>() {
             @Nullable
             @Override
-            public NBTBase writeNBT(Capability<IReactorFuelCapability> capability, IReactorFuelCapability instance, EnumFacing side) {
-                NBTTagCompound nbt = new NBTTagCompound();
-                nbt.setString("name", instance.getName());
+            public INBT writeNBT(Capability<IReactorFuelCapability> capability, IReactorFuelCapability instance, Direction side) {
+                CompoundNBT nbt = new CompoundNBT();
+                nbt.putString("name", instance.getName());
                 return nbt;
             }
 
             @Override
-            public void readNBT(Capability<IReactorFuelCapability> capability, IReactorFuelCapability instance, EnumFacing side, NBTBase nbt) {
-                instance.setName(((NBTTagCompound)nbt).getString("name"));
+            public void readNBT(Capability<IReactorFuelCapability> capability, IReactorFuelCapability instance, Direction side, INBT nbt) {
+                instance.setName(((CompoundNBT)nbt).getString("name"));
             }
         }, () -> new ReactorFuelCapability("default")); //TODO: update
     }

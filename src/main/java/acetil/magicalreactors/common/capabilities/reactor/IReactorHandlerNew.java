@@ -2,7 +2,7 @@ package acetil.magicalreactors.common.capabilities.reactor;
 
 import acetil.magicalreactors.common.reactor.IReactorFuel;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public interface IReactorHandlerNew {
     int getHeat ();
@@ -11,8 +11,8 @@ public interface IReactorHandlerNew {
     void update ();
     void cool (int cooling);
     boolean finished ();
-    NBTTagCompound writeNBT ();
-    void readNBT (NBTTagCompound nbt);
+    CompoundNBT writeNBT ();
+    void readNBT (CompoundNBT nbt);
     void setFuels (IReactorFuel[] fuels);
     void setNumSlots (int numSlots);
     // TODO: update

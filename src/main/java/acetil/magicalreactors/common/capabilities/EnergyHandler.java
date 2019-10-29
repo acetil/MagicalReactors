@@ -1,6 +1,6 @@
 package acetil.magicalreactors.common.capabilities;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public class EnergyHandler implements IEnergyStorage {
@@ -81,12 +81,12 @@ public class EnergyHandler implements IEnergyStorage {
     public void setMaxReceive (int maxReceive) {
         this.maxReceive = maxReceive;
     }
-    public void readNBT (NBTTagCompound nbt) {
-        this.energy = nbt.getInteger("stored_energy");
+    public void readNBT (CompoundNBT nbt) {
+        this.energy = nbt.getInt("stored_energy");
     }
-    public NBTTagCompound writeNBT () {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setInteger("stored_energy", this.energy);
+    public CompoundNBT writeNBT () {
+        CompoundNBT nbt = new CompoundNBT();
+        nbt.putInt("stored_energy", this.energy);
         return nbt;
     }
 }

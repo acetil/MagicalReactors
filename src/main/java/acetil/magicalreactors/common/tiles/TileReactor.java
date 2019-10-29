@@ -1,8 +1,6 @@
 package acetil.magicalreactors.common.tiles;
 
-import acetil.magicalreactors.common.capabilities.CapabilityReactor;
 import acetil.magicalreactors.common.capabilities.EnergyHandler;
-import acetil.magicalreactors.common.capabilities.ReactorHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
