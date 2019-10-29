@@ -21,24 +21,16 @@ import acetil.magicalreactors.common.lib.LibMisc;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class BlockDistiller extends Block implements ITileEntityProvider {
+public class BlockDistiller extends Block {
     private static final PropertyEnum<EnumDistillState> blockPosition = PropertyEnum.create("block_pos", EnumDistillState.class);
     private String machineName;
     private int bottomSlots;
     public BlockDistiller(String name, String machineName, int bottomSlots) {
-        super(Material.ROCK);
-        setUnlocalizedName(LibMisc.MODID + "." + name);
+        super(Properties.create(Material.ROCK));
         setRegistryName(name);
-        setHardness(4F);
-        setCreativeTab(NuclearCreativeTab.INSTANCE);
-        setDefaultState(this.getBlockState().getBaseState().withProperty(blockPosition, EnumDistillState.NONE));
+        //setDefaultState(this.getBlockState().getBaseState().withProperty(blockPosition, EnumDistillState.NONE));
         this.machineName = machineName;
         this.bottomSlots = bottomSlots;
-    }
-    public void initModel () {
-        // TODO update json
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0,
-                new ModelResourceLocation(getRegistryName(), "inventory"));
     }
 
     @SuppressWarnings("deprecation")

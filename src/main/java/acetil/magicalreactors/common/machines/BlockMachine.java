@@ -1,6 +1,7 @@
 package acetil.magicalreactors.common.machines;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -11,6 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -25,21 +27,13 @@ import javax.annotation.Nullable;
 public class BlockMachine extends Block implements ITileEntityProvider {
     protected String machineName;
     public BlockMachine (String name, String machineName) {
-        super(Material.ROCK);
-        setUnlocalizedName(LibMisc.MODID + "." + name);
+        super(Properties.create(Material.ROCK));
         setRegistryName(name);
-        setHardness(4F);
-        setCreativeTab(NuclearCreativeTab.INSTANCE);
         this.machineName = machineName;
-    }
-    public void initModel () {
-        // TODO update json
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0,
-                new ModelResourceLocation(getRegistryName(), "inventory"));
     }
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileMachineBase(machineName);
     }
     public boolean onBlockActivated (World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,

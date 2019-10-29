@@ -1,6 +1,6 @@
 package acetil.magicalreactors.common.capabilities.machines;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -92,7 +92,7 @@ public class MachineFluidHandler implements IFluidHandler {
             if (fluidStacks.get(i) != null) {
                 int amountDrained = Math.min(maxDrain, fluidStacks.get(i).amount);
                 Fluid fluidType = fluidStacks.get(i).getFluid();
-                NBTTagCompound tag = fluidStacks.get(i).tag;
+                CompoundNBT tag = fluidStacks.get(i).tag;
                 if (doDrain) {
                     fluidStacks.get(i).amount -= amountDrained;
                     if (fluidStacks.get(i).amount <= 0) {
@@ -144,39 +144,39 @@ public class MachineFluidHandler implements IFluidHandler {
     public FluidStack getFluid (int slot) {
         return fluidStacks.get(slot);
     }
-    public void readNBT (NBTTagCompound nbt) {
-        if (nbt.getInteger("num_inputs") != inputSlots && nbt.getInteger("num_outputs") != outputSlots) {
+    public void readNBT (CompoundNBT nbt) {
+        if (nbt.getInt("num_inputs") != inputSlots && nbt.getInt("num_outputs") != outputSlots) {
             throw new IllegalArgumentException("Wrong number of inputs or outputs, probably a different tile entity!");
         }
         fluidStacks.clear();
-        NBTTagCompound fluids = nbt.getCompoundTag("fluids");
+        CompoundNBT fluids = nbt.getCompound("fluids");
         for (int i = 0; i < inputSlots + outputSlots; i++) {
-            NBTTagCompound fluidTag = fluids.getCompoundTag("fluid" + i);
+            CompoundNBT fluidTag = fluids.getCompound("fluid" + i);
             fluidStacks.add(new FluidStack(FluidRegistry.getFluid(fluidTag.getString("name")),
-                    fluidTag.getInteger("amount")));
-            if (fluidTag.hasKey("nbt")) {
-                fluidStacks.get(i).tag = fluidTag.getCompoundTag("tag");
+                    fluidTag.getInt("amount")));
+            if (fluidTag.contains("nbt")) {
+                fluidStacks.get(i).tag = fluidTag.getCompound("tag");
             }
         }
     }
-    public NBTTagCompound writeNBT () {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setInteger("num_inputs", inputSlots + outputSlots);
-        NBTTagCompound fluids = new NBTTagCompound();
+    public CompoundNBT writeNBT () {
+        CompoundNBT nbt = new CompoundNBT();
+        nbt.putInt("num_inputs", inputSlots + outputSlots);
+        CompoundNBT fluids = new CompoundNBT();
         for (int i = 0; i < inputSlots + outputSlots; i++) {
             FluidStack stack = fluidStacks.get(i);
             if (stack == null) {
                 continue;
             }
-            NBTTagCompound fluidTag = new NBTTagCompound();
-            fluidTag.setString("name", stack.getFluid().getName());
-            fluidTag.setInteger("amount", stack.amount);
-            if (stack.tag != null) {
-                fluidTag.setTag("nbt", stack.tag);
+            CompoundNBT fluidTag = new CompoundNBT();
+            fluidTag.putString("name", stack.getFluid().getRegistryName().toString());
+            fluidTag.putInt("amount", stack.getAmount());
+            if (stack.getTag() != null) {
+                fluidTag.put("nbt", stack.getTag());
             }
-            fluids.setTag("fluid" + i, fluidTag);
+            fluids.put("fluid" + i, fluidTag);
         }
-        nbt.setTag("fluids", fluids);
+        nbt.put("fluids", fluids);
         return nbt;
     }
     protected void onContentsChanged (int slot, int amount) {

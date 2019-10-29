@@ -10,25 +10,27 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.lib.LibGui;
 import acetil.magicalreactors.common.lib.LibMisc;
+import net.minecraftforge.registries.ObjectHolder;
 
+@ObjectHolder(LibMisc.MODID)
 public class MachineBlocks {
-    public static BlockMachine CENTRIFUGE = new BlockMachine("centrifuge", "centrifuge");
-    public static BlockMachine RECRYSTALISER = new BlockMachine("recrystaliser", "recrystaliser");
-    public static BlockMachine REACTOR_VESSEL = new BlockMachine("reactor_vessel", "reactor_vessel");
-    public static BlockMachine FERMENTER = new BlockMachine("fermenter", "fermenter");
-    public static BlockMachine ROD_FILLER = new BlockMachine("rod_filler", "rod_filler");
-    public static BlockMachine CONDENSER = new BlockMachine("condenser", "condenser");
-    public static BlockDistiller DISTILLER = new BlockDistiller("distiller", "distiller", 2);
+    public static BlockMachine CENTRIFUGE = null;
+    public static BlockMachine RECRYSTALISER = null;
+    public static BlockMachine REACTOR_VESSEL = null;
+    public static BlockMachine FERMENTER = null;
+    public static BlockMachine ROD_FILLER = null;
+    public static BlockMachine CONDENSER = null;
+    public static BlockDistiller DISTILLER = null;
     public static void registerMachineBlocks (RegistryEvent.Register<Block> event) {
-        event.getRegistry().register(CENTRIFUGE);
-        event.getRegistry().register(RECRYSTALISER);
-        event.getRegistry().register(REACTOR_VESSEL);
-        event.getRegistry().register(FERMENTER);
-        event.getRegistry().register(ROD_FILLER);
-        event.getRegistry().register(DISTILLER);
+        event.getRegistry().register(new BlockMachine("centrifuge", "centrifuge"));
+        event.getRegistry().register(new BlockMachine("recrystaliser", "recrystaliser"));
+        event.getRegistry().register(new BlockMachine("reactor_vessel", "reactor_vessel"));
+        event.getRegistry().register(new BlockMachine("fermenter", "fermenter"));
+        event.getRegistry().register(new BlockMachine("rod_filler", "rod_filler"));
+        event.getRegistry().register(new BlockDistiller("distiller", "distiller", 2));
 
-        GameRegistry.registerTileEntity(TileMachineBase.class, new ResourceLocation(LibMisc.MODID + ":machine_entity"));
-        GameRegistry.registerTileEntity(TileMachineDistiller.class, new ResourceLocation(LibMisc.MODID + ":distiller_entity"));
+        /*GameRegistry.registerTileEntity(TileMachineBase.class, new ResourceLocation(LibMisc.MODID + ":machine_entity"));
+        GameRegistry.registerTileEntity(TileMachineDistiller.class, new ResourceLocation(LibMisc.MODID + ":distiller_entity"));*/
 
         registerMachines();
     }
@@ -58,16 +60,6 @@ public class MachineBlocks {
         ModBlocks.registerItemBlock(event, ROD_FILLER);
         ModBlocks.registerItemBlock(event, CONDENSER);
         ModBlocks.registerItemBlock(event, DISTILLER);
-    }
-    @SideOnly(Side.CLIENT)
-    public static void initMachineModels () {
-        CENTRIFUGE.initModel();
-        RECRYSTALISER.initModel();
-        REACTOR_VESSEL.initModel();
-        FERMENTER.initModel();
-        ROD_FILLER.initModel();
-        CONDENSER.initModel();
-        DISTILLER.initModel();
     }
 
 }
