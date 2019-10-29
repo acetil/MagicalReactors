@@ -13,7 +13,9 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.Level;
 
@@ -26,23 +28,23 @@ public class GuiContainer extends Container {
     private static final int INVENTORY_SLOT_SIZE = 18;
     private BlockPos tePos;
     public GuiContainer (MachineContainerJson json, String containerTypeName, int windowId, PlayerInventory inv, PacketBuffer data) {
+        this(json, containerTypeName, windowId, inv, inv.player.world.getTileEntity(data.readBlockPos())
+                .getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+                .orElse(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.getDefaultInstance()));
+    }
+    public GuiContainer (MachineContainerJson json, String containerTypeName, int windowId, PlayerInventory inv, IItemHandler handler) {
         super(ForgeRegistries.CONTAINERS.getValue(new ResourceLocation(containerTypeName)), windowId);
-        addOwnSlots(new Inventory(json.inputsSlots.size() + json.outputSlots.size()), json);
-        if (data == null) {
-            MagicalReactors.LOGGER.warn("Container {} has null packet data!", containerTypeName);
-        } else {
-            tePos = data.readBlockPos();
-        }
+        addOwnSlots(handler, json);
         addPlayerSlots(inv, json);
     }
-    private void addOwnSlots (IInventory inv, MachineContainerJson json) {
+    private void addOwnSlots (IItemHandler inv, MachineContainerJson json) {
         int slotNum = 0;
         for (MachineSlotJson slotJson : json.inputsSlots) {
-            addSlot(new Slot(inv, slotNum, slotJson.x, slotJson.y));
+            addSlot(new SlotItemHandler(inv, slotNum, slotJson.x, slotJson.y));
             slotNum++;
         }
         for (MachineSlotJson slotJson : json.outputSlots) {
-            addSlot(new Slot(inv, slotNum, slotJson.x, slotJson.y));
+            addSlot(new SlotItemHandler(inv, slotNum, slotJson.x, slotJson.y));
             slotNum++;
         }
     }

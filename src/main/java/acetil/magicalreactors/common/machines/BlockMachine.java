@@ -1,12 +1,11 @@
 package acetil.magicalreactors.common.machines;
 
+import acetil.magicalreactors.common.containers.GuiContainer;
+import acetil.magicalreactors.common.containers.json.MachineContainerManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -15,9 +14,8 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -68,23 +66,25 @@ public class BlockMachine extends Block {
 
             @Nullable
             @Override
-            public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
+            public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity playerEntity) {
                 ItemStackHandler itemHandler = ((TileMachineBase) te).itemHandler;
-
-                return null;
+                return new GuiContainer(MachineContainerManager.getContainerJson(machineName), machineName, windowId, inv, itemHandler);
             }
         }, pos);
         return true;
     }
-    /*public void onBlockAdded (World worldIn, BlockPos pos, BlockState state) {
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (!worldIn.isRemote) {
             boolean isOn = worldIn.isBlockPowered(pos);
             if (worldIn.getTileEntity(pos) instanceof TileMachineBase) {
                 ((TileMachineBase)worldIn.getTileEntity(pos)).setPoweredState(isOn);
             }
         }
-        super.onBlockAdded(worldIn, pos, state);
-    } */
+        super.onBlockAdded(state, worldIn, pos, oldState, isMoving);
+    }
     @SuppressWarnings("deprecation")
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         if (!worldIn.isRemote) {
@@ -93,9 +93,9 @@ public class BlockMachine extends Block {
             }
         }
     }
-
-    /*@Override
-    public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos,@Nonnull BlockState state) {
+    @SuppressWarnings("deprecation")
+    @Override
+    public void spawnAdditionalDrops(BlockState state, World worldIn, BlockPos pos, ItemStack stack) {
         if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).isPresent()) {
             IItemHandler itemStackHandler = worldIn.getTileEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).;
             for (int i = 0; i < itemStackHandler.getSlots(); i++) {
@@ -106,6 +106,6 @@ public class BlockMachine extends Block {
             worldIn.updateComparatorOutputLevel(pos, this);
         }
 
-        super.breakBlock(worldIn, pos, state);
-    }*/
+        super.spawnAdditionalDrops(state, worldIn, pos, stack);
+    }
 }
