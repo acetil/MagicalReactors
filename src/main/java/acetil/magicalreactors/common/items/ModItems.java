@@ -9,7 +9,7 @@ import acetil.magicalreactors.common.lib.LibMisc;
 import net.minecraftforge.registries.ObjectHolder;
 import org.apache.logging.log4j.Level;
 
-@Mod.EventBusSubscriber(modid = LibMisc.MODID)
+@Mod.EventBusSubscriber(modid = LibMisc.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 @ObjectHolder(LibMisc.MODID)
 public class ModItems {
 

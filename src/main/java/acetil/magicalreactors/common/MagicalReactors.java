@@ -1,6 +1,7 @@
 package acetil.magicalreactors.common;
 
 import acetil.magicalreactors.client.core.proxy.ClientProxy;
+import acetil.magicalreactors.client.gui.json.MachineGuiManager;
 import acetil.magicalreactors.common.core.proxy.IProxy;
 import acetil.magicalreactors.common.core.proxy.ServerProxy;
 import acetil.magicalreactors.common.lib.LibMisc;
@@ -36,14 +37,16 @@ public class MagicalReactors {
 
     }
     private void clientSetup (final FMLClientSetupEvent event) {
-
+        MachineGuiManager.registerGuis();
     }
     private void enqueueIMC (final InterModEnqueueEvent event) {
 
     }
     private void processIMC (final InterModProcessEvent event) {
 
-    }/*
+    }
+
+    /*
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);

@@ -16,11 +16,7 @@ import java.util.stream.Collectors;
 public class FileUtils {
     public static List<Path> getPaths (URI uri) {
         List<Path> paths = new ArrayList<>();
-        if (uri == null) {
-            return paths;
-        }
         try {
-            FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
             paths = Files.walk(Paths.get(uri))
                         .filter(Files::isRegularFile)
                         .collect(Collectors.toList());
@@ -46,14 +42,15 @@ public class FileUtils {
         return uri;
     }
     public static void closeFileSystem (URI uri) {
-        if (uri == null) {
+        /*if (uri == null) {
             return;
         }
+
         try {
             FileSystems.getFileSystem(uri).close();
         } catch (IOException e) {
             MagicalReactors.LOGGER.log(Level.ERROR, "Error closing file system at path " + uri.getPath());
             MagicalReactors.LOGGER.log(Level.ERROR, e);
-        }
+        }*/
     }
 }

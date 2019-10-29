@@ -1,5 +1,6 @@
 package acetil.magicalreactors.common.block;
 
+import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.block.reactor.BlockReactorController;
 import acetil.magicalreactors.common.block.reactor.BlockReactor;
 import acetil.magicalreactors.common.block.reactor.BlockRuneBase;
@@ -13,24 +14,33 @@ import net.minecraftforge.fml.common.Mod;
 import acetil.magicalreactors.common.lib.LibMisc;
 import net.minecraftforge.registries.ObjectHolder;
 
-@Mod.EventBusSubscriber(modid = LibMisc.MODID)
+@Mod.EventBusSubscriber(modid = LibMisc.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 @SuppressWarnings("unused")
 @ObjectHolder(LibMisc.MODID)
 public class ModBlocks {
+    @ObjectHolder("temp_ore")
     public static BlockOre TEMP_ORE1 = null; //TODO
+    @ObjectHolder("temp_ore_b")
     public static BlockOre TEMP_ORE2 = null; //TODO
+    @ObjectHolder("reactor_controller")
     public static BlockReactorController REACTOR_CONTROLLER = null;
+    @ObjectHolder("rune_basic")
     public static BlockRuneBase RUNE_BASIC = null;
+    @ObjectHolder("rune_stabilisation")
     public static BlockRuneBase RUNE_STABILISATION = null;
+    @ObjectHolder("rune_transfer")
     public static BlockRuneBase RUNE_TRANSFER = null;
+    @ObjectHolder("rune_harmonic")
     public static BlockRuneBase RUNE_HARMONIC = null;
+    @ObjectHolder("rune_locus")
     public static BlockRuneBase RUNE_LOCUS = null;
+    @ObjectHolder("reactor_block")
     public static BlockReactor REACTOR_BLOCK = null;
 
     @SubscribeEvent
     public static void registerBlocks (RegistryEvent.Register<Block> event) {
-        event.getRegistry().register(new BlockOre("temp_ore1", 4f));
-        event.getRegistry().register(new BlockOre("temp_ore2", 4f));
+        event.getRegistry().register(new BlockOre("temp_ore", 4f));
+        event.getRegistry().register(new BlockOre("temp_ore_b", 4f));
         event.getRegistry().register(new BlockReactorController());
         event.getRegistry().register(new BlockRuneBase("rune_basic"));
         event.getRegistry().register(new BlockRuneBase("rune_stabilisation"));
@@ -59,6 +69,7 @@ public class ModBlocks {
         System.out.println("Registered itemblocks");
     }
     public static void registerItemBlock (RegistryEvent.Register<Item> event, Block b) {
+        MagicalReactors.LOGGER.info("Registered itemblock for {}", b.getRegistryName());
         event.getRegistry().register(new BlockItem(b, new Item.Properties()).setRegistryName(b.getRegistryName()));
     }
 }

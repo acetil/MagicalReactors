@@ -1,6 +1,7 @@
 package acetil.magicalreactors.common.containers.json;
 
 import acetil.magicalreactors.common.containers.GuiContainerFactory;
+import acetil.magicalreactors.common.lib.LibMisc;
 import com.google.gson.Gson;
 import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.utils.FileUtils;
@@ -8,6 +9,7 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.Level;
 
 import java.io.IOException;
@@ -18,7 +20,7 @@ import java.rmi.registry.Registry;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@Mod.EventBusSubscriber(modid = LibMisc.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MachineContainerManager {
     private static Map<String, MachineContainerJson> registry = new HashMap<>();
 
