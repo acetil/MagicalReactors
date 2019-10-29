@@ -1,6 +1,8 @@
 package acetil.magicalreactors.client.gui.elements;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
+import acetil.magicalreactors.client.gui.ContainerGui;
+import acetil.magicalreactors.common.containers.GuiContainer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -23,7 +25,7 @@ public class ElementPercentBar implements IGuiElement {
     private int width;
     private int height;
     private BarDirection direction;
-    private ProgressFunction progressFunction;
+    private PercentFunction percentFunction;
     @Override
     public IGuiElement applyJson(GuiElementJson json) {
         name = json.name;
@@ -39,17 +41,13 @@ public class ElementPercentBar implements IGuiElement {
     public void setDirection (BarDirection direction) {
         this.direction = direction;
     }
-    public void setProgressFunction (ProgressFunction function) {
-        this.progressFunction = function;
+    public void setProgressFunction (PercentFunction function) {
+        this.percentFunction = function;
     }
     @Override
-    public void draw(GuiContainer gui, TileMachineBase te) {
-        IMachineCapability machineHandler = te.getCapability(CapabilityMachine.MACHINE_CAPABILITY, null);
-        IItemHandler itemHandler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-        IEnergyStorage energyHandler = te.getCapability(CapabilityEnergy.ENERGY, null);
-        IFluidHandler fluidHandler = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-        float progress = progressFunction.getProgress(gui, machineHandler, itemHandler, energyHandler, fluidHandler);
-        gui.mc.getTextureManager().bindTexture(texture);
+    public void draw(ContainerGui gui, TileEntity te) {
+        float progress = percentFunction.getFilled(gui, te);
+        gui.getMinecraft().getTextureManager().bindTexture(texture);
         int width = this.width;
         int height = this.height;
         int startX = x;
@@ -74,15 +72,14 @@ public class ElementPercentBar implements IGuiElement {
                 height *= progress;
                 break;
         }
-        gui.drawTexturedModalRect(startX + gui.getGuiLeft(), startY + gui.getGuiTop(), startU, startV, width, height);
+        gui.blit(startX + gui.getGuiLeft(), startY + gui.getGuiTop(), startU, startV, width, height);
 
     }
     public enum BarDirection {
         UP, DOWN, LEFT, RIGHT
     }
-    public interface ProgressFunction {
-        float getProgress (GuiContainer gui, IMachineCapability machineHandler, IItemHandler itemHandler, IEnergyStorage energyHandler,
-                           IFluidHandler fluidHandler);
+    public interface PercentFunction {
+        float getFilled (ContainerGui gui, TileEntity te);
     }
 }
 

@@ -1,8 +1,9 @@
 package acetil.magicalreactors.client.gui.elements;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
+import acetil.magicalreactors.client.gui.ContainerGui;
 import acetil.magicalreactors.client.gui.json.GuiElementJson;
 import acetil.magicalreactors.common.machines.TileMachineBase;
+import net.minecraft.tileentity.TileEntity;
 
 public class ElementToggle implements IGuiElement {
 
@@ -12,7 +13,9 @@ public class ElementToggle implements IGuiElement {
     }
 
     @Override
-    public void draw(GuiContainer gui, TileMachineBase te) {
+    public void draw(ContainerGui gui, TileEntity te) {
 
     }
+
+
 }
