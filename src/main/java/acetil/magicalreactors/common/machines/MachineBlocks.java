@@ -72,9 +72,12 @@ public class MachineBlocks {
         ModBlocks.registerItemBlock(event, DISTILLER);
     }
     public static void registerTileEntities (RegistryEvent.Register<TileEntityType<?>> event) {
-        event.getRegistry().register(TileEntityType.Builder.create(TileMachineBase::new).build(null)
+        event.getRegistry().register(TileEntityType.Builder
+                .create(TileMachineBase::new, CENTRIFUGE, RECRYSTALISER, FERMENTER, REACTOR_VESSEL, CONDENSER)
+                .build(null)
                 .setRegistryName(new ResourceLocation(LibMisc.MODID, "machine_base")));
-        event.getRegistry().register(TileEntityType.Builder.create(TileMachineDistiller::new).build(null)
+        event.getRegistry().register(TileEntityType.Builder.create(TileMachineDistiller::new, DISTILLER)
+                .build(null)
                 .setRegistryName(new ResourceLocation(LibMisc.MODID, "machine_distiller")));
     }
 }

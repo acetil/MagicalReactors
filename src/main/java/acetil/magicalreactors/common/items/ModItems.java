@@ -18,7 +18,7 @@ public class ModItems {
     @SubscribeEvent
     public static void registerItems (RegistryEvent.Register<Item> event) {
         event.getRegistry().register(new ItemResource("uranium_ingot"));
-        event.getRegistry().register(new ItemResource("item_temp2"));
+        event.getRegistry().register(new ItemResource("temp2"));
         MagicalReactors.LOGGER.log(Level.INFO, "Item registry complete");
     }
 

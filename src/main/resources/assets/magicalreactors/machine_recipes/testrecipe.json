@@ -4,14 +4,14 @@
   "ingredients" : [
     {
       "type" : "item",
-      "item" : "nuclearmod:uranium_ingot",
+      "item" : "magicalreactors:uranium_ingot",
       "count" : 1
     }
   ],
   "output" : [
     {
       "type" : "item",
-      "item" : "nuclearmod:temp2",
+      "item" : "magicalreactors:temp2",
       "count" : 1
     },
     {

@@ -182,8 +182,13 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
         return machine;
     }
     private void sendMessage (){
+        if (world == null) {
+            return;
+        }
         PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)),
                 new MessageMachineUpdate(pos.getX(), pos.getY(), pos.getZ(), machineHandler.isOn(),
                         machineHandler.getEnergyPerTick(), machineHandler.energyToCompletion(), machineHandler.energyRequired()));
+
+
     }
 }

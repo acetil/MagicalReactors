@@ -42,11 +42,14 @@ public class ModBlocks {
     public static Block RUNE_LOCUS = null;
     @ObjectHolder("reactor_block")
     public static Block REACTOR_BLOCK = null;
-
+    @ObjectHolder("test_energy_source")
+    public static Block TEST_ENERGY_SOURCE = null;
     @ObjectHolder("reactor")
     public static TileEntityType<?> REACTOR_TILE_ENTITY = null;
     @ObjectHolder("reactor_controller")
     public static TileEntityType<?> REACTOR_CONTROLLER_TILE_ENTITY = null;
+    @ObjectHolder("test_energy_source")
+    public static TileEntityType<?> TEST_ENERGY_SOURCE_TILE = null;
     public static TileEntityType<?> BYPRODUCT_INTERFACE;
     public static TileEntityType<?> COOLING_INTERFACE;
     public static TileEntityType<?> ENERGY_INTERFACE;
@@ -62,6 +65,7 @@ public class ModBlocks {
         event.getRegistry().register(new BlockRuneBase("rune_harmonic"));
         event.getRegistry().register(new BlockRuneBase("rune_locus"));
         event.getRegistry().register(new BlockReactor());
+        event.getRegistry().register(new BlockTestEnergySource());
         MachineBlocks.registerMachineBlocks(event);
         /*GameRegistry.registerTileEntity(TileReactor.class, new ResourceLocation(LibMisc.MODID + ":reactor_entity"));
         GameRegistry.registerTileEntity(TileReactorController.class, new ResourceLocation(LibMisc.MODID + ":reactor_controller_entity"));
@@ -79,6 +83,7 @@ public class ModBlocks {
         registerItemBlock(event, RUNE_HARMONIC);
         registerItemBlock(event, RUNE_LOCUS);
         registerItemBlock(event, REACTOR_BLOCK);
+        registerItemBlock(event, TEST_ENERGY_SOURCE);
         MachineBlocks.registerMachineItems(event);
         System.out.println("Registered itemblocks");
     }
@@ -88,18 +93,19 @@ public class ModBlocks {
     }
     @SubscribeEvent
     public static void registerTileEntities (RegistryEvent.Register<TileEntityType<?>> event) {
-        registerTileEntity(event, TileReactor::new, "reactor");
-        registerTileEntity(event, TileReactorController::new, "reactor_controller");
+        registerTileEntity(event, TileReactor::new, "reactor", REACTOR_BLOCK);
+        registerTileEntity(event, TileReactorController::new, "reactor_controller", REACTOR_CONTROLLER);
         registerTileEntity(event, TileReactorInterfaceByproduct::new, "byproduct_interface");
         registerTileEntity(event, TileReactorInterfaceCooling::new, "cooling_interface");
         registerTileEntity(event, TileReactorInterfaceEnergy::new, "energy_interface");
         registerTileEntity(event, TileReactorInterfaceFuelLoader::new, "fuel_interface");
+        registerTileEntity(event, TileTestEnergySource::new, "test_energy_source", TEST_ENERGY_SOURCE);
         MachineBlocks.registerTileEntities(event);
         MagicalReactors.LOGGER.info("Registered tile entities!");
     }
     public static void registerTileEntity (RegistryEvent.Register<TileEntityType<?>> event, Supplier<? extends TileEntity> factory,
-                                           String name) {
-        event.getRegistry().register(TileEntityType.Builder.create(factory).build(null)
+                                           String name, Block... blocks) {
+        event.getRegistry().register(TileEntityType.Builder.create(factory, blocks).build(null)
                 .setRegistryName(new ResourceLocation(LibMisc.MODID, name)));
     }
 }

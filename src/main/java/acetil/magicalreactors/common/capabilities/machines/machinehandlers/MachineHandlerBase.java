@@ -158,7 +158,7 @@ public class MachineHandlerBase implements IMachineCapability {
     }
     @Override
     public void updateWork(ItemStackHandler itemStackHandler, MachineFluidHandler machineFluidHandler) {
-        //System.out.println("Updating work");
+        System.out.println("Updating work");
         // TODO clean up
         if (workFinished()) {
             completeRecipe(itemStackHandler, machineFluidHandler);

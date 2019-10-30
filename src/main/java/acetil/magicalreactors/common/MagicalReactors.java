@@ -6,6 +6,8 @@ import acetil.magicalreactors.common.capabilities.*;
 import acetil.magicalreactors.common.core.proxy.IProxy;
 import acetil.magicalreactors.common.core.proxy.ServerProxy;
 import acetil.magicalreactors.common.lib.LibMisc;
+import acetil.magicalreactors.common.network.PacketHandler;
+import acetil.magicalreactors.common.recipes.MachineRecipeManager;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -36,6 +38,8 @@ public class MagicalReactors {
     }
     private void setup (final FMLCommonSetupEvent event) {
         registerCapabilities();
+        MachineRecipeManager.readRecipes("assets/magicalreactors/machine_recipes");
+        PacketHandler.initMessages();
     }
     private void clientSetup (final FMLClientSetupEvent event) {
         MachineGuiManager.registerGuis();

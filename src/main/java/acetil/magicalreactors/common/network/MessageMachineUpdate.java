@@ -54,6 +54,7 @@ public class MessageMachineUpdate implements IMessage {
                        .handlePacket(isOn, energyPerTick, energyToCompletion, totalEnergyRequired);
            }
         });
+        ctx.get().setPacketHandled(true);
     }
 
     @Override
