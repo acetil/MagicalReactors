@@ -30,24 +30,17 @@ public class BlockReactorController extends Block{
         setRegistryName("reactor_controller");
         //setCreativeTab(NuclearCreativeTab.INSTANCE);
     }
-
+    @Override
+    public boolean hasTileEntity (BlockState state) {
+        return true;
+    }
     @Nullable
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileReactorController();
     }
-    @Override
-    public void onBlockPlacedBy (World worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        // TODO: add other details
-        TileEntity te =  worldIn.getTileEntity(pos);
-        if (te instanceof TileReactorController) {
-            //((TileReactorController)te).setPosition(worldIn, pos);
-        } else {
-            MagicalReactors.LOGGER.log(Level.WARN,
-                    String.format("Null reactor controller TE added at (%d, %d, %d)", pos.getX(), pos.getY(), pos.getZ()));
-        }
-    }
     // TODO: figure out deprecation
+    @SuppressWarnings("deprecation")
     @Override
     public boolean onBlockActivated (BlockState state, World worldIn, BlockPos pos, PlayerEntity playerIn,
                                      Hand hand, BlockRayTraceResult hit) {

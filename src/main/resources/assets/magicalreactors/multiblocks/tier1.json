@@ -2,12 +2,12 @@
   "name" : "reactor_tier1",
   "type" : "reactor",
   "key" : {
-    "#" : "nuclearmod:rune_basic",
-    "X" : "nuclearmod:rune_stabilisation",
-    "O" : "nuclearmod:rune_transfer",
-    "x" : "nuclearmod:rune_locus",
-    "0" : "nuclearmod:reactor_controller",
-    "*" : "nuclearmod:reactor_block_new"
+    "#" : "magicalreactors:rune_basic",
+    "X" : "magicalreactors:rune_stabilisation",
+    "O" : "magicalreactors:rune_transfer",
+    "x" : "magicalreactors:rune_locus",
+    "0" : "magicalreactors:reactor_controller",
+    "*" : "magicalreactors:reactor_block"
   },
   "multiblock" : [
     [

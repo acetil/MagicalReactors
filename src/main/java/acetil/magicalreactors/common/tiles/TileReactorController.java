@@ -34,6 +34,7 @@ public class TileReactorController extends TileEntity implements ITickableTileEn
     }
     public void setPosition () {
         reactorhandler.setPosition(world, pos);
+        System.out.println("Setting position!");
     }
     @Override
     public void setPos (BlockPos pos) {
