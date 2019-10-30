@@ -10,6 +10,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -29,6 +30,7 @@ public class GuiContainer extends Container {
     private static final int INVENTORY_SLOT_SIZE = 18;
     private BlockPos tePos;
     private IItemHandler itemHandler;
+    private int ownSize;
     public GuiContainer (MachineContainerJson json, String containerTypeName, int windowId, PlayerInventory inv, PacketBuffer data) {
         super(ForgeRegistries.CONTAINERS.getValue(new ResourceLocation(containerTypeName)), windowId);
         tePos = data.readBlockPos();
@@ -45,6 +47,7 @@ public class GuiContainer extends Container {
         this.tePos = pos;
     }
     public void addSlots (IItemHandler handler, PlayerInventory inv, MachineContainerJson json) {
+        ownSize = json.inputsSlots.size() + json.outputSlots.size();
         addOwnSlots(handler, json);
         addPlayerSlots(inv, json);
     }
@@ -68,7 +71,8 @@ public class GuiContainer extends Container {
             }
         }
         for (int i = 0; i < HOTBAR_SIZE; i++) {
-            addSlot(new Slot(inv, i, json.inventoryStartX + i * INVENTORY_SLOT_SIZE, json.inventoryStartY + HOTBAR_OFFSET));
+            addSlot(new Slot(inv, i, json.inventoryStartX + i * INVENTORY_SLOT_SIZE,
+                    json.inventoryStartY + HOTBAR_OFFSET));
         }
     }
     @Override
@@ -80,5 +84,29 @@ public class GuiContainer extends Container {
     }
     public BlockPos getTileEntityPosition () {
         return tePos;
+    }
+    @Override
+    public ItemStack transferStackInSlot (PlayerEntity playerIn, int index) {
+        System.out.println("Transferring stack in slot!");
+        ItemStack stack = ItemStack.EMPTY;
+        Slot slot = getSlot(index);
+        if (slot.getHasStack()) {
+            ItemStack stack1 = slot.getStack();
+            stack = stack1.copy();
+            if (index < ownSize) {
+                if (!this.mergeItemStack(stack1, ownSize, inventorySlots.size(), true)) {
+                    System.out.println("Merged stack!");
+                    return ItemStack.EMPTY;
+                }
+            } else if (!this.mergeItemStack(stack1, 0, ownSize, false)) {
+                return ItemStack.EMPTY;
+            }
+            if (stack1.isEmpty()) {
+                slot.putStack(ItemStack.EMPTY);
+            } else {
+                slot.onSlotChanged();
+            }
+        }
+        return stack;
     }
 }

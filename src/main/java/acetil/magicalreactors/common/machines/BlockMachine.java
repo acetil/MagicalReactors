@@ -93,28 +93,29 @@ public class BlockMachine extends Block {
         }
         super.onBlockAdded(state, worldIn, pos, oldState, isMoving);
     }
+    @Override
     @SuppressWarnings("deprecation")
-    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+    public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         if (!worldIn.isRemote) {
             if (worldIn.getTileEntity(pos) instanceof TileMachineBase) {
                 ((TileMachineBase)worldIn.getTileEntity(pos)).setPoweredState(worldIn.isBlockPowered(pos));
             }
         }
     }
-    @SuppressWarnings("deprecation")
     @Override
-    public void spawnAdditionalDrops(BlockState state, World worldIn, BlockPos pos, ItemStack stack) {
-        if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).isPresent()) {
-            IItemHandler itemStackHandler = worldIn.getTileEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)
+    @SuppressWarnings("deprecation")
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (state.hasTileEntity() && state.getBlock() != newState.getBlock()) {
+            IItemHandler itemHandler = worldIn.getTileEntity(pos)
+                    .getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
                     .orElse(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.getDefaultInstance());
-            for (int i = 0; i < itemStackHandler.getSlots(); i++) {
-                if (!itemStackHandler.getStackInSlot(i).isEmpty()) {
-                    spawnAsEntity(worldIn, pos, itemStackHandler.getStackInSlot(i));
+            for (int i = 0; i < itemHandler.getSlots(); i++) {
+                if (!itemHandler.getStackInSlot(i).isEmpty()) {
+                    spawnAsEntity(worldIn, pos, itemHandler.getStackInSlot(i));
                 }
             }
             worldIn.updateComparatorOutputLevel(pos, this);
         }
-
-        super.spawnAdditionalDrops(state, worldIn, pos, stack);
+        super.onReplaced(state, worldIn, pos, newState, isMoving);
     }
 }
