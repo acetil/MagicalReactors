@@ -4,8 +4,6 @@
     "model" : "magicalreactors:block/rune_basic"
   },
   "variants" : {
-    "inventory" : [{"model" : "magicalreactors:block/rune_basic"}],
-    "normal" : [{}],
     "completed_multiblock" : {
       "false": {"model" : "magicalreactors:block/rune_basic"},
       "true": {"model" : "magicalreactors:block/rune_basic_multi"}
