@@ -89,4 +89,7 @@ public class EnergyHandler implements IEnergyStorage {
         nbt.putInt("stored_energy", this.energy);
         return nbt;
     }
+    public void setTotalEnergy (int energy) {
+        this.energy = energy;
+    }
 }

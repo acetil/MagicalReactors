@@ -245,6 +245,7 @@ public class MachineHandlerBase implements IMachineCapability {
         this.energyPerTick = energyPerTick;
         this.energyToCompletion = energyToCompletion;
         this.totalEnergyRequired = totalEnergyRequired;
+
     }
 
     @Override

@@ -4,19 +4,36 @@
   "width" : 176,
   "height" : 166,
   "container" : "centrifuge",
-  "elements" : [{
-    "type" : "progress",
-    "name" : "progress_bar",
-    "texture_name" : "magicalreactors:textures/gui/temp-centrifuge.png",
-    "x" : 84,
-    "y" : 32,
-    "width" : 24,
-    "height" : 17,
-    "textures" : [
-      {
-        "textureX": 176,
-        "textureY": 0
-      }
-    ]
-  }]
+  "elements" : [
+    {
+      "type" : "progress",
+      "name" : "progress_bar",
+      "texture_name" : "magicalreactors:textures/gui/temp-centrifuge.png",
+      "x" : 84,
+      "y" : 32,
+      "width" : 24,
+      "height" : 16,
+      "textures" : [
+        {
+          "textureX": 176,
+          "textureY": 0
+        }
+      ]
+    },
+    {
+      "type" : "energy",
+      "name" : "energy_bar",
+      "texture_name" : "magicalreactors:textures/gui/temp-centrifuge.png",
+      "x" : 8,
+      "y" : 9,
+      "width": 15,
+      "height" : 58,
+      "textures" : [
+        {
+          "textureX" : 176,
+          "textureY" : 16
+        }
+      ]
+    }
+  ]
 }
