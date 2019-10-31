@@ -1,11 +1,16 @@
 package acetil.magicalreactors.common.capabilities.machines.machinehandlers;
 
+import acetil.magicalreactors.common.network.MessageMachineUpdate;
+import acetil.magicalreactors.common.network.PacketHandler;
 import acetil.magicalreactors.common.recipes.MachineRecipe;
 import acetil.magicalreactors.common.recipes.MachineRecipeInput;
 import acetil.magicalreactors.common.recipes.MachineRecipeManager;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.ItemStackHandler;
 import acetil.magicalreactors.common.capabilities.machines.MachineFluidHandler;
 
@@ -25,11 +30,13 @@ public class MachineHandlerBase implements IMachineCapability {
     int energyToCompletion;
     int energyPerTick;
     int totalEnergyRequired;
+    int pastEnergyPerTick;
     boolean shouldUpdate;
     List<ItemStack> inputs;
     List<ItemStack> outputs;
     List<ItemStack> recipeOutputs;
     boolean isInRecipe = false;
+    boolean shouldSendPacket = false;
     public MachineHandlerBase (String machine, int energyUseRate, int inputSlots, int outputSlots) {
         this.machine = machine;
         this.energyUseRate = energyUseRate;
@@ -46,6 +53,7 @@ public class MachineHandlerBase implements IMachineCapability {
     public int addEnergy(int power) {
         int originalEnergy = energyToCompletion;
         energyToCompletion -= Math.min(Math.min(power, energyUseRate), energyToCompletion);
+        pastEnergyPerTick = energyPerTick;
         energyPerTick = originalEnergy - energyToCompletion;
         return energyPerTick;
     }
@@ -101,6 +109,10 @@ public class MachineHandlerBase implements IMachineCapability {
             isOn = (powered && redstoneRequired == MachineRedstone.REQUIRED_POWERED) ||
                     (!powered && redstoneRequired == MachineRedstone.REQUIRED_UNPOWERED);
             shouldUpdate = true;
+            if (!isOn) {
+                energyPerTick = 0;
+                pastEnergyPerTick = 0;
+            }
         }
     }
 
@@ -159,6 +171,7 @@ public class MachineHandlerBase implements IMachineCapability {
     @Override
     public void updateWork(ItemStackHandler itemStackHandler, MachineFluidHandler machineFluidHandler) {
         System.out.println("Updating work");
+        shouldSendPacket = true;
         // TODO clean up
         if (workFinished()) {
             completeRecipe(itemStackHandler, machineFluidHandler);
@@ -245,13 +258,23 @@ public class MachineHandlerBase implements IMachineCapability {
         this.energyPerTick = energyPerTick;
         this.energyToCompletion = energyToCompletion;
         this.totalEnergyRequired = totalEnergyRequired;
-
+        System.out.println("Handling machine packet!");
     }
 
     @Override
     public void updateClient() {
         if (isOn) {
             energyToCompletion = Math.max(0, energyToCompletion - energyPerTick);
+        }
+    }
+
+    @Override
+    public void sync(World world, BlockPos pos) {
+        if (shouldSendPacket || energyPerTick != pastEnergyPerTick) {
+            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)),
+                    new MessageMachineUpdate(pos, isOn,
+                            energyPerTick, energyToCompletion, totalEnergyRequired));
+            shouldSendPacket = false;
         }
     }
 

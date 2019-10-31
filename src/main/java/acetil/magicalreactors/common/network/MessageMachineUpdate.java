@@ -18,38 +18,31 @@ public class MessageMachineUpdate implements IMessage {
     private int energyPerTick;
     private int energyToCompletion;
     private int totalEnergyRequired;
-    private int x;
-    private int y;
-    private int z;
+    private BlockPos pos;
     public MessageMachineUpdate () {
 
     }
-    public MessageMachineUpdate (int x, int y, int z, boolean isOn, int energyPerTick,
+    public MessageMachineUpdate (BlockPos pos, boolean isOn, int energyPerTick,
                                  int energyToCompletion, int totalEnergyRequired) {
         this.energyPerTick = energyPerTick;
         this.energyToCompletion = energyToCompletion;
         this.totalEnergyRequired = totalEnergyRequired;
         this.isOn = isOn;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.pos = pos;
     }
     public static MessageMachineUpdate fromBytes (PacketBuffer buf) {
-        int x = buf.readInt();
-        int y = buf.readInt();
-        int z = buf.readInt();
+        BlockPos pos = buf.readBlockPos();
         boolean isOn = buf.readBoolean();
         int energyPerTick = buf.readInt();
         int energyToCompletion = buf.readInt();
         int totalEnergyRequired = buf.readInt();
-        return new MessageMachineUpdate(x, y, z, isOn, energyPerTick, energyToCompletion, totalEnergyRequired);
+        return new MessageMachineUpdate(pos, isOn, energyPerTick, energyToCompletion, totalEnergyRequired);
     }
 
     @Override
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
            World world = Minecraft.getInstance().world;
-           BlockPos pos = new BlockPos(x, y, z);
            if (world.isAreaLoaded(pos, 2) && world.getTileEntity(pos) != null &&
                    world.getTileEntity(pos).getCapability(CapabilityMachine.MACHINE_CAPABILITY).isPresent()) {
                world.getTileEntity(pos)
@@ -63,9 +56,7 @@ public class MessageMachineUpdate implements IMessage {
 
     @Override
     public void toBytes(PacketBuffer buf) {
-        buf.writeInt(x);
-        buf.writeInt(y);
-        buf.writeInt(z);
+        buf.writeBlockPos(pos);
         buf.writeBoolean(isOn);
         buf.writeInt(energyPerTick);
         buf.writeInt(energyToCompletion);

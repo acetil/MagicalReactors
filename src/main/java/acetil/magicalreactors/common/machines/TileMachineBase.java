@@ -112,12 +112,10 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
             if (machineHandler.shouldUpdateWork()) {
                 machineHandler.updateWork(itemHandler, machineFluidHandler);
                 TileMachineBase.this.markDirty();
-                sendMessage();
-            } else if (energyUsed != pastEnergyTickRate) {
-                sendMessage();
             }
 
         }
+        machineHandler.sync(world, pos);
         energyHandler.sync(world, pos);
     }
     @Override
@@ -183,15 +181,5 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
     }
     public String getMachine () {
         return machine;
-    }
-    private void sendMessage (){
-        if (world == null) {
-            return;
-        }
-        PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)),
-                new MessageMachineUpdate(pos.getX(), pos.getY(), pos.getZ(), machineHandler.isOn(),
-                        machineHandler.getEnergyPerTick(), machineHandler.energyToCompletion(), machineHandler.energyRequired()));
-
-
     }
 }
