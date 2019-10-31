@@ -19,6 +19,7 @@ public class PacketHandler {
     private static int id = 0;
     public static void initMessages () {
         registerMessage(MessageMachineUpdate.class, MessageMachineUpdate::fromBytes);
+        registerMessage(MessageEnergyUpdate.class, MessageEnergyUpdate::fromBytes);
     }
     public static <MSG extends IMessage> void registerMessage (Class<MSG> msg, Function<PacketBuffer, MSG> fromBytes) {
         registerMessage(msg, MSG::toBytes, fromBytes, MSG::handle);

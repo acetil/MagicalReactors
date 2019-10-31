@@ -1,7 +1,12 @@
 package acetil.magicalreactors.common.capabilities;
 
+import acetil.magicalreactors.common.network.MessageEnergyUpdate;
+import acetil.magicalreactors.common.network.PacketHandler;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 public class EnergyHandler implements IEnergyStorage {
     private int capacity;
@@ -11,6 +16,9 @@ public class EnergyHandler implements IEnergyStorage {
     private boolean canExtract;
     private int energy;
     private boolean holdsEnergy;
+    private int lastEnergy;
+    private int energyChange;
+    private int lastEnergyChange;
     public EnergyHandler (int capacity, int maxReceive, int maxExtract, boolean canReceive, boolean canExtract) {
 
         this.capacity = capacity;
@@ -19,6 +27,9 @@ public class EnergyHandler implements IEnergyStorage {
         this.canReceive = canReceive;
         this.canExtract = canExtract;
         holdsEnergy = true;
+        lastEnergy = energy;
+        energyChange = 0;
+        lastEnergyChange = 0;
     }
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
@@ -83,6 +94,9 @@ public class EnergyHandler implements IEnergyStorage {
     }
     public void readNBT (CompoundNBT nbt) {
         this.energy = nbt.getInt("stored_energy");
+        lastEnergy = energy;
+        energyChange = 0;
+        lastEnergyChange = 0;
     }
     public CompoundNBT writeNBT () {
         CompoundNBT nbt = new CompoundNBT();
@@ -91,5 +105,24 @@ public class EnergyHandler implements IEnergyStorage {
     }
     public void setTotalEnergy (int energy) {
         this.energy = energy;
+    }
+    public void setEnergyChange (int energyChange) {
+        this.energyChange = energyChange;
+    }
+    public void updateEnergyChange () {
+        lastEnergyChange = energyChange;
+        energyChange = energy - lastEnergy;
+        lastEnergy = energy;
+    }
+    public void sync (World world, BlockPos pos) {
+        updateEnergyChange();
+        if (energyChange != lastEnergyChange) {
+            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)),
+                    new MessageEnergyUpdate(pos, energy, energyChange));
+            System.out.println("Sending energy update!");
+        }
+    }
+    public void syncClient () {
+        energy = Math.max(0, Math.min(energy + energyChange, capacity));
     }
 }

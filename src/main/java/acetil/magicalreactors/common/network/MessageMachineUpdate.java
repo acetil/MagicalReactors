@@ -21,12 +21,11 @@ public class MessageMachineUpdate implements IMessage {
     private int x;
     private int y;
     private int z;
-    private int totalEnergy;
     public MessageMachineUpdate () {
 
     }
     public MessageMachineUpdate (int x, int y, int z, boolean isOn, int energyPerTick,
-                                 int energyToCompletion, int totalEnergyRequired, int totalEnergy) {
+                                 int energyToCompletion, int totalEnergyRequired) {
         this.energyPerTick = energyPerTick;
         this.energyToCompletion = energyToCompletion;
         this.totalEnergyRequired = totalEnergyRequired;
@@ -34,7 +33,6 @@ public class MessageMachineUpdate implements IMessage {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.totalEnergy = totalEnergy;
     }
     public static MessageMachineUpdate fromBytes (PacketBuffer buf) {
         int x = buf.readInt();
@@ -44,8 +42,7 @@ public class MessageMachineUpdate implements IMessage {
         int energyPerTick = buf.readInt();
         int energyToCompletion = buf.readInt();
         int totalEnergyRequired = buf.readInt();
-        int totalEnergy = buf.readInt();
-        return new MessageMachineUpdate(x, y, z, isOn, energyPerTick, energyToCompletion, totalEnergyRequired, totalEnergy);
+        return new MessageMachineUpdate(x, y, z, isOn, energyPerTick, energyToCompletion, totalEnergyRequired);
     }
 
     @Override
@@ -59,20 +56,9 @@ public class MessageMachineUpdate implements IMessage {
                        .getCapability(CapabilityMachine.MACHINE_CAPABILITY)
                        .orElseGet(CapabilityMachine.MACHINE_CAPABILITY::getDefaultInstance)
                        .handlePacket(isOn, energyPerTick, energyToCompletion, totalEnergyRequired);
-               IEnergyStorage energyHandler =  world.getTileEntity(pos)
-                                                    .getCapability(CapabilityEnergy.ENERGY)
-                                                    .orElseGet(CapabilityEnergy.ENERGY::getDefaultInstance);
-               if (energyHandler instanceof EnergyHandler) {
-                   ((EnergyHandler) energyHandler).setTotalEnergy(totalEnergy);
-               }
            }
         });
         ctx.get().setPacketHandled(true);
-    }
-
-    @Override
-    public Function<PacketBuffer, IMessage> getFromBytes() {
-        return MessageMachineUpdate::fromBytes;
     }
 
     @Override
@@ -84,6 +70,5 @@ public class MessageMachineUpdate implements IMessage {
         buf.writeInt(energyPerTick);
         buf.writeInt(energyToCompletion);
         buf.writeInt(totalEnergyRequired);
-        buf.writeInt(totalEnergy);
     }
 }

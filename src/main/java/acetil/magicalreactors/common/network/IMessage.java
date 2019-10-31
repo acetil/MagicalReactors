@@ -7,7 +7,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public interface IMessage {
-    Function<PacketBuffer, IMessage> getFromBytes ();
     void toBytes(PacketBuffer buf);
     void handle (Supplier<NetworkEvent.Context> ctx);
 }

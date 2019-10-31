@@ -101,12 +101,14 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
     public void tick () {
         if (world.isRemote) {
             machineHandler.updateClient();
+            energyHandler.syncClient();
             return;
         }
         if (machineHandler.isOn()) {
             //System.out.println("Machine handler is on!");
             int energyUsed = machineHandler.addEnergy(Math.min(machineHandler.getEnergyUseRate(), energyHandler.getEnergyStored()));
             energyHandler.extractEnergy(energyUsed, false);
+
             if (machineHandler.shouldUpdateWork()) {
                 machineHandler.updateWork(itemHandler, machineFluidHandler);
                 TileMachineBase.this.markDirty();
@@ -116,6 +118,7 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
             }
 
         }
+        energyHandler.sync(world, pos);
     }
     @Override
     public <T> LazyOptional<T> getCapability (Capability<T> capability, @Nullable Direction facing) {
@@ -187,7 +190,7 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
         }
         PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)),
                 new MessageMachineUpdate(pos.getX(), pos.getY(), pos.getZ(), machineHandler.isOn(),
-                        machineHandler.getEnergyPerTick(), machineHandler.energyToCompletion(), machineHandler.energyRequired(), energyHandler.getEnergyStored()));
+                        machineHandler.getEnergyPerTick(), machineHandler.energyToCompletion(), machineHandler.energyRequired()));
 
 
     }
