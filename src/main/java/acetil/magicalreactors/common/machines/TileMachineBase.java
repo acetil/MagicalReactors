@@ -3,6 +3,8 @@ package acetil.magicalreactors.common.machines;
 import acetil.magicalreactors.common.capabilities.CapabilityMachine;
 import acetil.magicalreactors.common.capabilities.EnergyHandler;
 import acetil.magicalreactors.common.capabilities.machines.MachineFluidHandler;
+import acetil.magicalreactors.common.capabilities.machines.MachineGuiItemHandler;
+import acetil.magicalreactors.common.capabilities.machines.MachineSidedInventoryHandler;
 import acetil.magicalreactors.common.lib.LibMisc;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -36,7 +38,8 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
     IMachineCapability machineHandler;
     MachineFluidHandler machineFluidHandler;
     protected LazyOptional<IEnergyStorage> energyOptional = LazyOptional.empty();
-    protected LazyOptional<IItemHandler> itemOptional = LazyOptional.empty();
+    protected LazyOptional<IItemHandler> guiItemOptional = LazyOptional.empty();
+    protected LazyOptional<IItemHandler> sidedItemOptional = LazyOptional.empty();
     protected LazyOptional<IMachineCapability> machineOptional = LazyOptional.empty();
     protected LazyOptional<IFluidHandler> fluidOptional = LazyOptional.empty();
     private String machine;
@@ -87,7 +90,10 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
                 machineHandler.updateItems(this, machineFluidHandler);
             }
         };
-        itemOptional = LazyOptional.of(() -> itemHandler);
+        guiItemOptional = LazyOptional.of(() -> new MachineGuiItemHandler(machineRegistry.machine, itemHandler,
+                machineRegistry.inputSlots));
+        sidedItemOptional = LazyOptional.of(() -> new MachineSidedInventoryHandler(machineRegistry.machine,
+                itemHandler, machineRegistry.inputSlots));
         try {
             machineHandler = machineRegistry.factory.call();
             machineOptional = LazyOptional.of(() -> machineHandler);
@@ -121,7 +127,11 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
     @Override
     public <T> LazyOptional<T> getCapability (Capability<T> capability, @Nullable Direction facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return itemOptional.cast();
+            if (facing == null) {
+                return guiItemOptional.cast();
+            } else {
+                return sidedItemOptional.cast();
+            }
         } else if (capability == CapabilityEnergy.ENERGY) {
             return energyOptional.cast();
         } else if (capability == CapabilityMachine.MACHINE_CAPABILITY) {
@@ -140,7 +150,7 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
             initHandlers(MachineRegistry.getMachine(nbt.getString("machine_name")));
         }
         if (nbt.contains("items")) {
-            itemHandler.deserializeNBT((CompoundNBT) nbt.getCompound("items"));
+            itemHandler.deserializeNBT(nbt.getCompound("items"));
         }
         if (nbt.contains("energy")) {
             // TODO: match others by reading the child tag
@@ -181,5 +191,8 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
     }
     public String getMachine () {
         return machine;
+    }
+    public ItemStackHandler getItemHandler () {
+        return itemHandler;
     }
 }

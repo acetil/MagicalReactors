@@ -1,19 +1,21 @@
 package acetil.magicalreactors.common.capabilities.machines;
 
+import acetil.magicalreactors.common.recipes.MachineRecipeManager;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 
-public class MachineGuiItemHandler implements IItemHandler {
+public class MachineGuiItemHandler implements IItemHandler, IItemHandlerModifiable {
     private ItemStackHandler itemHandler;
     private int inputSlots;
-    private int outputSlots;
-    public MachineGuiItemHandler (ItemStackHandler itemHandler, int inputSlots, int outputSlots) {
+    private String machine;
+    public MachineGuiItemHandler (String machine, ItemStackHandler itemHandler, int inputSlots) {
         this.itemHandler = itemHandler;
         this.inputSlots = inputSlots;
-        this.outputSlots = outputSlots;
+        this.machine = machine;
     }
 
     @Override
@@ -30,7 +32,7 @@ public class MachineGuiItemHandler implements IItemHandler {
     @Nonnull
     @Override
     public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-        if (slot < inputSlots) {
+        if (slot < inputSlots && isItemValid(slot, stack)) {
             return itemHandler.insertItem(slot, stack, simulate);
         } else {
             return stack;
@@ -50,14 +52,15 @@ public class MachineGuiItemHandler implements IItemHandler {
 
     @Override
     public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-        return itemHandler.isItemValid(slot, stack); //TODO update
+        if (slot < inputSlots) {
+            return MachineRecipeManager.isValidInput(machine, stack.getItem());
+        } else {
+            return false;
+        }
     }
 
-    public int getInputSlots() {
-        return inputSlots;
-    }
-
-    public int getOutputSlots() {
-        return outputSlots;
+    @Override
+    public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
+        itemHandler.setStackInSlot(slot, stack);
     }
 }

@@ -3,6 +3,8 @@ package acetil.magicalreactors.common.recipes;
 import com.google.gson.Gson;
 import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.utils.FileUtils;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.item.Item;
 
 import java.io.*;
 import java.net.URI;
@@ -49,5 +51,18 @@ public class MachineRecipeManager {
                 .map(MachineRecipe::new)
                 .collect(Collectors.toList()));
         MagicalReactors.LOGGER.info("Completed loading of " + machineRecipes.size() + " recipes.");
+    }
+    public static boolean isValidInput (String machine, MachineRecipeInput input) {
+        List<MachineRecipeInput> inputs = new ArrayList<>();
+        for (MachineRecipe recipe : getRecipes(machine)) {
+            inputs.addAll(recipe.getInputs());
+        }
+        return inputs.contains(input);
+    }
+    public static boolean isValidInput (String machine, Item item) {
+        return isValidInput(machine, new MachineRecipeInput(item, 1));
+    }
+    public static boolean isValidInput (String machine, Fluid fluid) {
+        return isValidInput(machine, new MachineRecipeInput(fluid, 1));
     }
 }

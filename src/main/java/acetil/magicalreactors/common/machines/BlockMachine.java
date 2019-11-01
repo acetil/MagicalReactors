@@ -74,7 +74,8 @@ public class BlockMachine extends Block {
             @Nullable
             @Override
             public Container createMenu(int windowId, PlayerInventory inv, PlayerEntity playerEntity) {
-                ItemStackHandler itemHandler = ((TileMachineBase) te).itemHandler;
+                IItemHandler itemHandler = ((TileMachineBase) te).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+                        .orElse(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.getDefaultInstance());
                 return new GuiContainer(MachineContainerManager.getContainerJson(machineName),
                         LibMisc.MODID + ":" + machineName, windowId, inv, itemHandler, pos);
             }
