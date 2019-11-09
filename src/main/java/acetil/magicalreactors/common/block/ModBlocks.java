@@ -4,9 +4,12 @@ import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.block.reactor.BlockReactorController;
 import acetil.magicalreactors.common.block.reactor.BlockReactor;
 import acetil.magicalreactors.common.block.reactor.BlockRuneBase;
+import acetil.magicalreactors.common.fluid.ModFluids;
 import acetil.magicalreactors.common.machines.MachineBlocks;
 import acetil.magicalreactors.common.tiles.*;
 import net.minecraft.block.Block;
+import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
@@ -44,6 +47,8 @@ public class ModBlocks {
     public static Block REACTOR_BLOCK = null;
     @ObjectHolder("test_energy_source")
     public static Block TEST_ENERGY_SOURCE = null;
+    @ObjectHolder("ethanol_block")
+    public static FlowingFluidBlock ETHANOL_BLOCK = null;
     @ObjectHolder("reactor")
     public static TileEntityType<?> REACTOR_TILE_ENTITY = null;
     @ObjectHolder("reactor_controller")
@@ -66,6 +71,8 @@ public class ModBlocks {
         event.getRegistry().register(new BlockRuneBase("rune_locus"));
         event.getRegistry().register(new BlockReactor());
         event.getRegistry().register(new BlockTestEnergySource());
+        event.getRegistry().register(new FlowingFluidBlock(() -> ModFluids.STILL_ETHANOL,
+                Block.Properties.create(Material.WATER).doesNotBlockMovement().noDrops()).setRegistryName("ethanol_block"));
         MachineBlocks.registerMachineBlocks(event);
         /*GameRegistry.registerTileEntity(TileReactor.class, new ResourceLocation(LibMisc.MODID + ":reactor_entity"));
         GameRegistry.registerTileEntity(TileReactorController.class, new ResourceLocation(LibMisc.MODID + ":reactor_controller_entity"));
@@ -84,6 +91,7 @@ public class ModBlocks {
         registerItemBlock(event, RUNE_LOCUS);
         registerItemBlock(event, REACTOR_BLOCK);
         registerItemBlock(event, TEST_ENERGY_SOURCE);
+        registerItemBlock(event, ETHANOL_BLOCK); //TODO: remove
         MachineBlocks.registerMachineItems(event);
         System.out.println("Registered itemblocks");
     }
