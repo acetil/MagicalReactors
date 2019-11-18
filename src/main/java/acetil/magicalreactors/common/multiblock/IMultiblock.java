@@ -10,4 +10,5 @@ public interface IMultiblock {
     IMultiblockValidator getMultiblockValidator (World worldIn, BlockPos pos);
     boolean allowsFilledAirBlocks ();
     String getType ();
+    String getData (String key);
 }

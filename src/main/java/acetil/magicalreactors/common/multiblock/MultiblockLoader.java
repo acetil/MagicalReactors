@@ -48,6 +48,7 @@ public class MultiblockLoader {
         public String[][] multiblock;
         @SerializedName("filled_air")
         public boolean allowsFilledAir = false;
+        public Map<String, String> data = new HashMap<>();
     }
 
 }
