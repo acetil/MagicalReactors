@@ -20,14 +20,12 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
     private BlockPos offsetPos;
     private boolean valid;
     private Orientation orientation = Orientation.NONE;
-    private MultiblockImpl multiblock;
-    public MultiblockValidatorImpl (List<MultiblockImpl.BlockOffset> offsets, World worldIn, BlockPos pos, MultiblockImpl multiblock) {
+    public MultiblockValidatorImpl (List<MultiblockImpl.BlockOffset> offsets, World worldIn, BlockPos pos) {
         this.world = worldIn;
         this.offsetPos = pos;
         this.valid = false;
         System.out.println(String.format("Offset: (%d, %d, %d)", pos.getX(), pos.getY(), pos.getZ()));
         createValidators(offsets);
-        this.multiblock = multiblock;
     }
     @Override
     public boolean isValid() {
@@ -91,11 +89,6 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
                                        world.getTileEntity(pred.pos).getCapability(capability, side).isPresent())
                                .map(BlockPredicate::getPos)
                                .collect(Collectors.toList());
-    }
-
-    @Override
-    public IMultiblock getMultiblock() {
-        return multiblock;
     }
 
     private LockedValidator getOrientation () {

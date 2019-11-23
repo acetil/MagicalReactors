@@ -21,5 +21,4 @@ public interface IMultiblockValidator {
     List<BlockPos> getPositionsOfType (Class <?> blockType);
     List<BlockPos> getPositionsWithCapability (Capability<?> capability, Direction side);
 
-    IMultiblock getMultiblock ();
 }

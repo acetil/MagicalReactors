@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Level;
 import java.util.*;
 import java.util.function.Predicate;
 
-public class MultiblockImpl implements IMultiblock {
+public class MultiblockImpl implements IMultiblock{
     private Map<Character, Predicate<BlockState>> keyMap = new HashMap<>();
     private String[][] multiblock;
     private boolean allowsFilledAirBlocks;
@@ -23,13 +23,11 @@ public class MultiblockImpl implements IMultiblock {
     private int[] offsetCoord = new int[3];
     private static char OFFSET_CHAR = '0';
     private String type;
-    private Map<String, String> data;
     public MultiblockImpl (MultiblockLoader.MultiblockJson json) {
         allowsFilledAirBlocks = json.allowsFilledAir;
         name = json.name;
         multiblock = json.multiblock;
         type = json.type;
-        data = json.data;
         generateKeyMap(json.keyMap);
         handleParity();
         validateOffsetPoint();
@@ -41,7 +39,7 @@ public class MultiblockImpl implements IMultiblock {
     }
     @Override
     public IMultiblockValidator getMultiblockValidator(World worldIn, BlockPos pos) {
-        return new MultiblockValidatorImpl(offsets, worldIn, pos, this);
+        return new MultiblockValidatorImpl(offsets, worldIn, pos);
     }
     @Override
     public boolean allowsFilledAirBlocks() {
@@ -51,11 +49,6 @@ public class MultiblockImpl implements IMultiblock {
     @Override
     public String getType() {
         return type;
-    }
-
-    @Override
-    public String getData(String key) {
-        return data.get(key);
     }
 
     private void generateKeyMap (Map<String, String> stringMap) {
@@ -168,7 +161,6 @@ public class MultiblockImpl implements IMultiblock {
         }
         offsetCoord = coord;
     }
-
     @SuppressWarnings("unchecked")
     private <T> T[] appendArray (T[] array, T append) {
         List<T> newList = new LinkedList<>(Arrays.asList(array));
