@@ -216,4 +216,9 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
         }
         return false;
     }
+
+    @Override
+    public void initialCheck() {
+        checkMultiblock(); // TODO: update
+    }
 }
