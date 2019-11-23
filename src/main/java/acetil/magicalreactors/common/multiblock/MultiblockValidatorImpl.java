@@ -32,12 +32,12 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
     }
 
     @Override
-    public void validate() {
+    public void updateAll() {
         valid = false;
         for (LockedValidator l : validators) {
             System.out.println("Checked orientation:");
             l.orientation.printOrientation();
-            l.validate();
+            l.updateAll();
             valid |= l.valid;
             if (valid) {
                 orientation = l.orientation;
@@ -95,6 +95,14 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
         return positions.contains(pos);
     }
 
+    @Override
+    public void update(BlockPos pos, BlockState newState) {
+        for (LockedValidator l : validators) {
+            l.update(pos, newState);
+            valid |= l.valid;
+        }
+    }
+
     private LockedValidator getOrientation () {
         // TODO: consider rename
         for (LockedValidator l : validators) {
@@ -134,6 +142,7 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
         BlockPos offsetPos;
         Orientation orientation;
         List<BlockPos> incorrectBlocks;
+        int numIncorrectBlocks;
         boolean valid;
         LockedValidator(List<MultiblockImpl.BlockOffset> offsets, World worldIn, BlockPos pos, Orientation orientation) {
             predicates = offsets.stream()
@@ -146,17 +155,39 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
             incorrectBlocks = new LinkedList<>();
             valid = false;
         }
-        public void validate () {
+        public void updateAll () {
             incorrectBlocks.clear();
             for (BlockPredicate predicate : predicates) {
                 if (!predicate.test()) {
                     incorrectBlocks.add(predicate.pos);
                 }
             }
-            valid = incorrectBlocks.size() == 0;
+            numIncorrectBlocks = incorrectBlocks.size();
+            valid = numIncorrectBlocks == 0;
         }
         public int getNumIncorrectBlocks () {
             return incorrectBlocks.size();
+        }
+        void update (BlockPos pos, BlockState state) {
+            if (incorrectBlocks.contains(pos)) {
+                incorrectBlocks.remove(pos);
+                numIncorrectBlocks--;
+            }
+            BlockPredicate pred = null;
+            for (BlockPredicate p : predicates) {
+                if (pos.equals(p.pos)) {
+                    pred = p;
+                    break;
+                }
+            }
+            if (pred == null) {
+                return;
+            }
+            if (!pred.statePredicate.test(state)) {
+                incorrectBlocks.add(pos);
+                numIncorrectBlocks++;
+            }
+            valid = numIncorrectBlocks == 0;
         }
     }
     public static class BlockPredicate {

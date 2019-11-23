@@ -118,7 +118,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
         }
         boolean isValid = false;
         for (IMultiblockValidator validator : validators) {
-            validator.validate();
+            validator.updateAll();
             if (validator.isValid()) {
                 currentValidator = validator;
                 MagicalReactors.LOGGER.log(Level.INFO, "Multilock is valid!");
@@ -162,7 +162,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
     }
 
     @Override
-    public void onBlockUpdate(BlockPos pos, BlockState state, BlockState prevState) {
+    public void onBlockUpdate(BlockPos pos, BlockState state) {
         checkMultiblock();
     }
 

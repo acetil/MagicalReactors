@@ -17,11 +17,11 @@ import java.util.Map;
 @Mod.EventBusSubscriber
 public class MultiblockEventHandler {
     private static Map<IWorld, List<IUpdateListener>> listenerMap = new HashMap<>();
-    private static void updateController (IWorld world, BlockPos pos, BlockState state, BlockState prevState) {
+    private static void updateController (IWorld world, BlockPos pos, BlockState state) {
         if (listenerMap.containsKey(world)) {
             for (IUpdateListener listener : listenerMap.get(world)) {
                 if (listener.isTracking(pos)) {
-                    listener.onBlockUpdate(pos, state, prevState);
+                    listener.onBlockUpdate(pos, state);
                 }
             }
         }
@@ -29,15 +29,15 @@ public class MultiblockEventHandler {
     @SubscribeEvent
     public static void blockPlaceEvent (BlockEvent.EntityPlaceEvent event) {
         System.out.println("On block place!");
-        updateController(event.getWorld(), event.getPos(), event.getPlacedBlock(), event.getState());
+        updateController(event.getWorld(), event.getPos(), event.getPlacedBlock());
     }
     @SubscribeEvent
     public static void blockBreakEvent (BlockEvent.BreakEvent event) {
         System.out.println("On block break!");
-        updateController(event.getWorld(), event.getPos(), Blocks.AIR.getDefaultState(), event.getState());
+        updateController(event.getWorld(), event.getPos(), Blocks.AIR.getDefaultState());
     }
     public interface IUpdateListener {
-        void onBlockUpdate (BlockPos pos, BlockState state, BlockState prevState);
+        void onBlockUpdate (BlockPos pos, BlockState state);
         boolean isTracking (BlockPos pos);
     }
 }
