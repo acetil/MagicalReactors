@@ -9,6 +9,7 @@ import acetil.magicalreactors.common.multiblock.IMultiblock;
 import acetil.magicalreactors.common.multiblock.IMultiblockValidator;
 import acetil.magicalreactors.common.multiblock.MultiblockRegistry;
 import acetil.magicalreactors.common.reactor.IReactorFuel;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
@@ -161,7 +162,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
     }
 
     @Override
-    public void onBlockUpdate(BlockPos pos) {
+    public void onBlockUpdate(BlockPos pos, BlockState state, BlockState prevState) {
         checkMultiblock();
     }
 
