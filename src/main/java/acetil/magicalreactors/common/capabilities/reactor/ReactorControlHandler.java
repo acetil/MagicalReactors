@@ -158,12 +158,53 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
             }
         }
         isMulti = isValid;
-
     }
-
+    private void checkBlock (BlockPos pos, BlockState state) {
+        // TODO: consider refactor
+        if (world.isRemote()) {
+            return;
+        }
+        boolean isValid = false;
+        for (IMultiblockValidator validator : validators) {
+            validator.update(pos, state);
+            if (validator.isValid()) {
+                isValid = true;
+                MagicalReactors.LOGGER.debug("Multiblock is valid!");
+                currentValidator = validator;
+                break;
+            }
+        }
+        if (!isValid) {
+            currentValidator = validators.stream().min(Comparator.comparingInt(IMultiblockValidator::getNumInvalidBlocks)).get();
+            MagicalReactors.LOGGER.debug("Multiblock is invalid!");
+            for (BlockPos p : currentValidator.getInvalidBlocks()) {
+                MagicalReactors.LOGGER.debug("Invalid block: ({},{},{})", p.getX(), p.getY(), p.getZ());
+            }
+        }
+        if (isValid != isMulti) {
+            reactorInterfaceHandlers = new ArrayList<>();
+            reactorHandler = null;
+            if (isValid) {
+                reactorInterfaceHandlers = currentValidator.getPositionsWithCapability(CapabilityReactorInterface.REACTOR_INTERFACE, null)
+                        .stream()
+                        .map((BlockPos p) -> world.getTileEntity(p)
+                                .getCapability(CapabilityReactorInterface.REACTOR_INTERFACE, null).orElse(CapabilityReactorInterface.REACTOR_INTERFACE.getDefaultInstance()))
+                        .collect(Collectors.toList());
+                reactorHandler = world.getTileEntity(currentValidator.getPositionsWithCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
+                        .get(0))
+                        .getCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
+                        .orElse(CapabilityReactor.CAPABILITY_REACTOR.getDefaultInstance());
+            }
+            for (BlockPos p : currentValidator.getPositionsOfType(IReactorBuildingBlock.class)) {
+                ((IReactorBuildingBlock)world.getBlockState(p).getBlock())
+                        .updateMultiblockState(world.getBlockState(p), world, p, isValid);
+            }
+            isMulti = isValid;
+        }
+    }
     @Override
     public void onBlockUpdate(BlockPos pos, BlockState state) {
-        checkMultiblock();
+        checkBlock(pos, state);
     }
 
     @Override

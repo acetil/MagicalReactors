@@ -97,6 +97,9 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
 
     @Override
     public void update(BlockPos pos, BlockState newState) {
+        if (!contains(pos)) {
+            return;
+        }
         for (LockedValidator l : validators) {
             l.update(pos, newState);
             valid |= l.valid;
