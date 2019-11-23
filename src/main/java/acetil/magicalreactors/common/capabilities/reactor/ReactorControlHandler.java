@@ -18,7 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ReactorControlHandler implements IReactorControlCapability, MultiblockEventHandler.UpdateListener {
+public class ReactorControlHandler implements IReactorControlCapability, MultiblockEventHandler.IUpdateListener {
     private boolean isPowered;
     private boolean isUpdateTick;
     private boolean isMulti = false;
@@ -163,5 +163,10 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
     @Override
     public void onBlockUpdate(BlockPos pos) {
         checkMultiblock();
+    }
+
+    @Override
+    public boolean isTracking(BlockPos pos) {
+        return true; // TODO: update
     }
 }
