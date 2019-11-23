@@ -105,6 +105,15 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
         for (LockedValidator l : validators) {
             l.update(pos, newState);
             valid |= l.valid;
+            if (l.valid) {
+                orientation = l.orientation;
+            }
+        }
+        if (!valid) {
+            orientation = validators.stream()
+                                    .min(Comparator.comparingInt(LockedValidator::getNumIncorrectBlocks))
+                                    .get()
+                                    .orientation;
         }
     }
 
