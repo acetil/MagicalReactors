@@ -1,5 +1,6 @@
 package acetil.magicalreactors.common.multiblock;
 
+import acetil.magicalreactors.common.MagicalReactors;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
@@ -100,6 +101,7 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
         if (!contains(pos)) {
             return;
         }
+        valid = false;
         for (LockedValidator l : validators) {
             l.update(pos, newState);
             valid |= l.valid;
@@ -169,9 +171,10 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
             valid = numIncorrectBlocks == 0;
         }
         public int getNumIncorrectBlocks () {
-            return incorrectBlocks.size();
+            return numIncorrectBlocks;
         }
         void update (BlockPos pos, BlockState state) {
+            MagicalReactors.LOGGER.debug("Blockpos: ({},{},{})", pos.getX(), pos.getY(), pos.getZ());
             if (incorrectBlocks.contains(pos)) {
                 incorrectBlocks.remove(pos);
                 numIncorrectBlocks--;
@@ -184,13 +187,16 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
                 }
             }
             if (pred == null) {
+                MagicalReactors.LOGGER.debug("Null pos predicate!");
                 return;
             }
             if (!pred.statePredicate.test(state)) {
                 incorrectBlocks.add(pos);
                 numIncorrectBlocks++;
+                MagicalReactors.LOGGER.debug("Incorrect block! Num incorrect blocks = {}", numIncorrectBlocks);
             }
             valid = numIncorrectBlocks == 0;
+            System.out.println("Valid: " + valid);
         }
     }
     public static class BlockPredicate {
