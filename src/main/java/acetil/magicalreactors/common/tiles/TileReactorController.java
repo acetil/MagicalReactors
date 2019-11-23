@@ -20,6 +20,7 @@ import javax.annotation.Nullable;
 public class TileReactorController extends TileEntity implements ITickableTileEntity {
     private ReactorControlHandler reactorhandler;
     private LazyOptional<IReactorControlCapability> reactorOptional;
+    private boolean first = true;
     public TileReactorController () {
         super(ModBlocks.REACTOR_CONTROLLER_TILE_ENTITY);
         reactorhandler = new ReactorControlHandler();
@@ -27,7 +28,11 @@ public class TileReactorController extends TileEntity implements ITickableTileEn
     }
     @Override
     public void tick () {
-
+        if (first) {
+            // no forge onload >:(
+            reactorhandler.onCreation();
+            first = false;
+        }
     }
     public void setPosition (World worldIn, BlockPos pos) {
         reactorhandler.setPosition(worldIn, pos);
@@ -50,5 +55,10 @@ public class TileReactorController extends TileEntity implements ITickableTileEn
     }
     public void updateMultiblock () {
         reactorhandler.checkMultiblock();
+    }
+    @Override
+    public void remove () {
+        reactorhandler.onDestruction();
+        super.remove();
     }
 }

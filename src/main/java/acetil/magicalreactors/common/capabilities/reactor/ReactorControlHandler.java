@@ -149,10 +149,10 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
                     .map((BlockPos p) -> world.getTileEntity(p)
                             .getCapability(CapabilityReactorInterface.REACTOR_INTERFACE, null).orElse(CapabilityReactorInterface.REACTOR_INTERFACE.getDefaultInstance()))
                     .collect(Collectors.toList());
-            reactorHandler = world.getTileEntity(currentValidator.getPositionsWithCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
+            /*reactorHandler = world.getTileEntity(currentValidator.getPositionsWithCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
                     .get(0))
                     .getCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
-                    .orElse(CapabilityReactor.CAPABILITY_REACTOR.getDefaultInstance());
+                    .orElse(CapabilityReactor.CAPABILITY_REACTOR.getDefaultInstance());*/
             if (!isMulti) {
 
             }
@@ -190,10 +190,10 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
                         .map((BlockPos p) -> world.getTileEntity(p)
                                 .getCapability(CapabilityReactorInterface.REACTOR_INTERFACE, null).orElse(CapabilityReactorInterface.REACTOR_INTERFACE.getDefaultInstance()))
                         .collect(Collectors.toList());
-                reactorHandler = world.getTileEntity(currentValidator.getPositionsWithCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
+                /*reactorHandler = world.getTileEntity(currentValidator.getPositionsWithCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
                         .get(0))
                         .getCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
-                        .orElse(CapabilityReactor.CAPABILITY_REACTOR.getDefaultInstance());
+                        .orElse(CapabilityReactor.CAPABILITY_REACTOR.getDefaultInstance());*/
             }
             for (BlockPos p : currentValidator.getPositionsOfType(IReactorBuildingBlock.class)) {
                 ((IReactorBuildingBlock)world.getBlockState(p).getBlock())
@@ -220,5 +220,19 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
     @Override
     public void initialCheck() {
         checkMultiblock(); // TODO: update
+    }
+    public void onCreation () {
+        if (!world.isRemote) {
+            MultiblockEventHandler.addListener(world, this);
+        }
+    }
+    public void onDestruction () {
+        if (!world.isRemote) {
+            MultiblockEventHandler.removeListener(world, this);
+            for (BlockPos p : currentValidator.getPositionsOfType(IReactorBuildingBlock.class)) {
+                ((IReactorBuildingBlock)world.getBlockState(p).getBlock())
+                        .updateMultiblockState(world.getBlockState(p), world, p, false);
+            }
+        }
     }
 }
