@@ -7,10 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -20,12 +17,14 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
     private BlockPos offsetPos;
     private boolean valid;
     private Orientation orientation = Orientation.NONE;
+    private Set<BlockPos> positions;
     public MultiblockValidatorImpl (List<MultiblockImpl.BlockOffset> offsets, World worldIn, BlockPos pos) {
         this.world = worldIn;
         this.offsetPos = pos;
         this.valid = false;
         System.out.println(String.format("Offset: (%d, %d, %d)", pos.getX(), pos.getY(), pos.getZ()));
         createValidators(offsets);
+        updatePositions();
     }
     @Override
     public boolean isValid() {
@@ -91,6 +90,11 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
                                .collect(Collectors.toList());
     }
 
+    @Override
+    public boolean contains(BlockPos pos) {
+        return positions.contains(pos);
+    }
+
     private LockedValidator getOrientation () {
         // TODO: consider rename
         for (LockedValidator l : validators) {
@@ -116,6 +120,14 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
     private List<MultiblockImpl.BlockOffset> rotateOffsets (List<MultiblockImpl.BlockOffset> offsets) {
         return offsets.stream().map(MultiblockImpl.BlockOffset::getRotatedOffset).collect(Collectors.toList());
     }
+
+    private void updatePositions () {
+        positions = new HashSet<>();
+        for (LockedValidator validator : validators) {
+            positions.addAll(validator.predicates.stream().map(BlockPredicate::getPos).collect(Collectors.toList()));
+        }
+    }
+
     private static class LockedValidator {
         List<BlockPredicate> predicates;
         World world;

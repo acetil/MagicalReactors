@@ -168,6 +168,11 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
 
     @Override
     public boolean isTracking(BlockPos pos) {
-        return true; // TODO: update
+        for (IMultiblockValidator validator : validators) {
+            if (validator.contains(pos)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
