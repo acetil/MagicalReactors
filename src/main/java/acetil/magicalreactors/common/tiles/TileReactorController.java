@@ -33,6 +33,7 @@ public class TileReactorController extends TileEntity implements ITickableTileEn
             reactorhandler.onCreation();
             first = false;
         }
+        reactorhandler.update();
     }
     public void setPosition (World worldIn, BlockPos pos) {
         reactorhandler.setPosition(worldIn, pos);

@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ReactorControlHandler implements IReactorControlCapability, MultiblockEventHandler.IUpdateListener {
-    private boolean isPowered;
+    private boolean isPowered = false;
     private boolean isUpdateTick;
     private boolean isMulti = false;
     private BlockPos pos;
@@ -66,7 +66,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
         // TODO: refactor
         int power = 0;
         int powerOutput = 0;
-        if (reactorHandler == null) {
+        if (!isMulti) {
             return;
         }
         if (isPowered) {

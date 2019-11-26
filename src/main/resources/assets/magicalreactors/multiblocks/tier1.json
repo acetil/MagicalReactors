@@ -2,20 +2,21 @@
   "name" : "reactor_tier1",
   "type" : "reactor",
   "key" : {
-    "#" : "magicalreactors:rune_basic",
+    "#" : "#magicalreactors:rune_block",
     "X" : "magicalreactors:rune_stabilisation",
     "O" : "magicalreactors:rune_transfer",
     "x" : "magicalreactors:rune_locus",
     "0" : "magicalreactors:reactor_controller",
-    "*" : "magicalreactors:reactor_block"
+    "*" : "magicalreactors:reactor_block",
+    "R" : "magicalreactors:rune_basic"
   },
   "multiblock" : [
     [
          "XOX",
         "XXOXX",
-       "XX#O#XX",
+       "XXRORXX",
        "OOOxOOO",
-       "XX#O#XX",
+       "XXRORXX",
         "XXOXX",
          "XOX"
     ],
@@ -23,14 +24,14 @@
          "###",
         "#   #",
        "#     #",
-      "#  # #  #",
+      "#  R R  #",
       "#       #",
-      "#  # #  #",
+      "#  R R  #",
        "#     #",
         "#   #",
          "#0#"
     ],
-    ["# #", " * ", "# #"]
+    ["R R", " * ", "R R"]
   ],
   "filled_air" : false
 }

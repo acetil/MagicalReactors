@@ -3,6 +3,8 @@ package acetil.magicalreactors.common.multiblock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -13,7 +15,8 @@ import org.apache.logging.log4j.Level;
 import java.util.*;
 import java.util.function.Predicate;
 
-public class MultiblockImpl implements IMultiblock{
+public class MultiblockImpl implements IMultiblock {
+    // TODO: handle reloads
     private Map<Character, Predicate<BlockState>> keyMap = new HashMap<>();
     private String[][] multiblock;
     private boolean allowsFilledAirBlocks;
@@ -72,6 +75,11 @@ public class MultiblockImpl implements IMultiblock{
     }
     private Predicate<BlockState> getPredicate (String key) {
         // TODO: update to more than just blocks
+        if (key.charAt(0) == '#') {
+            // tag
+            return (BlockState state) -> BlockTags.getCollection().getOrCreate(new ResourceLocation(key.substring(1)))
+                                                                  .contains(state.getBlock());
+        }
         Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key));
         System.out.println(String.format("Key: %s, name: %s", key, b.getRegistryName()));
         if (b == Blocks.AIR && allowsFilledAirBlocks) {
