@@ -63,6 +63,9 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
 
     @Override
     public void update() {
+        if (world.isRemote) {
+            return;
+        }
         // TODO: refactor
         int power = 0;
         int powerOutput = 0;
@@ -70,6 +73,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
             return;
         }
         if (isPowered) {
+            MagicalReactors.LOGGER.debug("Updating!");
             if (isUpdateTick) {
                 reactorHandler.update();
             }
@@ -95,7 +99,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
             interfaceHandler.updateInterface(reactorHandler, this);
         }
 
-        if (reactorHandler.finished()) {
+        if (reactorHandler.finished() && reactorFuels.size() > 0) {
             reactorHandler.setFuels((IReactorFuel[]) reactorFuels.toArray());
         }
     }

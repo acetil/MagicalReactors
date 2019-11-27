@@ -1,10 +1,7 @@
 package acetil.magicalreactors.common.block;
 
 import acetil.magicalreactors.common.MagicalReactors;
-import acetil.magicalreactors.common.block.reactor.BlockReactorController;
-import acetil.magicalreactors.common.block.reactor.BlockReactor;
-import acetil.magicalreactors.common.block.reactor.BlockReactorInterface;
-import acetil.magicalreactors.common.block.reactor.BlockRuneBase;
+import acetil.magicalreactors.common.block.reactor.*;
 import acetil.magicalreactors.common.fluid.ModFluids;
 import acetil.magicalreactors.common.machines.MachineBlocks;
 import acetil.magicalreactors.common.tiles.*;
@@ -51,6 +48,8 @@ public class ModBlocks {
     public static Block TEST_ENERGY_SOURCE = null;
     @ObjectHolder("fuel_loader")
     public static Block FUEL_INTERFACE = null;
+    @ObjectHolder("redstone_interface")
+    public static Block REDSTONE_INTERFACE = null;
     @ObjectHolder("ethanol_block")
     public static FlowingFluidBlock ETHANOL_BLOCK = null;
     @ObjectHolder("reactor")
@@ -64,6 +63,8 @@ public class ModBlocks {
     public static TileEntityType<?> ENERGY_INTERFACE;
     @ObjectHolder("fuel_interface_tile")
     public static TileEntityType<?> FUEL_INTERFACE_TILE;
+    @ObjectHolder("redstone_interface_tile")
+    public static TileEntityType<?> REDSTONE_INTERFACE_TILE = null;
     @SubscribeEvent
     public static void registerBlocks (RegistryEvent.Register<Block> event) {
         event.getRegistry().register(new BlockOre("temp_ore", 4f));
@@ -77,6 +78,8 @@ public class ModBlocks {
         event.getRegistry().register(new BlockReactor());
         event.getRegistry().register(new BlockReactorInterface("fuel_loader",
                 TileReactorInterfaceFuelLoader::new));
+        event.getRegistry().register(new BlockReactorInterfaceRedstone("redstone_interface",
+                TileReactorInterfaceRedstone::new));
         event.getRegistry().register(new BlockTestEnergySource());
         event.getRegistry().register(new FlowingFluidBlock(() -> ModFluids.STILL_ETHANOL,
                 Block.Properties.create(Material.WATER).doesNotBlockMovement().noDrops()).setRegistryName("ethanol_block"));
@@ -100,6 +103,7 @@ public class ModBlocks {
         registerItemBlock(event, TEST_ENERGY_SOURCE);
         registerItemBlock(event, ETHANOL_BLOCK); //TODO: remove
         registerItemBlock(event, FUEL_INTERFACE);
+        registerItemBlock(event, REDSTONE_INTERFACE);
         MachineBlocks.registerMachineItems(event);
         System.out.println("Registered itemblocks");
     }
@@ -116,6 +120,7 @@ public class ModBlocks {
         registerTileEntity(event, TileReactorInterfaceEnergy::new, "energy_interface");
         registerTileEntity(event, TileReactorInterfaceFuelLoader::new, "fuel_interface_tile", FUEL_INTERFACE);
         registerTileEntity(event, TileTestEnergySource::new, "test_energy_source", TEST_ENERGY_SOURCE);
+        registerTileEntity(event, TileReactorInterfaceRedstone::new, "redstone_interface_tile", REDSTONE_INTERFACE);
         MachineBlocks.registerTileEntities(event);
         MagicalReactors.LOGGER.info("Registered tile entities!");
     }

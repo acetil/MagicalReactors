@@ -1,6 +1,7 @@
 {
   "values" : [
     "magicalreactors:rune_basic",
-    "magicalreactors:fuel_loader"
+    "magicalreactors:fuel_loader",
+    "magicalreactors:redstone_interface"
   ]
 }

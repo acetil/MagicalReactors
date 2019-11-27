@@ -18,4 +18,8 @@ public class BlockReactorInterface extends BlockRuneBase {
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return tileEntitySupplier.get();
     }
+    @Override
+    public boolean hasTileEntity (BlockState state) {
+        return true;
+    }
 }
