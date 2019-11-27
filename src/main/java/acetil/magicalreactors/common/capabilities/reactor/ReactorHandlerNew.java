@@ -8,6 +8,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.items.ItemStackHandler;
 import org.apache.logging.log4j.Level;
 
+import java.util.List;
+
 public class ReactorHandlerNew implements IReactorHandlerNew {
     private int heat;
     private int maxHeat;
@@ -21,7 +23,7 @@ public class ReactorHandlerNew implements IReactorHandlerNew {
         energyProduced = 0;
         slots = new IReactorFuel[1];
         numSlots = 1;
-        finished = false;
+        finished = true;
         maxHeat = 1; // if 0 may cause problems
         itemHandler = null;
     }
@@ -30,7 +32,7 @@ public class ReactorHandlerNew implements IReactorHandlerNew {
         energyProduced = 0;
         slots = new IReactorFuel[numSlots];
         this.numSlots = numSlots;
-        finished = false;
+        finished = true;
         this.maxHeat = maxHeat;
         itemHandler = null;
     }
@@ -80,6 +82,7 @@ public class ReactorHandlerNew implements IReactorHandlerNew {
         }
         heat += heatProduced;
         energyProduced = currentEnergyProduced;
+        MagicalReactors.LOGGER.debug("Heat: {}, energyProduced: {}", heat, energyProduced);
     }
 
     @Override
@@ -121,13 +124,14 @@ public class ReactorHandlerNew implements IReactorHandlerNew {
             slots[i] = ReactorFuelRegistry.getFuel(slotCompound.getString("slot" + i));
         }
     }
-    public void setFuels (IReactorFuel[] mats) {
-        if (numSlots != mats.length) {
+    @Override
+    public void setFuels (List<IReactorFuel> mats) {
+        if (numSlots != mats.size()) {
             MagicalReactors.LOGGER.log(Level.INFO, "Incorrect number of materials for reactor. Should be " + numSlots
-                    + ", encountered " + mats.length);
+                    + ", encountered " + mats.size());
         } else {
             for (int i = 0; i < numSlots; i++) {
-                slots[i] = mats[i];
+                slots[i] = mats.get(i);
             }
             finished = false;
         }

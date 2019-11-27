@@ -100,7 +100,8 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
         }
 
         if (reactorHandler.finished() && reactorFuels.size() > 0) {
-            reactorHandler.setFuels((IReactorFuel[]) reactorFuels.toArray());
+            MagicalReactors.LOGGER.debug("Setting fuels!");
+            reactorHandler.setFuels(reactorFuels);
         }
     }
 

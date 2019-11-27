@@ -5,6 +5,7 @@ import acetil.magicalreactors.client.gui.json.MachineGuiManager;
 import acetil.magicalreactors.common.capabilities.*;
 import acetil.magicalreactors.common.core.proxy.IProxy;
 import acetil.magicalreactors.common.core.proxy.ServerProxy;
+import acetil.magicalreactors.common.items.ModItems;
 import acetil.magicalreactors.common.lib.LibMisc;
 import acetil.magicalreactors.common.multiblock.MultiblockLoader;
 import acetil.magicalreactors.common.network.PacketHandler;
@@ -39,6 +40,7 @@ public class MagicalReactors {
     }
     private void setup (final FMLCommonSetupEvent event) {
         registerCapabilities();
+        ModItems.registerFuels();
         MachineRecipeManager.readRecipes("assets/magicalreactors/machine_recipes");
         PacketHandler.initMessages();
         MultiblockLoader.loadMultiblocks("assets/magicalreactors/multiblocks");

@@ -4,6 +4,8 @@ import acetil.magicalreactors.common.reactor.IReactorFuel;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
+import java.util.List;
+
 public interface IReactorHandlerNew {
     int getHeat ();
     void setHeat (int heat);
@@ -13,7 +15,7 @@ public interface IReactorHandlerNew {
     boolean finished ();
     CompoundNBT writeNBT ();
     void readNBT (CompoundNBT nbt);
-    void setFuels (IReactorFuel[] fuels);
+    void setFuels (List<IReactorFuel> fuels);
     void setNumSlots (int numSlots);
     // TODO: update
     ItemStack getNextOutput (boolean simulate);

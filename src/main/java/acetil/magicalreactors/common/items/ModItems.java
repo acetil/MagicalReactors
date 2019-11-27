@@ -1,5 +1,7 @@
 package acetil.magicalreactors.common.items;
 
+import acetil.magicalreactors.common.reactor.ReactorFuelBasic;
+import acetil.magicalreactors.common.reactor.ReactorFuelRegistry;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -12,14 +14,18 @@ import org.apache.logging.log4j.Level;
 @Mod.EventBusSubscriber(modid = LibMisc.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 @ObjectHolder(LibMisc.MODID)
 public class ModItems {
-
+    @ObjectHolder("uranium_ingot")
     public static ItemResource URANIUM_INGOT = null;
+    @ObjectHolder("temp2")
     public static ItemResource ITEM_TEMP2 = null;
     @SubscribeEvent
     public static void registerItems (RegistryEvent.Register<Item> event) {
         event.getRegistry().register(new ItemResource("uranium_ingot"));
         event.getRegistry().register(new ItemResource("temp2"));
         MagicalReactors.LOGGER.log(Level.INFO, "Item registry complete");
+    }
+    public static void registerFuels () {
+        ReactorFuelRegistry.registerFuel(new ReactorFuelBasic(), URANIUM_INGOT);
     }
 
 }
