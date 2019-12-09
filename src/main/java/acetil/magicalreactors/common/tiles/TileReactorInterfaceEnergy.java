@@ -29,8 +29,8 @@ public class TileReactorInterfaceEnergy extends TileEntity implements ITickableT
     private int capacity;
     private int energyOutputRate;
     public TileReactorInterfaceEnergy (int capacity, int energyOutputRate) {
-        super(ModBlocks.ENERGY_INTERFACE);
-        energyHandler = new EnergyHandler(capacity, 0, energyOutputRate, false, true);
+        super(ModBlocks.ENERGY_INTERFACE_TILE);
+        energyHandler = new EnergyHandler(capacity, capacity, energyOutputRate, false, true);
         reactorInterface = new ReactorEnergyInterface(energyHandler);
         energyOptional = LazyOptional.of(() -> energyHandler);
         interfaceOptional = LazyOptional.of(() -> reactorInterface);
@@ -38,14 +38,12 @@ public class TileReactorInterfaceEnergy extends TileEntity implements ITickableT
         this.energyOutputRate = energyOutputRate;
     }
     public TileReactorInterfaceEnergy () {
-        super(ModBlocks.ENERGY_INTERFACE);
-        energyHandler = null;
-        reactorInterface = null;
+        this(10000, 1000);
     }
 
     @Override
     public void tick() {
-        if (this.world.isRemote) {
+        if (!world.isRemote) {
             giveEnergy(Math.min(energyOutputRate, energyHandler.getEnergyStored()));
         }
     }
@@ -90,7 +88,7 @@ public class TileReactorInterfaceEnergy extends TileEntity implements ITickableT
             CompoundNBT energyCompound = nbt.getCompound("energy");
             capacity = energyCompound.getInt("capacity");
             energyOutputRate = energyCompound.getInt("output_rate");
-            energyHandler = new EnergyHandler(capacity, 0, energyOutputRate, false, true);
+            energyHandler = new EnergyHandler(capacity, capacity, energyOutputRate, false, true);
             reactorInterface = new ReactorEnergyInterface(energyHandler);
             energyOptional = LazyOptional.of(() -> energyHandler);
             interfaceOptional = LazyOptional.of(() -> reactorInterface);

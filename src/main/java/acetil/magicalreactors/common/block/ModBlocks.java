@@ -26,6 +26,8 @@ import java.util.function.Supplier;
 @ObjectHolder(LibMisc.MODID)
 public class ModBlocks {
     // TODO: move to DefferedLoader
+    // TODO: make config values suppliers / add reload support
+    // TODO: cleanup
     @ObjectHolder("temp_ore")
     public static Block TEMP_ORE1 = null; //TODO
     @ObjectHolder("temp_ore_b")
@@ -50,6 +52,8 @@ public class ModBlocks {
     public static Block FUEL_INTERFACE = null;
     @ObjectHolder("redstone_interface")
     public static Block REDSTONE_INTERFACE = null;
+    @ObjectHolder("energy_interface")
+    public static Block ENERGY_INTERFACE = null;
     @ObjectHolder("ethanol_block")
     public static FlowingFluidBlock ETHANOL_BLOCK = null;
     @ObjectHolder("test_battery")
@@ -62,7 +66,8 @@ public class ModBlocks {
     public static TileEntityType<?> TEST_ENERGY_SOURCE_TILE = null;
     public static TileEntityType<?> BYPRODUCT_INTERFACE;
     public static TileEntityType<?> COOLING_INTERFACE;
-    public static TileEntityType<?> ENERGY_INTERFACE;
+    @ObjectHolder("energy_interface_tile")
+    public static TileEntityType<?> ENERGY_INTERFACE_TILE;
     @ObjectHolder("fuel_interface_tile")
     public static TileEntityType<?> FUEL_INTERFACE_TILE;
     @ObjectHolder("redstone_interface_tile")
@@ -84,6 +89,8 @@ public class ModBlocks {
                 TileReactorInterfaceFuelLoader::new));
         event.getRegistry().register(new BlockReactorInterfaceRedstone("redstone_interface",
                 TileReactorInterfaceRedstone::new));
+        event.getRegistry().register(new BlockReactorInterface("energy_interface",
+                () -> new TileReactorInterfaceEnergy(100000, 1000)));
         event.getRegistry().register(new BlockTestEnergySource());
         event.getRegistry().register(new FlowingFluidBlock(() -> ModFluids.STILL_ETHANOL,
                 Block.Properties.create(Material.WATER).doesNotBlockMovement().noDrops()).setRegistryName("ethanol_block"));
@@ -109,6 +116,7 @@ public class ModBlocks {
         registerItemBlock(event, ETHANOL_BLOCK); //TODO: remove
         registerItemBlock(event, FUEL_INTERFACE);
         registerItemBlock(event, REDSTONE_INTERFACE);
+        registerItemBlock(event, ENERGY_INTERFACE);
         registerItemBlock(event, TEST_BATTERY);
         MachineBlocks.registerMachineItems(event);
         System.out.println("Registered itemblocks");
@@ -123,7 +131,7 @@ public class ModBlocks {
         registerTileEntity(event, TileReactorController::new, "reactor_controller", REACTOR_CONTROLLER);
         registerTileEntity(event, TileReactorInterfaceByproduct::new, "byproduct_interface");
         registerTileEntity(event, TileReactorInterfaceCooling::new, "cooling_interface");
-        registerTileEntity(event, TileReactorInterfaceEnergy::new, "energy_interface");
+        registerTileEntity(event, TileReactorInterfaceEnergy::new, "energy_interface_tile", ENERGY_INTERFACE);
         registerTileEntity(event, TileReactorInterfaceFuelLoader::new, "fuel_interface_tile", FUEL_INTERFACE);
         registerTileEntity(event, TileTestEnergySource::new, "test_energy_source", TEST_ENERGY_SOURCE);
         registerTileEntity(event, TileReactorInterfaceRedstone::new, "redstone_interface_tile", REDSTONE_INTERFACE);

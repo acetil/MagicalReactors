@@ -90,7 +90,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
         for (IReactorInterfaceHandler interfaceHandler : reactorInterfaceHandlers) {
             int powerAcceptance = interfaceHandler.getPowerAcceptance();
             powerOutput += interfaceHandler.receivePower((int)Math.min(power - powerOutput,
-                    Math.ceil((float)power * powerAcceptance / totalPowerOutput)));
+                    Math.ceil(power * (float)powerAcceptance / totalPowerOutput)));
 
             if (reactorHandler.finished()) {
                 reactorFuels.addAll(interfaceHandler.getReactorFuels());
