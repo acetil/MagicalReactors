@@ -3,6 +3,7 @@
     "magicalreactors:rune_basic",
     "magicalreactors:fuel_loader",
     "magicalreactors:redstone_interface",
-    "magicalreactors:energy_interface"
+    "magicalreactors:energy_interface",
+    "magicalreactors:cooling_interface"
   ]
 }

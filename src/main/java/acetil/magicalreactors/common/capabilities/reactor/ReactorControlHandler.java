@@ -10,6 +10,7 @@ import acetil.magicalreactors.common.multiblock.IMultiblockValidator;
 import acetil.magicalreactors.common.multiblock.MultiblockRegistry;
 import acetil.magicalreactors.common.reactor.IReactorFuel;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
@@ -73,7 +74,6 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
             return;
         }
         if (isPowered) {
-            MagicalReactors.LOGGER.debug("Updating!");
             if (isUpdateTick) {
                 reactorHandler.update();
             }
@@ -164,6 +164,14 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
         }
         isMulti = isValid;
     }
+
+    @Override
+    public void debugPrint (PlayerEntity player) {
+        if (reactorHandler != null) {
+            reactorHandler.debugMessage(player);
+        }
+    }
+
     private void checkBlock (BlockPos pos, BlockState state) {
         // TODO: consider refactor
         if (world.isRemote()) {

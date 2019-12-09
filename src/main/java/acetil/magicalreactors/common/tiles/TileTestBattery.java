@@ -36,6 +36,6 @@ public class TileTestBattery extends TileEntity implements ITickableTileEntity {
 
     @Override
     public void tick() {
-        MagicalReactors.LOGGER.debug("Storage: {} / {}", energyHandler.getEnergyStored(), energyHandler.getMaxEnergyStored());
+
     }
 }

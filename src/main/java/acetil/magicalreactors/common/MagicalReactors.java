@@ -41,6 +41,7 @@ public class MagicalReactors {
     private void setup (final FMLCommonSetupEvent event) {
         registerCapabilities();
         ModItems.registerFuels();
+        ModItems.registerCoolants();
         MachineRecipeManager.readRecipes("assets/magicalreactors/machine_recipes");
         PacketHandler.initMessages();
         MultiblockLoader.loadMultiblocks("assets/magicalreactors/multiblocks");

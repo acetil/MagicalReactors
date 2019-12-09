@@ -5,8 +5,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
 public class ReactorFuelBasic implements IReactorFuel {
-    int durability = 300;
-    int maxDurability = 300;
+    int durability = 20;
+    int maxDurability = 20;
     int energyProduced = 100;
     int heatProduced = 40;
     @Override
@@ -26,7 +26,7 @@ public class ReactorFuelBasic implements IReactorFuel {
 
     @Override
     public int getHeatProduced() {
-        return 40;
+        return heatProduced;
     }
 
     @Override

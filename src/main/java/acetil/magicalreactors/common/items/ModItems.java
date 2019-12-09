@@ -1,5 +1,6 @@
 package acetil.magicalreactors.common.items;
 
+import acetil.magicalreactors.common.reactor.ReactorCoolingRegistry;
 import acetil.magicalreactors.common.reactor.ReactorFuelBasic;
 import acetil.magicalreactors.common.reactor.ReactorFuelRegistry;
 import net.minecraft.item.Item;
@@ -27,5 +28,7 @@ public class ModItems {
     public static void registerFuels () {
         ReactorFuelRegistry.registerFuel(new ReactorFuelBasic(), URANIUM_INGOT);
     }
-
+    public static void registerCoolants () {
+        ReactorCoolingRegistry.registerCooling("minecraft:ice", 100);
+    }
 }

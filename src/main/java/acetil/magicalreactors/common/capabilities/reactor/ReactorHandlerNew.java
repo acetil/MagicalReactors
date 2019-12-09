@@ -3,8 +3,10 @@ package acetil.magicalreactors.common.capabilities.reactor;
 import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.reactor.IReactorFuel;
 import acetil.magicalreactors.common.reactor.ReactorFuelRegistry;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.items.ItemStackHandler;
 import org.apache.logging.log4j.Level;
 
@@ -82,7 +84,6 @@ public class ReactorHandlerNew implements IReactorHandlerNew {
         }
         heat += heatProduced;
         energyProduced = currentEnergyProduced;
-        MagicalReactors.LOGGER.debug("Heat: {}, energyProduced: {}", heat, energyProduced);
     }
 
     @Override
@@ -151,6 +152,12 @@ public class ReactorHandlerNew implements IReactorHandlerNew {
         }
         return item;
     }
+
+    @Override
+    public void debugMessage (PlayerEntity player) {
+        player.sendMessage(new StringTextComponent("Heat: " + heat + ", energy production: " + energyProduced));
+    }
+
     @Override
     public void setNumSlots (int numSlots) {
         IReactorFuel[] temp = new IReactorFuel[numSlots];

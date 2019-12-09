@@ -1,6 +1,7 @@
 package acetil.magicalreactors.common.capabilities.reactor;
 
 import acetil.magicalreactors.common.reactor.IReactorFuel;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 
@@ -19,4 +20,5 @@ public interface IReactorHandlerNew {
     void setNumSlots (int numSlots);
     // TODO: update
     ItemStack getNextOutput (boolean simulate);
+    void debugMessage (PlayerEntity player);
 }

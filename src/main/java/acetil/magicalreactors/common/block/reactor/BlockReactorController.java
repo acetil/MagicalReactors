@@ -1,6 +1,7 @@
 package acetil.magicalreactors.common.block.reactor;
 
 
+import acetil.magicalreactors.common.capabilities.CapabilityReactorController;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ITileEntityProvider;
@@ -48,6 +49,10 @@ public class BlockReactorController extends Block{
         if (te instanceof TileReactorController) {
             MagicalReactors.LOGGER.log(Level.INFO, "Checking multiblock");
             ((TileReactorController) te).updateMultiblock();
+            if (te.getCapability(CapabilityReactorController.REACTOR_CONTROLLER).isPresent()) {
+                te.getCapability(CapabilityReactorController.REACTOR_CONTROLLER)
+                        .orElse(CapabilityReactorController.REACTOR_CONTROLLER.getDefaultInstance()).debugPrint(playerIn);
+            }
             return true;
         }
         return false;
