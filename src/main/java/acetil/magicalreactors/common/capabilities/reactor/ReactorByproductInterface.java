@@ -12,6 +12,7 @@ public class ReactorByproductInterface implements IReactorInterfaceHandler{
     public void updateInterface(IReactorHandlerNew reactorHandler, IReactorControlCapability reactorControl) {
         ItemStack stack = reactorHandler.getNextOutput(true);
         while (!stack.isEmpty() && canInsertStack(stack)) {
+            System.out.println("Extracting byproduct!");
             insertStack(reactorHandler.getNextOutput(false));
             stack = reactorHandler.getNextOutput(true);
         }

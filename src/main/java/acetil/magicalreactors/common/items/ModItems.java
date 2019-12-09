@@ -26,7 +26,7 @@ public class ModItems {
         MagicalReactors.LOGGER.log(Level.INFO, "Item registry complete");
     }
     public static void registerFuels () {
-        ReactorFuelRegistry.registerFuel(new ReactorFuelBasic(), URANIUM_INGOT);
+        ReactorFuelRegistry.registerFuel(ReactorFuelBasic::new, "basic_fuel", URANIUM_INGOT);
     }
     public static void registerCoolants () {
         ReactorCoolingRegistry.registerCooling("minecraft:ice", 100);

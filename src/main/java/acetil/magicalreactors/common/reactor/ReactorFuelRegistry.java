@@ -13,19 +13,21 @@ import acetil.magicalreactors.common.lib.LibMisc;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
+
 @Mod.EventBusSubscriber
 public class ReactorFuelRegistry {
-    private static Map<String, IReactorFuel> fuels = new HashMap<>();
+    private static Map<String, Supplier<IReactorFuel>> fuels = new HashMap<>();
     private static Map<Item, String> itemFuels = new HashMap<>();
-    private static void registerFuel (IReactorFuel fuel) {
-        fuels.put(fuel.getName(), fuel);
+    private static void registerFuel (Supplier<IReactorFuel> fuel, String name) {
+        fuels.put(name, fuel);
     }
-    public static void registerFuel (IReactorFuel fuel, Item item) {
-        registerFuel(fuel);
-        itemFuels.put(item, fuel.getName());
+    public static void registerFuel (Supplier<IReactorFuel> fuel, String name, Item item) {
+        registerFuel(fuel, name);
+        itemFuels.put(item, name);
     }
     public static IReactorFuel getFuel (String name) {
-        return fuels.get(name);
+        return fuels.get(name).get();
     }
 
 

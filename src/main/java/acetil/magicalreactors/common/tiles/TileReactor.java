@@ -31,6 +31,7 @@ public class TileReactor extends TileEntity implements ITickableTileEntity {
           }
         };
         reactorHandler = new ReactorHandlerNew();
+        reactorHandler.setItemHandler(itemHandler);
         reactorOptional = LazyOptional.of(() -> reactorHandler);
     }
 

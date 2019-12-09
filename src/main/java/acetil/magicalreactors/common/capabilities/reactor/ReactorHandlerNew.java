@@ -73,7 +73,14 @@ public class ReactorHandlerNew implements IReactorHandlerNew {
             heatProduced += fuel.getHeatProduced();
             currentEnergyProduced += fuel.getEnergyProduced(heat, maxHeat);
             fuel.damage();
-            if (fuel.getCurrentDurability() <= 0) {
+            if (fuel.getCurrentDurability() <= -1) { // 0 misses one durability
+                ItemStack stack = fuel.getByproduct();
+                for (int j = 0; j < itemHandler.getSlots(); j++) {
+                    stack = itemHandler.insertItem(j, stack, false);
+                    if (stack.isEmpty()) {
+                        break;
+                    }
+                }
                 slots[i] = null;
             } else {
                 hasNonNull = true;
@@ -81,9 +88,11 @@ public class ReactorHandlerNew implements IReactorHandlerNew {
         }
         if (!hasNonNull) {
             finished = true;
+            energyProduced = 0;
+        } else {
+            heat += heatProduced;
+            energyProduced = currentEnergyProduced;
         }
-        heat += heatProduced;
-        energyProduced = currentEnergyProduced;
     }
 
     @Override
