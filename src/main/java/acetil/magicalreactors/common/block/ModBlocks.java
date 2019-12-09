@@ -52,6 +52,8 @@ public class ModBlocks {
     public static Block REDSTONE_INTERFACE = null;
     @ObjectHolder("ethanol_block")
     public static FlowingFluidBlock ETHANOL_BLOCK = null;
+    @ObjectHolder("test_battery")
+    public static Block TEST_BATTERY = null;
     @ObjectHolder("reactor")
     public static TileEntityType<?> REACTOR_TILE_ENTITY = null;
     @ObjectHolder("reactor_controller")
@@ -65,6 +67,8 @@ public class ModBlocks {
     public static TileEntityType<?> FUEL_INTERFACE_TILE;
     @ObjectHolder("redstone_interface_tile")
     public static TileEntityType<?> REDSTONE_INTERFACE_TILE = null;
+    @ObjectHolder("test_battery_tile")
+    public static TileEntityType<?> TEST_BATTERY_TILE = null;
     @SubscribeEvent
     public static void registerBlocks (RegistryEvent.Register<Block> event) {
         event.getRegistry().register(new BlockOre("temp_ore", 4f));
@@ -83,6 +87,7 @@ public class ModBlocks {
         event.getRegistry().register(new BlockTestEnergySource());
         event.getRegistry().register(new FlowingFluidBlock(() -> ModFluids.STILL_ETHANOL,
                 Block.Properties.create(Material.WATER).doesNotBlockMovement().noDrops()).setRegistryName("ethanol_block"));
+        event.getRegistry().register(new BlockTestBattery());
         MachineBlocks.registerMachineBlocks(event);
         /*GameRegistry.registerTileEntity(TileReactor.class, new ResourceLocation(LibMisc.MODID + ":reactor_entity"));
         GameRegistry.registerTileEntity(TileReactorController.class, new ResourceLocation(LibMisc.MODID + ":reactor_controller_entity"));
@@ -104,6 +109,7 @@ public class ModBlocks {
         registerItemBlock(event, ETHANOL_BLOCK); //TODO: remove
         registerItemBlock(event, FUEL_INTERFACE);
         registerItemBlock(event, REDSTONE_INTERFACE);
+        registerItemBlock(event, TEST_BATTERY);
         MachineBlocks.registerMachineItems(event);
         System.out.println("Registered itemblocks");
     }
@@ -121,6 +127,7 @@ public class ModBlocks {
         registerTileEntity(event, TileReactorInterfaceFuelLoader::new, "fuel_interface_tile", FUEL_INTERFACE);
         registerTileEntity(event, TileTestEnergySource::new, "test_energy_source", TEST_ENERGY_SOURCE);
         registerTileEntity(event, TileReactorInterfaceRedstone::new, "redstone_interface_tile", REDSTONE_INTERFACE);
+        registerTileEntity(event, TileTestBattery::new, "test_battery_tile", TEST_BATTERY);
         MachineBlocks.registerTileEntities(event);
         MagicalReactors.LOGGER.info("Registered tile entities!");
     }

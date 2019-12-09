@@ -37,8 +37,4 @@ public class ReactorFuelRegistry {
                     new ReactorFuelProvider(itemFuels.get(event.getObject().getItem())));
         }
     }
-    @SubscribeEvent
-    public static void blockBreakEvent (BlockEvent.BreakEvent event) {
-        MagicalReactors.LOGGER.debug("Event test!");
-    }
 }
