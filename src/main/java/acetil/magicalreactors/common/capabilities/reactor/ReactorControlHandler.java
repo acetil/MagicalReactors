@@ -9,8 +9,10 @@ import acetil.magicalreactors.common.multiblock.IMultiblock;
 import acetil.magicalreactors.common.multiblock.IMultiblockValidator;
 import acetil.magicalreactors.common.multiblock.MultiblockRegistry;
 import acetil.magicalreactors.common.reactor.IReactorFuel;
+import jdk.nashorn.internal.codegen.CompileUnit;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
@@ -170,6 +172,21 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
         if (reactorHandler != null) {
             reactorHandler.debugMessage(player);
         }
+    }
+
+    @Override
+    public void readNBT (CompoundNBT nbt) {
+        isPowered = nbt.getBoolean("is_powered");
+        isUpdateTick = nbt.getBoolean("is_update_tick");
+    }
+
+
+    @Override
+    public CompoundNBT writeNBT () {
+        CompoundNBT compound = new CompoundNBT();
+        compound.putBoolean("is_powered", isPowered);
+        compound.putBoolean("is_update_tick", isUpdateTick);
+        return compound;
     }
 
     private void checkBlock (BlockPos pos, BlockState state) {

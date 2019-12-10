@@ -4,6 +4,7 @@ import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.capabilities.CapabilityReactorController;
 import acetil.magicalreactors.common.capabilities.reactor.IReactorControlCapability;
 import acetil.magicalreactors.common.lib.LibMisc;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
@@ -32,6 +33,7 @@ public class TileReactorController extends TileEntity implements ITickableTileEn
             // no forge onload >:(
             reactorhandler.onCreation();
             first = false;
+            this.markDirty();
         }
         reactorhandler.update();
     }
@@ -61,5 +63,18 @@ public class TileReactorController extends TileEntity implements ITickableTileEn
     public void remove () {
         reactorhandler.onDestruction();
         super.remove();
+    }
+
+    @Override
+    public void read (CompoundNBT compound) {
+        super.read(compound);
+        CompoundNBT handlerCompound = compound.getCompound("handler");
+        reactorhandler.readNBT(handlerCompound);
+    }
+
+    @Override
+    public CompoundNBT write (CompoundNBT compound) {
+        compound.put("handler", reactorhandler.writeNBT());
+        return super.write(compound);
     }
 }

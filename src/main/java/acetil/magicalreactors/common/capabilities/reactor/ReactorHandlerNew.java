@@ -114,7 +114,11 @@ public class ReactorHandlerNew implements IReactorHandlerNew {
         nbt.putInt("num_slots", numSlots);
         CompoundNBT slotCompound = new CompoundNBT();
         for (int i = 0; i < numSlots; i++) {
-            slotCompound.putString("slot" + i, slots[i].getName());
+            if (slots[i] == null) {
+                slotCompound.putString("slot" + i, "null");
+            } else {
+                slotCompound.putString("slot" + i, slots[i].getName());
+            }
         }
         nbt.put("slots", slotCompound);
         return nbt;
@@ -131,7 +135,11 @@ public class ReactorHandlerNew implements IReactorHandlerNew {
         }
         CompoundNBT slotCompound = nbt.getCompound("slots");
         for (int i = 0; i < tempNumSlots; i++) {
-            slots[i] = ReactorFuelRegistry.getFuel(slotCompound.getString("slot" + i));
+            if (slotCompound.getString("slot" + i).equals("null")) {
+                slots[i] = null;
+            } else {
+                slots[i] = ReactorFuelRegistry.getFuel(slotCompound.getString("slot" + i));
+            }
         }
     }
     @Override
