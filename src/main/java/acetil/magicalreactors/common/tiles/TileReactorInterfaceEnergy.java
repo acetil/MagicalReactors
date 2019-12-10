@@ -45,6 +45,7 @@ public class TileReactorInterfaceEnergy extends TileEntity implements ITickableT
     public void tick() {
         if (!world.isRemote) {
             giveEnergy(Math.min(energyOutputRate, energyHandler.getEnergyStored()));
+            this.markDirty();
         }
     }
     private void giveEnergy (int energy) {
@@ -92,8 +93,8 @@ public class TileReactorInterfaceEnergy extends TileEntity implements ITickableT
             reactorInterface = new ReactorEnergyInterface(energyHandler);
             energyOptional = LazyOptional.of(() -> energyHandler);
             interfaceOptional = LazyOptional.of(() -> reactorInterface);
-            if (nbt.contains("handler")) {
-                energyHandler.readNBT(nbt.getCompound("handler"));
+            if (energyCompound.contains("handler")) {
+                energyHandler.readNBT(energyCompound.getCompound("handler"));
             }
         }
     }
