@@ -9,6 +9,7 @@ import acetil.magicalreactors.common.capabilities.machines.MachineFluidHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class MachineHandlerFluid extends MachineHandlerBase {
@@ -17,7 +18,7 @@ public class MachineHandlerFluid extends MachineHandlerBase {
     private List<FluidStack> fluidInputs;
     private List<FluidStack> fluidOutputs;
     private List<FluidStack> recipeFluidOutputs;
-    public MachineHandlerFluid (String machine, int inputSlots, int outputSlots, int fluidInputSlots, int fluidOutputSlots, int energyUseRate) {
+    public MachineHandlerFluid (String machine, int inputSlots, int outputSlots, int fluidInputSlots, int fluidOutputSlots, Supplier<Integer> energyUseRate) {
         super(machine, energyUseRate,inputSlots, outputSlots);
         this.fluidInputSlots = fluidInputSlots;
         this.fluidOutputSlots = fluidOutputSlots;

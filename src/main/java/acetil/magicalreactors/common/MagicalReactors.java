@@ -6,7 +6,7 @@ import acetil.magicalreactors.common.capabilities.*;
 import acetil.magicalreactors.common.core.proxy.IProxy;
 import acetil.magicalreactors.common.core.proxy.ServerProxy;
 import acetil.magicalreactors.common.items.ModItems;
-import acetil.magicalreactors.common.lib.LibMisc;
+import acetil.magicalreactors.common.constants.Constants;
 import acetil.magicalreactors.common.multiblock.MultiblockLoader;
 import acetil.magicalreactors.common.network.PacketHandler;
 import acetil.magicalreactors.common.recipes.MachineRecipeManager;
@@ -21,11 +21,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-@Mod(LibMisc.MODID)
+@Mod(Constants.MODID)
 public class MagicalReactors {
-    public static final String MODID = LibMisc.MODID;
-    public static final String MODNAME = LibMisc.MODNAME;
-    public static final String VERSION = LibMisc.VERSION;
+    public static final String MODID = Constants.MODID;
+    public static final String MODNAME = Constants.MODNAME;
+    public static final String VERSION = Constants.VERSION;
 
     public static IProxy proxy = DistExecutor.runForDist(()-> ClientProxy::new, ()-> ServerProxy::new);
 

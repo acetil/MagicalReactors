@@ -234,6 +234,6 @@ public class CapabilityMachine {
                     ((MachineHandlerFluid)instance).setRecipeFluidOutputs(fluidRecipeOutputs);
                 }
             } */
-        }, () -> new MachineHandlerBase("centrifuge", 40, 1, 2));
+        }, () -> new MachineHandlerBase("centrifuge", () -> 40, 1, 2));
     }
 }

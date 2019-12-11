@@ -8,12 +8,12 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import acetil.magicalreactors.common.MagicalReactors;
-import acetil.magicalreactors.common.lib.LibMisc;
+import acetil.magicalreactors.common.constants.Constants;
 import net.minecraftforge.registries.ObjectHolder;
 import org.apache.logging.log4j.Level;
 
-@Mod.EventBusSubscriber(modid = LibMisc.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-@ObjectHolder(LibMisc.MODID)
+@Mod.EventBusSubscriber(modid = Constants.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@ObjectHolder(Constants.MODID)
 public class ModItems {
     @ObjectHolder("uranium_ingot")
     public static ItemResource URANIUM_INGOT = null;

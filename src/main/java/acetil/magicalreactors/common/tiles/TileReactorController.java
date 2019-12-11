@@ -3,18 +3,15 @@ package acetil.magicalreactors.common.tiles;
 import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.capabilities.CapabilityReactorController;
 import acetil.magicalreactors.common.capabilities.reactor.IReactorControlCapability;
-import acetil.magicalreactors.common.lib.LibMisc;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import acetil.magicalreactors.common.capabilities.reactor.ReactorControlHandler;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 

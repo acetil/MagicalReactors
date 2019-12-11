@@ -1,6 +1,6 @@
 package acetil.magicalreactors.common.block;
 
-import acetil.magicalreactors.common.lib.LibMisc;
+import acetil.magicalreactors.common.constants.Constants;
 import acetil.magicalreactors.common.tiles.TileTestBattery;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -11,7 +11,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -23,7 +22,7 @@ import javax.annotation.Nullable;
 public class BlockTestBattery extends Block {
     public BlockTestBattery () {
         super(Properties.create(Material.ROCK));
-        setRegistryName(new ResourceLocation(LibMisc.MODID, "test_battery"));
+        setRegistryName(new ResourceLocation(Constants.MODID, "test_battery"));
     }
 
     @Override

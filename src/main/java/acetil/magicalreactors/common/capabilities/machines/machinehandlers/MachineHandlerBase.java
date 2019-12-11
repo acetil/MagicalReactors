@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 // TODO: consider refactor
 public class MachineHandlerBase implements IMachineCapability {
@@ -26,7 +27,7 @@ public class MachineHandlerBase implements IMachineCapability {
     boolean isOn = true;
     MachineRedstone redstoneRequired = MachineRedstone.REQUIRED_POWERED;
     String machine;
-    int energyUseRate;
+    Supplier<Integer> energyUseRate;
     int energyToCompletion;
     int energyPerTick;
     int totalEnergyRequired;
@@ -37,7 +38,7 @@ public class MachineHandlerBase implements IMachineCapability {
     List<ItemStack> recipeOutputs;
     boolean isInRecipe = false;
     boolean shouldSendPacket = false;
-    public MachineHandlerBase (String machine, int energyUseRate, int inputSlots, int outputSlots) {
+    public MachineHandlerBase (String machine, Supplier<Integer> energyUseRate, int inputSlots, int outputSlots) {
         this.machine = machine;
         this.energyUseRate = energyUseRate;
         this.energyToCompletion = 0;
@@ -52,7 +53,7 @@ public class MachineHandlerBase implements IMachineCapability {
     @Override
     public int addEnergy(int power) {
         int originalEnergy = energyToCompletion;
-        energyToCompletion -= Math.min(Math.min(power, energyUseRate), energyToCompletion);
+        energyToCompletion -= Math.min(Math.min(power, energyUseRate.get()), energyToCompletion);
         pastEnergyPerTick = energyPerTick;
         energyPerTick = originalEnergy - energyToCompletion;
         return energyPerTick;
@@ -69,7 +70,7 @@ public class MachineHandlerBase implements IMachineCapability {
 
     @Override
     public int getEnergyUseRate() {
-        return energyUseRate;
+        return energyUseRate.get();
     }
 
     @Override

@@ -4,19 +4,15 @@ import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.capabilities.CapabilityReactorInterface;
 import acetil.magicalreactors.common.capabilities.EnergyHandler;
 import acetil.magicalreactors.common.capabilities.reactor.IReactorInterfaceHandler;
-import acetil.magicalreactors.common.lib.LibMisc;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import acetil.magicalreactors.common.capabilities.reactor.ReactorEnergyInterface;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +26,7 @@ public class TileReactorInterfaceEnergy extends TileEntity implements ITickableT
     private int energyOutputRate;
     public TileReactorInterfaceEnergy (int capacity, int energyOutputRate) {
         super(ModBlocks.ENERGY_INTERFACE_TILE);
-        energyHandler = new EnergyHandler(capacity, capacity, energyOutputRate, false, true);
+        energyHandler = new EnergyHandler(() -> capacity, () -> capacity, () -> energyOutputRate, false, true);
         reactorInterface = new ReactorEnergyInterface(energyHandler);
         energyOptional = LazyOptional.of(() -> energyHandler);
         interfaceOptional = LazyOptional.of(() -> reactorInterface);
@@ -89,7 +85,7 @@ public class TileReactorInterfaceEnergy extends TileEntity implements ITickableT
             CompoundNBT energyCompound = nbt.getCompound("energy");
             capacity = energyCompound.getInt("capacity");
             energyOutputRate = energyCompound.getInt("output_rate");
-            energyHandler = new EnergyHandler(capacity, capacity, energyOutputRate, false, true);
+            energyHandler = new EnergyHandler(() -> capacity, () -> capacity, () -> energyOutputRate, false, true);
             reactorInterface = new ReactorEnergyInterface(energyHandler);
             energyOptional = LazyOptional.of(() -> energyHandler);
             interfaceOptional = LazyOptional.of(() -> reactorInterface);

@@ -1,17 +1,15 @@
 package acetil.magicalreactors.common.fluid;
 
-import acetil.magicalreactors.common.lib.LibMisc;
+import acetil.magicalreactors.common.constants.Constants;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.WaterFluid;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
 
-@ObjectHolder(LibMisc.MODID)
-@Mod.EventBusSubscriber(modid = LibMisc.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@ObjectHolder(Constants.MODID)
+@Mod.EventBusSubscriber(modid = Constants.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModFluids {
     @ObjectHolder("ethanol_source")
     public static FlowingFluid STILL_ETHANOL;

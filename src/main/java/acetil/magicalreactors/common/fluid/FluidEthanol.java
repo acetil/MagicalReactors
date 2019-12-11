@@ -1,7 +1,7 @@
 package acetil.magicalreactors.common.fluid;
 
 import acetil.magicalreactors.common.block.ModBlocks;
-import acetil.magicalreactors.common.lib.LibMisc;
+import acetil.magicalreactors.common.constants.Constants;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.Rarity;
@@ -14,15 +14,15 @@ public abstract class FluidEthanol extends ForgeFlowingFluid {
     public FluidEthanol (String name, boolean isSource, int colour, String stillTex, String flowingTex) {
         // TODO: update to work with nbt
         super(new Properties(() -> ModFluids.STILL_ETHANOL, () -> ModFluids.FLOWING_ETHANOL,
-                FluidAttributes.builder(new ResourceLocation(LibMisc.MODID, stillTex),
-                        new ResourceLocation(LibMisc.MODID, flowingTex))
+                FluidAttributes.builder(new ResourceLocation(Constants.MODID, stillTex),
+                        new ResourceLocation(Constants.MODID, flowingTex))
                         .density(789)
                         .rarity(Rarity.COMMON)
                         .viscosity(1230)
                         .color(colour)
                         .translationKey(name))
                         .block(() -> ModBlocks.ETHANOL_BLOCK));
-        setRegistryName(new ResourceLocation(LibMisc.MODID, name));
+        setRegistryName(new ResourceLocation(Constants.MODID, name));
         this.isSource = isSource;
     }
     public FluidEthanol (String name, boolean isSource, int colour) {

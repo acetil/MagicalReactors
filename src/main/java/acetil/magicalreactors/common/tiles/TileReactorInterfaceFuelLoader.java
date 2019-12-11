@@ -3,18 +3,15 @@ package acetil.magicalreactors.common.tiles;
 import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.capabilities.CapabilityReactorInterface;
 import acetil.magicalreactors.common.capabilities.reactor.IReactorInterfaceHandler;
-import acetil.magicalreactors.common.lib.LibMisc;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import acetil.magicalreactors.common.capabilities.reactor.ReactorFuelInputInterface;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class TileReactorInterfaceFuelLoader extends TileEntity {
     private ItemStackHandler itemHandler;

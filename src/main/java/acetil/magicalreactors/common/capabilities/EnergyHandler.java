@@ -8,10 +8,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.network.PacketDistributor;
 
+import java.util.function.Supplier;
+
 public class EnergyHandler implements IEnergyStorage {
-    private int capacity;
-    private int maxReceive;
-    private int maxExtract;
+    private Supplier<Integer> capacity;
+    private Supplier<Integer> maxReceive;
+    private Supplier<Integer> maxExtract;
     private boolean canReceive;
     private boolean canExtract;
     private int energy;
@@ -19,8 +21,7 @@ public class EnergyHandler implements IEnergyStorage {
     private int lastEnergy;
     private int energyChange;
     private int lastEnergyChange;
-    public EnergyHandler (int capacity, int maxReceive, int maxExtract, boolean canReceive, boolean canExtract) {
-
+    public EnergyHandler (Supplier<Integer> capacity, Supplier<Integer> maxReceive, Supplier<Integer> maxExtract, boolean canReceive, boolean canExtract) {
         this.capacity = capacity;
         this.maxReceive = maxReceive;
         this.maxExtract = maxExtract;
@@ -33,8 +34,8 @@ public class EnergyHandler implements IEnergyStorage {
     }
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
-        int receive = Math.min(maxReceive, this.maxReceive);
-        int energyReceived = Math.min(receive, capacity - energy);
+        int receive = Math.min(maxReceive, this.maxReceive.get());
+        int energyReceived = Math.min(receive, capacity.get() - energy);
         if (!simulate && holdsEnergy) {
             energy += energyReceived;
         }
@@ -43,8 +44,8 @@ public class EnergyHandler implements IEnergyStorage {
 
     @Override
     public int extractEnergy(int maxExtract, boolean simulate) {
-        int extract = Math.min(maxExtract, this.maxExtract);
-        int energyExtracted = Math.min(extract, capacity);
+        int extract = Math.min(maxExtract, this.maxExtract.get());
+        int energyExtracted = Math.min(extract, capacity.get());
         if (!simulate && holdsEnergy) {
             energy -= energyExtracted;
         }
@@ -60,7 +61,7 @@ public class EnergyHandler implements IEnergyStorage {
     @Override
     public int getMaxEnergyStored() {
         //System.out.println("Getting max energy stored");
-        return capacity;
+        return capacity.get();
     }
 
     @Override
@@ -73,25 +74,6 @@ public class EnergyHandler implements IEnergyStorage {
         return canReceive;
     }
 
-    public void setCanExtract (boolean canExtract) {
-        this.canExtract = canExtract;
-    }
-
-    public void setCanReceive (boolean canReceive) {
-        this.canReceive = canReceive;
-    }
-
-    public void setHoldsEnergy (boolean holdsEnergy) {
-        this.holdsEnergy = holdsEnergy;
-    }
-
-    public void setMaxExtract (int maxExtract) {
-        this.maxExtract = maxExtract;
-    }
-
-    public void setMaxReceive (int maxReceive) {
-        this.maxReceive = maxReceive;
-    }
     public void readNBT (CompoundNBT nbt) {
         this.energy = nbt.getInt("stored_energy");
         lastEnergy = energy;
@@ -123,6 +105,6 @@ public class EnergyHandler implements IEnergyStorage {
         }
     }
     public void syncClient () {
-        energy = Math.max(0, Math.min(energy + energyChange, capacity));
+        energy = Math.max(0, Math.min(energy + energyChange, capacity.get()));
     }
 }

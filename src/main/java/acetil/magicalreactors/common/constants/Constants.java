@@ -1,6 +1,6 @@
-package acetil.magicalreactors.common.lib;
+package acetil.magicalreactors.common.constants;
 
-public class LibMisc {
+public class Constants {
     public static final String MODID = "magicalreactors";
     public static final String MODNAME = "Magical Reactors";
     public static final String VERSION = "0.0.1";

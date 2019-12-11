@@ -2,7 +2,7 @@ package acetil.magicalreactors.client.gui.json;
 
 import acetil.magicalreactors.client.gui.ContainerGui;
 import acetil.magicalreactors.common.containers.GuiContainer;
-import acetil.magicalreactors.common.lib.LibMisc;
+import acetil.magicalreactors.common.constants.Constants;
 import com.google.gson.Gson;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.entity.player.PlayerInventory;
@@ -64,7 +64,7 @@ public class MachineGuiManager {
         readGuiJson("assets/magicalreactors/gui");
         for (String key : guiMap.keySet()) {
             ScreenManager.registerFactory((ContainerType<GuiContainer>) ForgeRegistries.CONTAINERS
-                            .getValue(new ResourceLocation(LibMisc.MODID, key)),
+                            .getValue(new ResourceLocation(Constants.MODID, key)),
                     (GuiContainer gui, PlayerInventory inv, ITextComponent name) -> new ContainerGui(gui, inv, name, guiMap.get(key)));
         }
     }

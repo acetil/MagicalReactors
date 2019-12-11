@@ -2,9 +2,7 @@ package acetil.magicalreactors.common.machines;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.Item;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -13,14 +11,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import acetil.magicalreactors.common.core.NuclearCreativeTab;
-import acetil.magicalreactors.common.lib.LibMisc;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class BlockDistiller extends Block {

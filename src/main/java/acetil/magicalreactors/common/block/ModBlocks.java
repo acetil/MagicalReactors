@@ -16,14 +16,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import acetil.magicalreactors.common.lib.LibMisc;
+import acetil.magicalreactors.common.constants.Constants;
 import net.minecraftforge.registries.ObjectHolder;
 
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = LibMisc.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Constants.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 @SuppressWarnings("unused")
-@ObjectHolder(LibMisc.MODID)
+@ObjectHolder(Constants.MODID)
 public class ModBlocks {
     // TODO: move to DefferedLoader
     // TODO: make config values suppliers / add reload support
@@ -154,6 +154,6 @@ public class ModBlocks {
     public static void registerTileEntity (RegistryEvent.Register<TileEntityType<?>> event, Supplier<? extends TileEntity> factory,
                                            String name, Block... blocks) {
         event.getRegistry().register(TileEntityType.Builder.create(factory, blocks).build(null)
-                .setRegistryName(new ResourceLocation(LibMisc.MODID, name)));
+                .setRegistryName(new ResourceLocation(Constants.MODID, name)));
     }
 }

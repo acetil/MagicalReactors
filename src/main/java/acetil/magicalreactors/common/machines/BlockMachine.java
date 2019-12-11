@@ -4,17 +4,12 @@ import acetil.magicalreactors.common.containers.GuiContainer;
 import acetil.magicalreactors.common.containers.json.MachineContainerManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -22,16 +17,11 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import acetil.magicalreactors.common.MagicalReactors;
-import acetil.magicalreactors.common.core.NuclearCreativeTab;
-import acetil.magicalreactors.common.lib.LibMisc;
-import net.minecraftforge.items.ItemStackHandler;
+import acetil.magicalreactors.common.constants.Constants;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class BlockMachine extends Block {
@@ -77,7 +67,7 @@ public class BlockMachine extends Block {
                 IItemHandler itemHandler = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
                         .orElse(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.getDefaultInstance());
                 return new GuiContainer(MachineContainerManager.getContainerJson(machineName),
-                        LibMisc.MODID + ":" + machineName, windowId, inv, itemHandler, pos);
+                        Constants.MODID + ":" + machineName, windowId, inv, itemHandler, pos);
             }
         }, pos);
         return true;
