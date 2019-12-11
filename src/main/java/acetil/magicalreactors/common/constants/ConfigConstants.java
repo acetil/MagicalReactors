@@ -1,22 +1,34 @@
 package acetil.magicalreactors.common.constants;
 
+import acetil.magicalreactors.common.machines.MachineRegistry;
+import acetil.magicalreactors.common.machines.MachineRegistryItem;
 import acetil.magicalreactors.common.utils.ModifiableSupplier;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
 
 public class ConfigConstants {
+    public static ForgeConfigSpec SERVER_SPEC;
+    public static Server SERVER;
     public static class Server {
-        private HashMap<String, MachineConfig> MACHINE_CONFIGS;
-        public Server (ForgeConfigSpec.Builder builder) {
-            MACHINE_CONFIGS = new HashMap<>();
+        public Server (ForgeConfigSpec.Builder forgeBuilder) {
+            Builder builder = new Builder(forgeBuilder, "Magical Reactors serverside config.", "magicalreactors");
+            builder.addCategory("general", "General configuration values");
+            builder.exitCategory();
+            builder.addCategory("machines", "Configs for all the machines");
+            for (MachineRegistryItem m : MachineRegistry.getMachines()) {
+                builder.addMachineConfig(m.config);
+            }
+            builder.exitCategory();
         }
-
-        public MachineConfig getMachineConfig (String name) {
-            return MACHINE_CONFIGS.get(name);
+        public static void bakeConfigs () {
+            Pair<Server, ForgeConfigSpec> pair = new ForgeConfigSpec.Builder()
+                    .configure(Server::new);
+            SERVER = pair.getLeft();
+            SERVER_SPEC = pair.getRight();
         }
-
     }
     public static class Builder {
         ForgeConfigSpec.Builder builder;

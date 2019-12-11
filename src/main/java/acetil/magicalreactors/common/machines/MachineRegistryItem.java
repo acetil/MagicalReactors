@@ -16,7 +16,7 @@ public class MachineRegistryItem {
     Supplier<Integer> energyCapacity;
     Supplier<Integer> maxReceive;
     Supplier<Integer> energyUseRate;
-    MachineConfig config;
+    public MachineConfig config;
     boolean holdsFluid;
     int fluidInputSlots;
     int fluidOutputSlots;

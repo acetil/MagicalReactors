@@ -3,15 +3,19 @@ package acetil.magicalreactors.common;
 import acetil.magicalreactors.client.core.proxy.ClientProxy;
 import acetil.magicalreactors.client.gui.json.MachineGuiManager;
 import acetil.magicalreactors.common.capabilities.*;
+import acetil.magicalreactors.common.constants.ConfigConstants;
 import acetil.magicalreactors.common.core.proxy.IProxy;
 import acetil.magicalreactors.common.core.proxy.ServerProxy;
 import acetil.magicalreactors.common.items.ModItems;
 import acetil.magicalreactors.common.constants.Constants;
+import acetil.magicalreactors.common.machines.MachineBlocks;
 import acetil.magicalreactors.common.multiblock.MultiblockLoader;
 import acetil.magicalreactors.common.network.PacketHandler;
 import acetil.magicalreactors.common.recipes.MachineRecipeManager;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -37,6 +41,10 @@ public class MagicalReactors {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
+        MachineBlocks.registerMachines();
+        ConfigConstants.Server.bakeConfigs();
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ConfigConstants.SERVER_SPEC);
+
     }
     private void setup (final FMLCommonSetupEvent event) {
         registerCapabilities();

@@ -40,7 +40,6 @@ public class MachineBlocks {
         /*GameRegistry.registerTileEntity(TileMachineBase.class, new ResourceLocation(LibMisc.MODID + ":machine_entity"));
         GameRegistry.registerTileEntity(TileMachineDistiller.class, new ResourceLocation(LibMisc.MODID + ":distiller_entity"));*/
 
-        registerMachines();
     }
     public static void registerMachines () {
         MachineRegistry.registerMachine(new MachineRegistryItem.Builder("centrifuge", 10000, 800, 400)
