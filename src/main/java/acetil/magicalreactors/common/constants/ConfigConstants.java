@@ -2,12 +2,10 @@ package acetil.magicalreactors.common.constants;
 
 import acetil.magicalreactors.common.machines.MachineRegistry;
 import acetil.magicalreactors.common.machines.MachineRegistryItem;
-import acetil.magicalreactors.common.utils.ModifiableSupplier;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.HashMap;
+import java.util.function.Supplier;
 
 public class ConfigConstants {
     public static ForgeConfigSpec SERVER_SPEC;
@@ -36,37 +34,34 @@ public class ConfigConstants {
             this.builder = builder;
             builder.comment(comment).push(path);
         }
-        public Builder addMachineConfig (MachineConfig config, String comment) {
+        public void addMachineConfig (MachineConfig config, String comment) {
             this.addCategory(config.NAME, comment);
-            this.add("energyStorage", config.energyStorageModifiable, config.defaultEnergyStorage,
+            config.ENERGY_STORAGE =  this.add("energyStorage", config.defaultEnergyStorage,
                     "Change this to modify the energy capacity of the machine", false, true);
-            this.add("maxReceive", config.maxReceiveModifiable, config.defaultMaxReceive,
+            config.MAX_RECEIVE=  this.add("maxReceive", config.defaultMaxReceive,
                     "Change this to modify the maximum amount of energy a machine can receive", false, true);
-            this.add("energyUseRate", config.energyUseRateModifiable, config.defaultEnergyUseRate,
+            config.ENERGY_USE_RATE =  this.add("energyUseRate", config.defaultEnergyUseRate,
                     "Change this to modify the amount of energy used per tick (more means the machine works faster)",
                     false, true);
             this.exitCategory();
-            return this;
         }
-        public Builder addMachineConfig (MachineConfig config) {
-            return addMachineConfig(config, null);
+        public void addMachineConfig (MachineConfig config) {
+            addMachineConfig(config, null);
         }
-        public Builder addCategory (String categoryName, String comment) {
+        public void addCategory (String categoryName, String comment) {
             if (comment != null) {
                 builder.comment(comment).push(categoryName);
             } else {
                 builder.push(categoryName);
             }
-            return this;
         }
-        public Builder addCategory (String categoryName) {
-            return addCategory(categoryName, null);
+        public void addCategory (String categoryName) {
+            addCategory(categoryName, null);
         }
-        public Builder exitCategory () {
+        public void exitCategory () {
             builder.pop();
-            return this;
         }
-        public <T> Builder add (String categoryName, ModifiableSupplier<T> modSupplier, T defaultVal, String comment, boolean requiresRestart, boolean hasTranslation) {
+        public <T> Supplier<T> add (String categoryName, T defaultVal, String comment, boolean requiresRestart, boolean hasTranslation) {
             if (comment != null) {
                 builder.comment(comment);
             }
@@ -76,8 +71,7 @@ public class ConfigConstants {
             if (hasTranslation) {
                 builder.translation(Constants.MODID + ".configgui." + categoryName);
             }
-            modSupplier.setSupplier(builder.define(categoryName, defaultVal)::get);
-            return this;
+            return builder.define(categoryName, defaultVal)::get;
         }
     }
 }
