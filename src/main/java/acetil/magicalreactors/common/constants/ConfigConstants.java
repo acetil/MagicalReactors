@@ -4,7 +4,6 @@ import acetil.magicalreactors.common.machines.MachineRegistry;
 import acetil.magicalreactors.common.machines.MachineRegistryItem;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
-
 import java.util.function.Supplier;
 
 public class ConfigConstants {
