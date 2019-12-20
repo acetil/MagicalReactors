@@ -20,7 +20,7 @@ public class TileReactorInterfaceCooling extends TileEntity {
     private LazyOptional<IItemHandler> itemOptional;
     private LazyOptional<IReactorInterfaceHandler> interfaceOptional;
     public TileReactorInterfaceCooling () {
-        super(ModBlocks.COOLING_INTERFACE_TILE);
+        super(ModBlocks.COOLING_INTERFACE_TILE.get());
         itemHandler = new ItemStackHandler(LibReactor.COOLING_INVENTORY_SIZE) {
             @Override
             protected void onContentsChanged (int slot) {

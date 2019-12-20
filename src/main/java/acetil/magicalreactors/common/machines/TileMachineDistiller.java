@@ -21,11 +21,11 @@ public class TileMachineDistiller extends TileMachineBase {
     private LazyOptional<IFluidHandler> topOptional = LazyOptional.empty();
     private int bottomSlots;
     public TileMachineDistiller(String machine, int bottomSlots) {
-        super(machine, MachineBlocks.MACHINE_DISTILLER);
+        super(machine, MachineBlocks.MACHINE_DISTILLER.get());
         this.bottomSlots = bottomSlots;
     }
     public TileMachineDistiller () {
-        super(MachineBlocks.MACHINE_DISTILLER);
+        super(MachineBlocks.MACHINE_DISTILLER.get());
     }
     @Override
     protected void initHandlers (MachineRegistryItem registryItem) {

@@ -5,8 +5,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import acetil.magicalreactors.common.capabilities.reactor.ReactorFuelProvider;
 import acetil.magicalreactors.common.constants.Constants;
 
@@ -14,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber
 public class ReactorFuelRegistry {
     private static Map<String, Supplier<IReactorFuel>> fuels = new HashMap<>();
     private static Map<Item, String> itemFuels = new HashMap<>();
@@ -30,7 +27,6 @@ public class ReactorFuelRegistry {
     }
 
 
-    @SubscribeEvent
     public static void attachCapabilities (AttachCapabilitiesEvent<ItemStack> event) {
         if (itemFuels.containsKey(event.getObject().getItem())) {
             MagicalReactors.LOGGER.debug("Attaching capability!");

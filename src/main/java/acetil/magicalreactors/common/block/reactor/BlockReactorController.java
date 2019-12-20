@@ -22,7 +22,6 @@ public class BlockReactorController extends Block{
 
     public BlockReactorController () {
         super(Properties.create(Material.ROCK));
-        setRegistryName("reactor_controller");
         //setCreativeTab(NuclearCreativeTab.INSTANCE);
     }
     @Override

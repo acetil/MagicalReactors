@@ -10,8 +10,8 @@ import java.util.function.Supplier;
 
 public class BlockReactorInterface extends BlockRuneBase {
     private Supplier<TileEntity> tileEntitySupplier;
-    public BlockReactorInterface(String registryName, Supplier<TileEntity> teSupplier) {
-        super(registryName);
+    public BlockReactorInterface(Supplier<TileEntity> teSupplier) {
+        super();
         tileEntitySupplier = teSupplier;
     }
     @Override

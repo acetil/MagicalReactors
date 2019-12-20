@@ -1,6 +1,7 @@
 package acetil.magicalreactors.common.machines;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -8,39 +9,30 @@ import net.minecraftforge.event.RegistryEvent;
 import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.lib.LibGui;
 import acetil.magicalreactors.common.constants.Constants;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ObjectHolder;
 
 @ObjectHolder(Constants.MODID)
 public class MachineBlocks {
-    @ObjectHolder("centrifuge")
-    public static BlockMachine CENTRIFUGE = null;
-    @ObjectHolder("recrystaliser")
-    public static BlockMachine RECRYSTALISER = null;
-    @ObjectHolder("reactor_vessel")
-    public static BlockMachine REACTOR_VESSEL = null;
-    @ObjectHolder("fermenter")
-    public static BlockMachine FERMENTER = null;
-    @ObjectHolder("condenser")
-    public static BlockMachine CONDENSER = null;
-    @ObjectHolder("distiller")
-    public static BlockDistiller DISTILLER = null;
-    @ObjectHolder("machine_base")
-    public static TileEntityType<?> MACHINE_BASE = null;
-    @ObjectHolder("machine_distiller")
-    public static TileEntityType<?> MACHINE_DISTILLER = null;
+    public static RegistryObject<Block> CENTRIFUGE = ModBlocks.BLOCKS.register("centrifuge", () -> new BlockMachine("centrifuge"));
+    public static RegistryObject<Block> RECRYSTALISER = ModBlocks.BLOCKS.register("recrystaliser", () -> new BlockMachine("recrystaliser"));
+    public static RegistryObject<Block> REACTOR_VESSEL = ModBlocks.BLOCKS.register("reactor_vessel", () -> new BlockMachine("reactor_vessel"));
+    public static RegistryObject<Block> FERMENTER = ModBlocks.BLOCKS.register("fermenter", () -> new BlockMachine("fermenter"));
+    public static RegistryObject<Block> CONDENSER = ModBlocks.BLOCKS.register("condenser", () -> new BlockMachine("condenser"));
+    public static RegistryObject<Block> DISTILLER = ModBlocks.BLOCKS.register("distiller", () -> new BlockDistiller("distiller", 2));
 
-    public static void registerMachineBlocks (RegistryEvent.Register<Block> event) {
-        event.getRegistry().register(new BlockMachine("centrifuge", "centrifuge"));
-        event.getRegistry().register(new BlockMachine("recrystaliser", "recrystaliser"));
-        event.getRegistry().register(new BlockMachine("reactor_vessel", "reactor_vessel"));
-        event.getRegistry().register(new BlockMachine("fermenter", "fermenter"));
-        event.getRegistry().register(new BlockMachine("condenser", "condenser"));
-        event.getRegistry().register(new BlockDistiller("distiller", "distiller", 2));
+    private static RegistryObject<Item> CENTRIFUGE_ITEM = ModBlocks.ITEMS.register("centrifuge", () -> new BlockItem(CENTRIFUGE.get(), new Item.Properties()));
+    private static RegistryObject<Item> RECRYSTALISER_ITEM = ModBlocks.ITEMS.register("recrystaliser", () -> new BlockItem(RECRYSTALISER.get(), new Item.Properties()));
+    private static RegistryObject<Item> REACTOR_VESSEL_ITEM = ModBlocks.ITEMS.register("reactor_vessel", () -> new BlockItem(REACTOR_VESSEL.get(), new Item.Properties()));
+    private static RegistryObject<Item> FERMENTER_ITEM = ModBlocks.ITEMS.register("fermenter", () -> new BlockItem(FERMENTER.get(), new Item.Properties()));
+    private static RegistryObject<Item> CONDENSER_ITEM = ModBlocks.ITEMS.register("condenser", () -> new BlockItem(CONDENSER.get(), new Item.Properties()));
+    private static RegistryObject<Item> DISTILLER_ITEM = ModBlocks.ITEMS.register("distiller", () -> new BlockItem(DISTILLER.get(), new Item.Properties()));
 
-        /*GameRegistry.registerTileEntity(TileMachineBase.class, new ResourceLocation(LibMisc.MODID + ":machine_entity"));
-        GameRegistry.registerTileEntity(TileMachineDistiller.class, new ResourceLocation(LibMisc.MODID + ":distiller_entity"));*/
+    public static RegistryObject<TileEntityType<?>> MACHINE_BASE = ModBlocks.TILE_ENTITIES.register("machine_base",
+            () -> ModBlocks.createTEType(TileMachineBase::new, CENTRIFUGE, RECRYSTALISER, FERMENTER, REACTOR_VESSEL, CONDENSER));
+    public static RegistryObject<TileEntityType<?>> MACHINE_DISTILLER = ModBlocks.TILE_ENTITIES.register("machine_distiller",
+            () -> ModBlocks.createTEType(TileMachineDistiller::new, DISTILLER));
 
-    }
     public static void registerMachines () {
         MachineRegistry.registerMachine(new MachineRegistryItem.Builder("centrifuge", 10000, 800, 400)
                                             .setInputSlots(1)
@@ -73,22 +65,5 @@ public class MachineBlocks {
                                             .setFluidOutputSlots(2)
                                             .setFluidCapacity(4000)
                                             .build());
-    }
-    public static void registerMachineItems (RegistryEvent.Register<Item> event) {
-        ModBlocks.registerItemBlock(event, CENTRIFUGE);
-        ModBlocks.registerItemBlock(event, RECRYSTALISER);
-        ModBlocks.registerItemBlock(event, REACTOR_VESSEL);
-        ModBlocks.registerItemBlock(event, FERMENTER);
-        ModBlocks.registerItemBlock(event, CONDENSER);
-        ModBlocks.registerItemBlock(event, DISTILLER);
-    }
-    public static void registerTileEntities (RegistryEvent.Register<TileEntityType<?>> event) {
-        event.getRegistry().register(TileEntityType.Builder
-                .create(TileMachineBase::new, CENTRIFUGE, RECRYSTALISER, FERMENTER, REACTOR_VESSEL, CONDENSER)
-                .build(null)
-                .setRegistryName(new ResourceLocation(Constants.MODID, "machine_base")));
-        event.getRegistry().register(TileEntityType.Builder.create(TileMachineDistiller::new, DISTILLER)
-                .build(null)
-                .setRegistryName(new ResourceLocation(Constants.MODID, "machine_distiller")));
     }
 }

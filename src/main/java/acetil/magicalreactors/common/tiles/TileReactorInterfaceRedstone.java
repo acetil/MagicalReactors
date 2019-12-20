@@ -14,7 +14,7 @@ public class TileReactorInterfaceRedstone extends TileEntity {
     private ReactorRedstoneInterface redstoneInterface;
     private LazyOptional<IReactorInterfaceHandler> redstoneOptional;
     public TileReactorInterfaceRedstone() {
-        super(ModBlocks.REDSTONE_INTERFACE_TILE);
+        super(ModBlocks.REDSTONE_INTERFACE_TILE.get());
         System.out.println("Is TileType null: " + (ModBlocks.REDSTONE_INTERFACE_TILE == null));
         redstoneInterface = new ReactorRedstoneInterface();
         redstoneOptional = LazyOptional.of(() -> redstoneInterface);

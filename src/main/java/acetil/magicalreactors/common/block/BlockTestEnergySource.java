@@ -11,7 +11,6 @@ public class BlockTestEnergySource extends Block {
 
     public BlockTestEnergySource() {
         super(Properties.create(Material.ROCK));
-        setRegistryName("test_energy_source");
     }
     @Override
     public boolean hasTileEntity (BlockState state) {

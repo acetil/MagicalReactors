@@ -9,14 +9,13 @@ import net.minecraft.item.Item;
 import java.util.Random;
 
 public class BlockOre extends Block {
-    public BlockOre (String name, float hardness) {
+    public BlockOre (float hardness) {
         super(Properties.create(Material.ROCK));
-        setRegistryName(name);
     }
 
     public Item getItemDropped (BlockState state, Random rand, int fortune) {
-        if (this == ModBlocks.TEMP_ORE2) {
-            return ModItems.ITEM_TEMP2;
+        if (this == ModBlocks.TEMP_ORE2.get()) {
+            return ModItems.ITEM_TEMP2.get();
         } else {
             return Item.getItemFromBlock(this);
         }
@@ -25,7 +24,7 @@ public class BlockOre extends Block {
         return 1; // TODO verify correct
     }
     public int quantityDroppedWithBonus(int fortune, Random random) {
-        if (fortune > 0 && this == ModBlocks.TEMP_ORE2) {
+        if (fortune > 0 && this == ModBlocks.TEMP_ORE2.get()) {
             int i = Math.min(0, random.nextInt(fortune + 2) - 1);
             return this.quantityDropped(random) * (i + 1);
         }

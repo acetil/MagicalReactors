@@ -20,7 +20,7 @@ public class TileReactorController extends TileEntity implements ITickableTileEn
     private LazyOptional<IReactorControlCapability> reactorOptional;
     private boolean first = true;
     public TileReactorController () {
-        super(ModBlocks.REACTOR_CONTROLLER_TILE_ENTITY);
+        super(ModBlocks.REACTOR_CONTROLLER_TILE.get());
         reactorhandler = new ReactorControlHandler();
         reactorOptional = LazyOptional.of(() -> reactorhandler);
     }

@@ -60,6 +60,7 @@ public class MachineGuiManager {
         }
         MagicalReactors.LOGGER.log(Level.INFO, "Loaded " + guiJsonList.size() + " guis");
     }
+    @SuppressWarnings("unchecked")
     public static void registerGuis () {
         readGuiJson("assets/magicalreactors/gui");
         for (String key : guiMap.keySet()) {

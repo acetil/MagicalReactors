@@ -41,7 +41,7 @@ public class ReactorFuelBasic implements IReactorFuel {
 
     @Override
     public ItemStack getByproduct() {
-        return new ItemStack(ModItems.ITEM_TEMP2, 1);
+        return new ItemStack(ModItems.ITEM_TEMP2.get(), 1);
     }
 
     @Override

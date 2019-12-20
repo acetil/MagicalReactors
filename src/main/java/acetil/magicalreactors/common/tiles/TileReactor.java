@@ -18,7 +18,7 @@ public class TileReactor extends TileEntity implements ITickableTileEntity {
     private ReactorHandlerNew reactorHandler;
     private LazyOptional<IReactorHandlerNew> reactorOptional;
     public TileReactor() {
-        super(ModBlocks.REACTOR_TILE_ENTITY);
+        super(ModBlocks.REACTOR_TILE_ENTITY.get());
         initHandlers();
     }
     private void initHandlers () {
