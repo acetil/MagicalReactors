@@ -1,5 +1,6 @@
 package acetil.magicalreactors.common.containers.json;
 
+import acetil.magicalreactors.common.containers.GuiContainer;
 import acetil.magicalreactors.common.containers.GuiContainerFactory;
 import acetil.magicalreactors.common.constants.Constants;
 import com.google.gson.Gson;
@@ -9,20 +10,26 @@ import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.Level;
 
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-@Mod.EventBusSubscriber(modid = Constants.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+import java.util.stream.Collectors;
+
 public class MachineContainerManager {
     private static Map<String, MachineContainerJson> registry = new HashMap<>();
-
+    public static DeferredRegister<ContainerType<?>> CONTAINERS = new DeferredRegister<>(ForgeRegistries.CONTAINERS, Constants.MODID);
+    public static List<RegistryObject<ContainerType<GuiContainer>>> CONTAINER_LIST = new ArrayList<>();
     public static void registerContainerJson (String key, MachineContainerJson containerJson) {
         registry.put(key, containerJson);
     }
@@ -44,12 +51,13 @@ public class MachineContainerManager {
         FileUtils.closeFileSystem(uri);
         MagicalReactors.LOGGER.log(Level.INFO, "Finished loading " + registry.size() + " containers");
     }
-    @SubscribeEvent
-    public static void registerContainers (final RegistryEvent.Register<ContainerType<?>> event) {
+    public static void registerContainers () {
         MagicalReactors.LOGGER.info("Starting registering containers!");
         readContainers("assets/magicalreactors/containers");
-        for (String key : registry.keySet()) {
+        /*for (String key : registry.keySet()) {
             event.getRegistry().register(IForgeContainerType.create(new GuiContainerFactory(registry.get(key))).setRegistryName(key));
-        }
+        }*/
+        CONTAINER_LIST = registry.keySet().stream().map((String s) -> CONTAINERS.register(s,
+                () -> IForgeContainerType.create(new GuiContainerFactory(registry.get(s))))).collect(Collectors.toList());
     }
 }

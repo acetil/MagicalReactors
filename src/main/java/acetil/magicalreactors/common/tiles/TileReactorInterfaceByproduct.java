@@ -20,7 +20,7 @@ public class TileReactorInterfaceByproduct extends TileEntity {
     private LazyOptional<IItemHandler> itemOptional;
     private LazyOptional<IReactorInterfaceHandler> interfaceOptional;
     public TileReactorInterfaceByproduct () {
-        super(ModBlocks.BYPRODUCT_INTERFACE_TILE);
+        super(ModBlocks.BYPRODUCT_INTERFACE_TILE.get());
         itemHandler = new ItemStackHandler(LibReactor.BYPRODUCT_INVENTORY_SIZE) {
             @Override
             protected void onContentsChanged (int slot) {

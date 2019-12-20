@@ -22,7 +22,6 @@ import javax.annotation.Nullable;
 public class BlockTestBattery extends Block {
     public BlockTestBattery () {
         super(Properties.create(Material.ROCK));
-        setRegistryName(new ResourceLocation(Constants.MODID, "test_battery"));
     }
 
     @Override

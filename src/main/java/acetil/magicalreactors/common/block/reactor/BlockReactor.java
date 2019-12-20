@@ -13,7 +13,6 @@ import javax.annotation.Nullable;
 public class BlockReactor extends Block {
     public BlockReactor() {
         super(Properties.create(Material.ROCK));
-        setRegistryName("reactor_block");
         //setHardness(4F);
         //setCreativeTab(NuclearCreativeTab.INSTANCE);
     }

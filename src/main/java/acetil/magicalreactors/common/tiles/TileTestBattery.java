@@ -20,7 +20,7 @@ public class TileTestBattery extends TileEntity implements ITickableTileEntity {
     private EnergyHandler energyHandler;
     private LazyOptional<IEnergyStorage> energyStorage = LazyOptional.empty();
     public TileTestBattery() {
-        super(ModBlocks.TEST_BATTERY_TILE);
+        super(ModBlocks.TEST_BATTERY_TILE.get());
         energyHandler = new EnergyHandler(() -> 1000000, () -> 10000, () ->1000, true, true);
         energyStorage = LazyOptional.of(() -> energyHandler);
     }

@@ -41,13 +41,13 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
     private int pastEnergyTickRate = 0;
     protected static final double TRACKING_RANGE = 30;
     public TileMachineBase () {
-        this(MachineBlocks.MACHINE_BASE);
+        this(MachineBlocks.MACHINE_BASE.get());
     }
     public TileMachineBase (String machine) {
-        this(machine, MachineBlocks.MACHINE_BASE);
+        this(machine, MachineBlocks.MACHINE_BASE.get());
     }
     public TileMachineBase(String machine, TileEntityType<?> type) {
-        super(MachineBlocks.MACHINE_BASE);
+        super(MachineBlocks.MACHINE_BASE.get());
         this.machine = machine;
         initHandlers(MachineRegistry.getMachine(machine));
     }

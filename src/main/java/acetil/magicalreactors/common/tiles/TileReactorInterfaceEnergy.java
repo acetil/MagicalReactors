@@ -25,7 +25,7 @@ public class TileReactorInterfaceEnergy extends TileEntity implements ITickableT
     private int capacity;
     private int energyOutputRate;
     public TileReactorInterfaceEnergy (int capacity, int energyOutputRate) {
-        super(ModBlocks.ENERGY_INTERFACE_TILE);
+        super(ModBlocks.ENERGY_INTERFACE_TILE.get());
         energyHandler = new EnergyHandler(() -> capacity, () -> capacity, () -> energyOutputRate, false, true);
         reactorInterface = new ReactorEnergyInterface(energyHandler);
         energyOptional = LazyOptional.of(() -> energyHandler);

@@ -11,8 +11,8 @@ import net.minecraft.world.World;
 import java.util.function.Supplier;
 
 public class BlockReactorInterfaceRedstone extends BlockReactorInterface {
-    public BlockReactorInterfaceRedstone(String registryName, Supplier<TileEntity> teSupplier) {
-        super(registryName, teSupplier);
+    public BlockReactorInterfaceRedstone(Supplier<TileEntity> teSupplier) {
+        super(teSupplier);
     }
 
 

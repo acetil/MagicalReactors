@@ -19,7 +19,7 @@ public class TileReactorInterfaceFuelLoader extends TileEntity {
     private LazyOptional<IItemHandler> itemOptional;
     private LazyOptional<IReactorInterfaceHandler> interfaceOptional;
     public TileReactorInterfaceFuelLoader() {
-        super(ModBlocks.FUEL_INTERFACE_TILE);
+        super(ModBlocks.FUEL_INTERFACE_TILE.get());
         itemHandler = new ItemStackHandler(1) {
             @Override
             protected void onContentsChanged (int slot) {

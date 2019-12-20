@@ -17,7 +17,7 @@ public class TileTestEnergySource extends TileEntity implements ITickableTileEnt
     private LazyOptional<IEnergyStorage> energyOptional;
     private EnergyHandler energyHandler;
     public TileTestEnergySource () {
-        super(ModBlocks.TEST_ENERGY_SOURCE_TILE);
+        super(ModBlocks.TEST_ENERGY_SOURCE_TILE.get());
         energyHandler = new EnergyHandler(() -> 10000000, () -> 0, () -> 1000000, false, true);
         energyOptional = LazyOptional.of(() -> energyHandler);
 

@@ -4,29 +4,23 @@ import acetil.magicalreactors.common.reactor.ReactorCoolingRegistry;
 import acetil.magicalreactors.common.reactor.ReactorFuelBasic;
 import acetil.magicalreactors.common.reactor.ReactorFuelRegistry;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.constants.Constants;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ObjectHolder;
 import org.apache.logging.log4j.Level;
 
-@Mod.EventBusSubscriber(modid = Constants.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 @ObjectHolder(Constants.MODID)
 public class ModItems {
-    @ObjectHolder("uranium_ingot")
-    public static ItemResource URANIUM_INGOT = null;
-    @ObjectHolder("temp2")
-    public static ItemResource ITEM_TEMP2 = null;
-    @SubscribeEvent
-    public static void registerItems (RegistryEvent.Register<Item> event) {
-        event.getRegistry().register(new ItemResource("uranium_ingot"));
-        event.getRegistry().register(new ItemResource("temp2"));
-        MagicalReactors.LOGGER.log(Level.INFO, "Item registry complete");
-    }
+    public static DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, Constants.MODID);
+    public static RegistryObject<Item> URANIUM_INGOT = ITEMS.register("uranium_ingot", () -> new Item(new Item.Properties()));
+    public static RegistryObject<Item> ITEM_TEMP2 = ITEMS.register("temp2", () -> new Item(new Item.Properties()));
     public static void registerFuels () {
-        ReactorFuelRegistry.registerFuel(ReactorFuelBasic::new, "basic_fuel", URANIUM_INGOT);
+        ReactorFuelRegistry.registerFuel(ReactorFuelBasic::new, "basic_fuel", URANIUM_INGOT.get());
     }
     public static void registerCoolants () {
         ReactorCoolingRegistry.registerCooling("minecraft:ice", 100);
