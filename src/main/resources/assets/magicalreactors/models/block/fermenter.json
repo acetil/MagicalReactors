@@ -1,14 +1,14 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "blocks/obsidian",
+		"0": "minecraft:block/obsidian",
 		"1": "magicalreactors:block/centrifuge_crystal",
 		"2": "magicalreactors:block/fermenter_barrel_front",
 		"3": "magicalreactors:block/fermenter_barrel_sides",
 		"4": "magicalreactors:block/fermenter_top",
 		"5": "magicalreactors:block/fermenter_funnel",
 		"6": "magicalreactors:block/fermenter_other",
-		"particle": "blocks/obsidian"
+		"particle": "minecraft:block/obsidian"
 	},
 	"elements": [
 		{
