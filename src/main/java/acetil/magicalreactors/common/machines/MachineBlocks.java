@@ -21,6 +21,7 @@ public class MachineBlocks {
     public static RegistryObject<Block> FERMENTER = ModBlocks.BLOCKS.register("fermenter", () -> new BlockMachine("fermenter"));
     public static RegistryObject<Block> CONDENSER = ModBlocks.BLOCKS.register("condenser", () -> new BlockMachine("condenser"));
     public static RegistryObject<Block> DISTILLER = ModBlocks.BLOCKS.register("distiller", () -> new BlockDistiller("distiller", 2));
+    public static RegistryObject<Block> DISSOLVER = ModBlocks.BLOCKS.register("dissolver", () -> new BlockMachine("dissolver"));
 
     private static RegistryObject<Item> CENTRIFUGE_ITEM = ModBlocks.ITEMS.register("centrifuge", () -> new BlockItem(CENTRIFUGE.get(), new Item.Properties()));
     private static RegistryObject<Item> RECRYSTALISER_ITEM = ModBlocks.ITEMS.register("recrystaliser", () -> new BlockItem(RECRYSTALISER.get(), new Item.Properties()));
@@ -28,9 +29,10 @@ public class MachineBlocks {
     private static RegistryObject<Item> FERMENTER_ITEM = ModBlocks.ITEMS.register("fermenter", () -> new BlockItem(FERMENTER.get(), new Item.Properties()));
     private static RegistryObject<Item> CONDENSER_ITEM = ModBlocks.ITEMS.register("condenser", () -> new BlockItem(CONDENSER.get(), new Item.Properties()));
     private static RegistryObject<Item> DISTILLER_ITEM = ModBlocks.ITEMS.register("distiller", () -> new BlockItem(DISTILLER.get(), new Item.Properties()));
+    private static RegistryObject<Item> DISSOLVER_ITEM = ModBlocks.ITEMS.register("dissolver", () -> new BlockItem(DISSOLVER.get(), new Item.Properties()));
 
     public static RegistryObject<TileEntityType<?>> MACHINE_BASE = ModBlocks.TILE_ENTITIES.register("machine_base",
-            () -> ModBlocks.createTEType(TileMachineBase::new, CENTRIFUGE, RECRYSTALISER, FERMENTER, REACTOR_VESSEL, CONDENSER));
+            () -> ModBlocks.createTEType(TileMachineBase::new, CENTRIFUGE, RECRYSTALISER, FERMENTER, REACTOR_VESSEL, CONDENSER, DISSOLVER));
     public static RegistryObject<TileEntityType<?>> MACHINE_DISTILLER = ModBlocks.TILE_ENTITIES.register("machine_distiller",
             () -> ModBlocks.createTEType(TileMachineDistiller::new, DISTILLER));
 
@@ -62,6 +64,12 @@ public class MachineBlocks {
                                             .setFluidCapacity(4000)
                                             .build());
         MachineRegistry.registerMachine(new MachineRegistryItem.Builder("distiller", 10000, 800, 400)
+                                            .setFluidInputSlots(1)
+                                            .setFluidOutputSlots(2)
+                                            .setFluidCapacity(4000)
+                                            .build());
+        MachineRegistry.registerMachine(new MachineRegistryItem.Builder("dissolver", 10000, 800, 400)
+                                            .setInputSlots(1)
                                             .setFluidInputSlots(1)
                                             .setFluidOutputSlots(2)
                                             .setFluidCapacity(4000)
