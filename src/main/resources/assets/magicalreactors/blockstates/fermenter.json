@@ -1,0 +1,10 @@
+{
+  "forge_marker" : 1,
+  "_comment" : "Add directions",
+  "defaults" : {
+    "model" : "magicalreactors:block/fermenter"
+  },
+  "variants" : {
+    "" : [{}]
+  }
+}
