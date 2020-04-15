@@ -1,0 +1,12 @@
+{
+  "forge_marker" : 1,
+  "defaults" : {
+    "model" : "magicalreactors:block/rune_transfer"
+  },
+  "variants" : {
+    "completed_multiblock" : {
+      "false": {"model" : "magicalreactors:block/rune_transfer"},
+      "true": {"model" : "magicalreactors:block/rune_transfer_multi"}
+    }
+  }
+}

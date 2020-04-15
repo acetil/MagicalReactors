@@ -1,7 +1,7 @@
 {
   "forge_marker" : 1,
   "defaults" : {
-    "model" : "magicalreactors:block/rune_basic"
+    "model" : "magicalreactors:block/rune_stabilisation"
   },
   "variants" : {
     "completed_multiblock" : {
