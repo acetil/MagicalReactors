@@ -1,0 +1,12 @@
+{
+  "forge_marker" : 1,
+  "defaults" : {
+    "model" : "magicalreactors:block/rune_locus"
+  },
+  "variants" : {
+    "completed_multiblock" : {
+      "false": {"model" : "magicalreactors:block/rune_locus"},
+      "true": {"model" : "magicalreactors:block/rune_locus_multi"}
+    }
+  }
+}
