@@ -1,0 +1,12 @@
+{
+  "forge_marker" : 1,
+  "defaults" : {
+    "model" : "magicalreactors:block/coolant_interface"
+  },
+  "variants" : {
+    "completed_multiblock" : {
+      "false": {"model" : "magicalreactors:block/coolant_interface"},
+      "true": {"model" : "magicalreactors:block/coolant_interface_multi"}
+    }
+  }
+}
