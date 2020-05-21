@@ -1,0 +1,12 @@
+{
+  "forge_marker" : 1,
+  "defaults" : {
+    "model" : "magicalreactors:block/energy_interface"
+  },
+  "variants" : {
+    "completed_multiblock" : {
+      "false": {"model" : "magicalreactors:block/energy_interface"},
+      "true": {"model" : "magicalreactors:block/energy_interface_multi"}
+    }
+  }
+}
