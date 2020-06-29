@@ -1,13 +1,20 @@
 package acetil.magicalreactors.client.gui.data;
 
 import acetil.magicalreactors.common.MagicalReactors;
+import acetil.magicalreactors.common.capabilities.CapabilityMachine;
+import acetil.magicalreactors.common.capabilities.machines.machinehandlers.IMachineCapability;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.NonNullSupplier;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,6 +43,7 @@ public class GuiDataManager {
     }
     public static void addVariable (String varPath, GuiDataVariable<?, ?> var) {
         String s = varPath.trim();
+        MagicalReactors.LOGGER.debug("Attempting to add gui variable at path {}!", varPath);
         if (isValidVarPath(s)) {
             GUI_DATA.addSubValue(s, var);
         } else {
@@ -53,6 +61,21 @@ public class GuiDataManager {
     public static boolean isValidVarPath (String varPath) {
         return true;
     }
+    public static void addDefaultVariables () {
+        addNamespace(new NamespaceCapBuilder<>("energy", CapabilityEnergy.ENERGY,
+                CapabilityEnergy.ENERGY.getDefaultInstance())
+                        .addVariable("energyStored", IEnergyStorage::getEnergyStored)
+                        .addVariable("maxEnergyStored", IEnergyStorage::getMaxEnergyStored)
+                        .addVariable("fractionStored", (IEnergyStorage e) ->
+                                (float) e.getEnergyStored() / e.getMaxEnergyStored()));
+        addNamespace(new NamespaceCapBuilder<>("machine", CapabilityMachine.MACHINE_CAPABILITY,
+                CapabilityMachine.MACHINE_CAPABILITY.getDefaultInstance())
+                        .addVariable("energyToCompletion", IMachineCapability::energyToCompletion)
+                        .addVariable("energyRequired", IMachineCapability::energyRequired)
+                        .addVariable("fractionComplete", (IMachineCapability m) ->
+                                m.energyRequired() == 0 ? 0 : 1.0f - (float) m.energyToCompletion() / m.energyRequired()));
+    }
+
     private static <A> Pair<String, A> cleanPath (Pair<String, A> p) {
         String s = p.t.trim();
         if (s.startsWith(".")) {
@@ -99,9 +122,19 @@ public class GuiDataManager {
 
         @Override
         Stream<Pair<String, GuiDataVariable<?, ?>>> build (String path) {
+            List<Pair<String, GuiDataVariable<?, ?>>> l = new ArrayList<>();
+            l.add(new Pair<>(path + "." + name, new GuiDataNamespace<>(func)));
             return variables.stream()
                             .map((VariableBuilder<U, ?> v) -> v.build(path + "." + name))
-                            .reduce(super.build(path), Stream::concat);
+                            .reduce(l.stream(), Stream::concat);
+        }
+    }
+    public static class NamespaceCapBuilder <T> extends NamespaceBuilder<TileEntity, T> {
+        public NamespaceCapBuilder (String name, Capability<T> cap, T defaultVal) {
+            super(name, (TileEntity te) -> te.getCapability(cap).orElse(defaultVal));
+        }
+        public NamespaceCapBuilder (String name, Capability<T> cap, NonNullSupplier<T> defaultSupplier) {
+            super(name, (TileEntity te) -> te.getCapability(cap).orElseGet(defaultSupplier));
         }
     }
 }

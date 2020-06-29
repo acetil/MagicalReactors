@@ -17,6 +17,7 @@ public class GuiDataNamespace <T, U> extends GuiDataVariable<T, U> {
     @Override
     public void addSubValue (String varPath, GuiDataVariable<?, ?> var) {
         String[] sList = varPath.split("\\.");
+        MagicalReactors.LOGGER.debug(String.join(", ", sList));
         if (subvalueMap.containsKey(sList[0])) {
             if (sList.length == 1) {
                 MagicalReactors.LOGGER.error("Duplicate variable name \"{}\" in namespace \"{}\"!",
@@ -24,6 +25,7 @@ public class GuiDataNamespace <T, U> extends GuiDataVariable<T, U> {
             } else {
                 subvalueMap.get(sList[0]).addSubValue(String.join(".",
                         Arrays.copyOfRange(sList, 1, sList.length)), var);
+                return;
             }
         }
         if (sList.length == 1) {

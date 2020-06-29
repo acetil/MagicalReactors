@@ -1,6 +1,7 @@
 package acetil.magicalreactors.common;
 
 import acetil.magicalreactors.client.core.proxy.ClientProxy;
+import acetil.magicalreactors.client.gui.data.GuiDataManager;
 import acetil.magicalreactors.client.gui.json.MachineGuiManager;
 import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.capabilities.*;
@@ -62,6 +63,7 @@ public class MagicalReactors {
         MultiblockLoader.loadMultiblocks("assets/magicalreactors/multiblocks");
     }
     private void clientSetup (final FMLClientSetupEvent event) {
+        GuiDataManager.addDefaultVariables();
         MachineGuiManager.registerGuis();
     }
     private void enqueueIMC (final InterModEnqueueEvent event) {
