@@ -18,10 +18,10 @@ import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 
-public class BlockReactorController extends Block{
+public class BlockReactorController extends BlockRuneBase {
 
     public BlockReactorController () {
-        super(Properties.create(Material.ROCK));
+        super();
         //setCreativeTab(NuclearCreativeTab.INSTANCE);
     }
     @Override

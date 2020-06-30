@@ -9,7 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class BlockRuneBase extends Block implements IReactorBuildingBlock {
-    private static final BooleanProperty MULTIBLOCK_STATE = BooleanProperty.create("completed_multiblock");
+    public static final BooleanProperty MULTIBLOCK_STATE = BooleanProperty.create("completed_multiblock");
     public BlockRuneBase() {
         super(Properties.create(Material.ROCK));
         setDefaultState(getStateContainer().getBaseState().with(MULTIBLOCK_STATE, false));

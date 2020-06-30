@@ -9,6 +9,7 @@ import acetil.magicalreactors.common.constants.ConfigConstants;
 import acetil.magicalreactors.common.containers.json.MachineContainerManager;
 import acetil.magicalreactors.common.core.proxy.IProxy;
 import acetil.magicalreactors.common.core.proxy.ServerProxy;
+import acetil.magicalreactors.common.datagen.DataGenerators;
 import acetil.magicalreactors.common.event.MultiblockEventHandler;
 import acetil.magicalreactors.common.fluid.ModFluids;
 import acetil.magicalreactors.common.items.ModItems;
@@ -89,6 +90,8 @@ public class MagicalReactors {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(MultiblockEventHandler::blockPlaceEvent);
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ReactorFuelRegistry::attachCapabilities);
+
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGenerators::generateData);
 
     }
     private void registerDeferredRegisters () {

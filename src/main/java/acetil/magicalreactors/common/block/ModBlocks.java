@@ -86,7 +86,7 @@ public class ModBlocks {
     public static RegistryObject<TileEntityType<?>> REDSTONE_INTERFACE_TILE = TILE_ENTITIES.register("redstone_interface", () -> createTEType(TileReactorInterfaceRedstone::new, REDSTONE_INTERFACE));
     public static RegistryObject<TileEntityType<?>> TEST_BATTERY_TILE = TILE_ENTITIES.register("test_battery", () -> createTEType(TileTestBattery::new, TEST_BATTERY));
 
-    public static TileEntityType<?> createTEType (Supplier<? extends TileEntity> factory, RegistryObject<Block>... blocks) {
+    public static TileEntityType<?> createTEType (Supplier<? extends TileEntity> factory, RegistryObject<? extends Block>... blocks) {
         return TileEntityType.Builder.create(factory, Arrays.stream(blocks).map(RegistryObject::get).toArray(Block[]::new)).build(null);
     }
 }

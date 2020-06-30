@@ -15,13 +15,13 @@ import net.minecraftforge.registries.ObjectHolder;
 @ObjectHolder(Constants.MODID)
 @SuppressWarnings("unchecked")
 public class MachineBlocks {
-    public static RegistryObject<Block> CENTRIFUGE = ModBlocks.BLOCKS.register("centrifuge", () -> new BlockMachine("centrifuge"));
-    public static RegistryObject<Block> RECRYSTALISER = ModBlocks.BLOCKS.register("recrystaliser", () -> new BlockMachine("recrystaliser"));
-    public static RegistryObject<Block> REACTOR_VESSEL = ModBlocks.BLOCKS.register("reactor_vessel", () -> new BlockMachine("reactor_vessel"));
-    public static RegistryObject<Block> FERMENTER = ModBlocks.BLOCKS.register("fermenter", () -> new BlockMachine("fermenter"));
-    public static RegistryObject<Block> CONDENSER = ModBlocks.BLOCKS.register("condenser", () -> new BlockMachine("condenser"));
-    public static RegistryObject<Block> DISTILLER = ModBlocks.BLOCKS.register("distiller", () -> new BlockDistiller("distiller", 2));
-    public static RegistryObject<Block> DISSOLVER = ModBlocks.BLOCKS.register("dissolver", () -> new BlockMachine("dissolver"));
+    public static RegistryObject<BlockMachine> CENTRIFUGE = ModBlocks.BLOCKS.register("centrifuge", () -> new BlockMachine("centrifuge"));
+    public static RegistryObject<BlockMachine> RECRYSTALISER = ModBlocks.BLOCKS.register("recrystaliser", () -> new BlockMachine("recrystaliser"));
+    public static RegistryObject<BlockMachine> REACTOR_VESSEL = ModBlocks.BLOCKS.register("reactor_vessel", () -> new BlockMachine("reactor_vessel"));
+    public static RegistryObject<BlockMachine> FERMENTER = ModBlocks.BLOCKS.register("fermenter", () -> new BlockMachine("fermenter"));
+    public static RegistryObject<BlockMachine> CONDENSER = ModBlocks.BLOCKS.register("condenser", () -> new BlockMachine("condenser"));
+    public static RegistryObject<BlockDistiller> DISTILLER = ModBlocks.BLOCKS.register("distiller", () -> new BlockDistiller("distiller", 2));
+    public static RegistryObject<BlockMachine> DISSOLVER = ModBlocks.BLOCKS.register("dissolver", () -> new BlockMachine("dissolver"));
 
     private static RegistryObject<Item> CENTRIFUGE_ITEM = ModBlocks.ITEMS.register("centrifuge", () -> new BlockItem(CENTRIFUGE.get(), new Item.Properties()));
     private static RegistryObject<Item> RECRYSTALISER_ITEM = ModBlocks.ITEMS.register("recrystaliser", () -> new BlockItem(RECRYSTALISER.get(), new Item.Properties()));
