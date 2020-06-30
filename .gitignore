@@ -28,7 +28,3 @@ CREDITS.txt
 
 # Generated files
 src/generated/*
-src/main/resources/blockstates/*
-src/main/resources/models/block/*
-src/main/resources/models/block/*/
-!src/main/resources/models/block/machine/*

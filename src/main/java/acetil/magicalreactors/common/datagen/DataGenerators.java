@@ -18,7 +18,7 @@ public class DataGenerators {
         event.getGenerator().addProvider(new BlockStates(event.getGenerator(), event.getExistingFileHelper()));
     }
     public static class BlockStates extends BlockStateProvider {
-        private static final String MACHINE_MODEL_PREFIX = "block";
+        private static final String MACHINE_MODEL_PREFIX = "block/machine";
         private static final String RUNE_TEXTURE_PREFIX = "block";
         private static final String RUNE_BASIC_TEXTURE = "wip-rune-basic-3";
         private static final String RUNE_BASIC_MULTI_TEXTURE = "wip-rune-basic";

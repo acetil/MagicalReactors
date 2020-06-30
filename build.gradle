@@ -18,7 +18,11 @@ group = 'acetil.magicalreactors' // http://maven.apache.org/guides/mini/guide-na
 archivesBaseName = 'magicalreactors'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-
+sourceSets {
+    generated {
+        resources
+    }
+}
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   Snapshot are built nightly.
@@ -42,9 +46,12 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
+            sourceSets.main.resources.srcDirs += ['src/generated/resources']
+
             mods {
                 magicalreactors {
                     source sourceSets.main
+                    source sourceSets.generated
                 }
             }
         }
@@ -61,6 +68,7 @@ minecraft {
             mods {
                 magicalreactors {
                     source sourceSets.main
+                    source sourceSets.generated
                 }
             }
         }
@@ -74,11 +82,12 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'magicalreactors', '--all', '--output', file('src/main/resources/'), '--existing', file('src/main/resources')
+            args '--mod', 'magicalreactors', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources')
 
             mods {
                 magicalreactors {
                     source sourceSets.main
+                    source sourceSets.generated
                 }
             }
         }
@@ -124,6 +133,7 @@ jar {
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
+    from sourceSets.generated.output
 }
 
 // Example configuration to allow publishing using the maven-publish task
