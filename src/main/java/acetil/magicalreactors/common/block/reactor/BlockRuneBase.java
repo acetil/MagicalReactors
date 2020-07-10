@@ -10,8 +10,8 @@ import net.minecraft.world.World;
 
 public class BlockRuneBase extends Block implements IReactorBuildingBlock {
     public static final BooleanProperty MULTIBLOCK_STATE = BooleanProperty.create("completed_multiblock");
-    public BlockRuneBase() {
-        super(Properties.create(Material.ROCK));
+    public BlockRuneBase(Properties properties) {
+        super(properties);
         setDefaultState(getStateContainer().getBaseState().with(MULTIBLOCK_STATE, false));
     }
 

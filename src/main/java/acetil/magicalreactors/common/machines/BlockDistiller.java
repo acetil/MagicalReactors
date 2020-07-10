@@ -18,8 +18,8 @@ public class BlockDistiller extends Block {
     private static final EnumProperty<EnumDistillState> BLOCK_POSITION = EnumProperty.create("block_pos", EnumDistillState.class);
     private String machineName;
     private int bottomSlots;
-    public BlockDistiller(String machineName, int bottomSlots) {
-        super(Properties.create(Material.ROCK));
+    public BlockDistiller(String machineName, int bottomSlots, Properties properties) {
+        super(properties);
         //setDefaultState(this.getBlockState().getBaseState().withProperty(blockPosition, EnumDistillState.NONE));
         this.machineName = machineName;
         this.bottomSlots = bottomSlots;

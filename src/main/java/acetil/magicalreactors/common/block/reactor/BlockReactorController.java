@@ -20,8 +20,8 @@ import javax.annotation.Nullable;
 
 public class BlockReactorController extends BlockRuneBase {
 
-    public BlockReactorController () {
-        super();
+    public BlockReactorController (Properties properties) {
+        super(properties);
         //setCreativeTab(NuclearCreativeTab.INSTANCE);
     }
     @Override

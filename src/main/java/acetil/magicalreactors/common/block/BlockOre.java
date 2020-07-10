@@ -9,8 +9,8 @@ import net.minecraft.item.Item;
 import java.util.Random;
 
 public class BlockOre extends Block {
-    public BlockOre (float hardness) {
-        super(Properties.create(Material.ROCK));
+    public BlockOre (Properties properties) {
+        super(properties);
     }
 
     public Item getItemDropped (BlockState state, Random rand, int fortune) {

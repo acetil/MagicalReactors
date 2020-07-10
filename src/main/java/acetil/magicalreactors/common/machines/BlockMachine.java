@@ -26,8 +26,8 @@ import javax.annotation.Nullable;
 
 public class BlockMachine extends Block {
     protected String machineName;
-    public BlockMachine (String machineName) {
-        super(Properties.create(Material.ROCK));
+    public BlockMachine (String machineName, Properties properties) {
+        super(properties);
         this.machineName = machineName;
     }
     @Override

@@ -17,8 +17,8 @@ import org.apache.logging.log4j.Level;
 @ObjectHolder(Constants.MODID)
 public class ModItems {
     public static DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, Constants.MODID);
-    public static RegistryObject<Item> URANIUM_INGOT = ITEMS.register("uranium_ingot", () -> new Item(new Item.Properties()));
-    public static RegistryObject<Item> ITEM_TEMP2 = ITEMS.register("temp2", () -> new Item(new Item.Properties()));
+    public static RegistryObject<Item> URANIUM_INGOT = ITEMS.register("uranium_ingot", () -> new Item(new Item.Properties().group(MagicalReactors.ITEM_GROUP)));
+    public static RegistryObject<Item> ITEM_TEMP2 = ITEMS.register("temp2", () -> new Item(new Item.Properties().group(MagicalReactors.ITEM_GROUP)));
     public static void registerFuels () {
         ReactorFuelRegistry.registerFuel(ReactorFuelBasic::new, "basic_fuel", URANIUM_INGOT.get());
     }

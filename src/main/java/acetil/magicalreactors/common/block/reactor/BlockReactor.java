@@ -11,8 +11,8 @@ import javax.annotation.Nullable;
 
 
 public class BlockReactor extends Block {
-    public BlockReactor() {
-        super(Properties.create(Material.ROCK));
+    public BlockReactor(Properties properties) {
+        super(properties);
         //setHardness(4F);
         //setCreativeTab(NuclearCreativeTab.INSTANCE);
     }

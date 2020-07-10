@@ -20,6 +20,8 @@ import acetil.magicalreactors.common.network.PacketHandler;
 import acetil.magicalreactors.common.reactor.ReactorFuelRegistry;
 import acetil.magicalreactors.common.recipes.MachineRecipeManager;
 import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -45,6 +47,12 @@ public class MagicalReactors {
 
 
     public static final Logger LOGGER = LogManager.getLogger();
+    public static final ItemGroup ITEM_GROUP = new ItemGroup(MODID) {
+        @Override
+        public ItemStack createIcon () {
+            return new ItemStack(ModItems.ITEM_TEMP2.get());
+        }
+    };
 
     public MagicalReactors () {
         registerEventListeners();
