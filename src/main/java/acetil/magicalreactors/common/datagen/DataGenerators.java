@@ -4,10 +4,12 @@ import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.block.reactor.BlockRuneBase;
 import acetil.magicalreactors.common.constants.Constants;
+import acetil.magicalreactors.common.items.ModItems;
 import acetil.magicalreactors.common.machines.BlockMachine;
 import acetil.magicalreactors.common.machines.MachineBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
@@ -16,6 +18,7 @@ import org.apache.logging.log4j.Level;
 public class DataGenerators {
     public static void generateData (GatherDataEvent event) {
         event.getGenerator().addProvider(new BlockStates(event.getGenerator(), event.getExistingFileHelper()));
+        event.getGenerator().addProvider(new ItemModels(event.getGenerator(), event.getExistingFileHelper()));
     }
     public static class BlockStates extends BlockStateProvider {
         private static final String MACHINE_MODEL_PREFIX = "block/machine";
@@ -114,4 +117,30 @@ public class DataGenerators {
         }
     }
 
+    public static class ItemModels extends ItemModelProvider {
+        private static final ResourceLocation ITEM_PARENT = new ResourceLocation("minecraft", "item/generated");
+        private static final String ITEM_TEX_KEY = "layer0";
+        private static final String ITEM_PATH = "item/";
+        public ItemModels (DataGenerator generator, ExistingFileHelper existingFileHelper) {
+            super(generator, Constants.MODID, existingFileHelper);
+        }
+
+        @Override
+        protected void registerModels () {
+            registerItemModel(ModItems.ITEM_TEMP2.get(), "crystal-better");
+        }
+
+        private void registerItemModel (Item item) {
+            registerItemModel(item, item.getRegistryName().getPath());
+        }
+
+        private void registerItemModel (Item item, String texture) {
+            singleTexture(item.getRegistryName().toString(), ITEM_PARENT, ITEM_TEX_KEY, new ResourceLocation(modid, ITEM_PATH + texture));
+        }
+
+        @Override
+        public String getName () {
+            return null;
+        }
+    }
 }
