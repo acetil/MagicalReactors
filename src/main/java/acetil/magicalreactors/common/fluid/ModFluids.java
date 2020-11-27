@@ -14,6 +14,6 @@ import net.minecraftforge.registries.ObjectHolder;
 @ObjectHolder(Constants.MODID)
 public class ModFluids {
     public static DeferredRegister<Fluid> FLUIDS = new DeferredRegister<>(ForgeRegistries.FLUIDS, Constants.MODID);
-    public static RegistryObject<Fluid> STILL_ETHANOL = FLUIDS.register("ethanol_source", () -> new FluidEthanol.Source("ethanol_source", 0xFFFFFFFF));
-    public static RegistryObject<Fluid> FLOWING_ETHANOL = FLUIDS.register("ethanol_flowing", () -> new FluidEthanol.Flowing("ethanol_flowing", 0xFFFFFFFF));
+    public static RegistryObject<Fluid> STILL_ETHANOL = FLUIDS.register("ethanol_source", () -> new FluidEthanol.Source("ethanol", 0xFFFFFFFF));
+    public static RegistryObject<Fluid> FLOWING_ETHANOL = FLUIDS.register("ethanol_flowing", () -> new FluidEthanol.Flowing("ethanol", 0xFFFFFFFF));
 }

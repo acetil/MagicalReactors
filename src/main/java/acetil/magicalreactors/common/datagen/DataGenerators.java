@@ -4,11 +4,14 @@ import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.block.reactor.BlockRuneBase;
 import acetil.magicalreactors.common.constants.Constants;
+import acetil.magicalreactors.common.fluid.FluidEthanol;
+import acetil.magicalreactors.common.fluid.ModFluids;
 import acetil.magicalreactors.common.items.ModItems;
 import acetil.magicalreactors.common.machines.BlockMachine;
 import acetil.magicalreactors.common.machines.MachineBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.*;
@@ -71,6 +74,8 @@ public class DataGenerators {
                     getModelLocation(ModBlocks.FUEL_INTERFACE.get(), RUNE_TEXTURE_PREFIX, "wip-reactor-controller"));
             // TODO: redstone
 
+            registerFluid(ModBlocks.ETHANOL_BLOCK.get(), (FluidEthanol)ModFluids.STILL_ETHANOL.get());
+
             MagicalReactors.LOGGER.log(Level.INFO, "Generated blockstates and models successfully!");
         }
         protected void registerMachine (BlockMachine machineBlock) {
@@ -114,6 +119,10 @@ public class DataGenerators {
         protected void registerRune (Block rune, ModelFile model, ModelFile modelMulti) {
             getVariantBuilder(rune).forAllStates(state -> ConfiguredModel.builder()
                 .modelFile(state.get(BlockRuneBase.MULTIBLOCK_STATE) ? modelMulti : model).build());
+        }
+        protected void registerFluid (Block fluidBlock, FluidEthanol fluid) {
+            getVariantBuilder(fluidBlock).forAllStates(state ->
+                    ConfiguredModel.allRotations(getBuilder(fluidBlock.getRegistryName().toString()).texture("particle", fluid.getStillTexture()), false));
         }
     }
 

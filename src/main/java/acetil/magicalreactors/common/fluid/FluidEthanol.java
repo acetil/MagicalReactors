@@ -12,6 +12,8 @@ import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 public abstract class FluidEthanol extends ForgeFlowingFluid {
     private boolean isSource;
+    private ResourceLocation stillTex;
+    private ResourceLocation flowingTex;
     public FluidEthanol (String name, boolean isSource, int colour, String stillTex, String flowingTex) {
         // TODO: update to work with nbt
         super(new Properties(ModFluids.STILL_ETHANOL, ModFluids.FLOWING_ETHANOL,
@@ -23,10 +25,20 @@ public abstract class FluidEthanol extends ForgeFlowingFluid {
                         .color(colour)
                         .translationKey(name))
                         .block(() -> (FlowingFluidBlock) ModBlocks.ETHANOL_BLOCK.get()));
+        this.stillTex = new ResourceLocation(Constants.MODID, stillTex);
+        this.flowingTex = new ResourceLocation(Constants.MODID, flowingTex);
         this.isSource = isSource;
     }
     public FluidEthanol (String name, boolean isSource, int colour) {
         this(name, isSource, colour, "fluids/" + name + "_still", "fluids/" + name + "_flowing");
+    }
+
+    public ResourceLocation getStillTexture () {
+        return stillTex;
+    }
+
+    public ResourceLocation getFlowingTexture () {
+        return flowingTex;
     }
 
     public static class Source extends FluidEthanol {
