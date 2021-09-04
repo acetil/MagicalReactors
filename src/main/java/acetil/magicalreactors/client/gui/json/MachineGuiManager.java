@@ -1,14 +1,14 @@
 package acetil.magicalreactors.client.gui.json;
 
 import acetil.magicalreactors.client.gui.ContainerGui;
-import acetil.magicalreactors.common.containers.GuiContainer;
 import acetil.magicalreactors.common.constants.Constants;
+import acetil.magicalreactors.common.containers.GuiContainer;
 import com.google.gson.Gson;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import acetil.magicalreactors.common.MagicalReactors;
@@ -64,9 +64,8 @@ public class MachineGuiManager {
     public static void registerGuis () {
         readGuiJson("assets/magicalreactors/gui");
         for (String key : guiMap.keySet()) {
-            ScreenManager.registerFactory((ContainerType<GuiContainer>) ForgeRegistries.CONTAINERS
-                            .getValue(new ResourceLocation(Constants.MODID, key)),
-                    (GuiContainer gui, PlayerInventory inv, ITextComponent name) -> new ContainerGui(gui, inv, name, guiMap.get(key)));
+            MenuScreens.register((MenuType<GuiContainer>) ForgeRegistries.CONTAINERS.getValue(new ResourceLocation(Constants.MODID, key)),
+                    (GuiContainer gui, Inventory inv, Component name) -> new ContainerGui(gui, inv, name, guiMap.get(key)));
         }
     }
 }

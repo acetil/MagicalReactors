@@ -3,7 +3,7 @@ package acetil.magicalreactors.client.gui.elements;
 import acetil.magicalreactors.client.gui.ContainerGui;
 import acetil.magicalreactors.client.gui.data.GuiDataManager;
 import acetil.magicalreactors.common.capabilities.EnergyHandler;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -20,9 +20,9 @@ public class ElementEnergyStorage extends ElementProgressBar {
     public IGuiElement applyJson (GuiElementJson json) {
         super.applyJson(json);
         setDirection(BarDirection.UP);
-        Function<TileEntity, ?> filledFunc = GuiDataManager.getVariable("energy.fractionStored");
-        setProgressFunction((ContainerGui gui, TileEntity te) ->
-                ((Function<TileEntity, Float>) filledFunc).apply(te));
+        Function<BlockEntity, ?> filledFunc = GuiDataManager.getVariable("energy.fractionStored");
+        setProgressFunction((ContainerGui gui, BlockEntity te) ->
+                ((Function<BlockEntity, Float>) filledFunc).apply(te));
         return this;
     }
 }

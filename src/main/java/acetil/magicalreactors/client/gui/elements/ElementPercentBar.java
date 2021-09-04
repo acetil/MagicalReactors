@@ -1,19 +1,10 @@
 package acetil.magicalreactors.client.gui.elements;
 
 import acetil.magicalreactors.client.gui.ContainerGui;
-import acetil.magicalreactors.common.containers.GuiContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import acetil.magicalreactors.client.gui.json.GuiElementJson;
-import acetil.magicalreactors.common.capabilities.CapabilityMachine;
-import acetil.magicalreactors.common.capabilities.machines.machinehandlers.IMachineCapability;
-import acetil.magicalreactors.common.machines.TileMachineBase;
 
 public class ElementPercentBar implements IGuiElement {
     private String name;
@@ -45,9 +36,9 @@ public class ElementPercentBar implements IGuiElement {
         this.percentFunction = function;
     }
     @Override
-    public void draw(ContainerGui gui, TileEntity te) {
+    public void draw (PoseStack matStack, ContainerGui gui, BlockEntity te) {
         float progress = percentFunction.getFilled(gui, te);
-        gui.getMinecraft().getTextureManager().bindTexture(texture);
+        gui.getMinecraft().getTextureManager().bindForSetup(texture);
         int width = this.width;
         int height = this.height;
         int startX = x;
@@ -72,14 +63,14 @@ public class ElementPercentBar implements IGuiElement {
                 height *= progress;
                 break;
         }
-        gui.blit(startX + gui.getGuiLeft(), startY + gui.getGuiTop(), startU, startV, width, height);
+        gui.blit(matStack, startX + gui.getGuiLeft(), startY + gui.getGuiTop(), startU, startV, width, height);
 
     }
     public enum BarDirection {
         UP, DOWN, LEFT, RIGHT
     }
     public interface PercentFunction {
-        float getFilled (ContainerGui gui, TileEntity te);
+        float getFilled (ContainerGui gui, BlockEntity te);
     }
 }
 

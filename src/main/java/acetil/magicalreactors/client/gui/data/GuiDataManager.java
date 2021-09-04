@@ -3,7 +3,7 @@ package acetil.magicalreactors.client.gui.data;
 import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.capabilities.CapabilityMachine;
 import acetil.magicalreactors.common.capabilities.machines.machinehandlers.IMachineCapability;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.NonNullSupplier;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -21,23 +21,23 @@ import java.util.stream.Stream;
 public class GuiDataManager {
     private static final GuiDataNamespaceTopLevel GUI_DATA =
             new GuiDataNamespaceTopLevel();
-    private static final Map<String, Function<TileEntity, ?>> LAZY_COMPILED_FUNCS = new HashMap<>();
+    private static final Map<String, Function<BlockEntity, ?>> LAZY_COMPILED_FUNCS = new HashMap<>();
 
-    public static Function<TileEntity, ?> getVariable (String varPath) {
+    public static Function<BlockEntity, ?> getVariable (String varPath) {
         String s = varPath.trim();
         if (LAZY_COMPILED_FUNCS.containsKey(s)) {
             return LAZY_COMPILED_FUNCS.get(s);
         } else if (isValidVarPath(s)) {
             MagicalReactors.LOGGER.debug("Compiling gui data path \"{}\"", s);
-            Function<TileEntity, ?> f =  GUI_DATA.getSubValue(s);
+            Function<BlockEntity, ?> f =  GUI_DATA.getSubValue(s);
             LAZY_COMPILED_FUNCS.put(s, f);
             return f;
         }
         MagicalReactors.LOGGER.error("Gui data path \"{}\" is invalid!", s);
-        LAZY_COMPILED_FUNCS.put(s, (TileEntity te) -> te);
-        return (TileEntity te) -> te;
+        LAZY_COMPILED_FUNCS.put(s, (BlockEntity te) -> te);
+        return (BlockEntity te) -> te;
     }
-    public static Function<TileEntity, String> getVariableString (String varStr) {
+    public static Function<BlockEntity, String> getVariableString (String varStr) {
         Function<Object, String> f = Object::toString;
         return f.compose(getVariable(varStr));
     }
@@ -53,7 +53,7 @@ public class GuiDataManager {
     private static void addVariable (Pair<String, GuiDataVariable<?, ?>> varPair) {
         addVariable(varPair.t, varPair.u);
     }
-    public static void addNamespace (NamespaceBuilder<TileEntity, ?> nameBuild) {
+    public static void addNamespace (NamespaceBuilder<BlockEntity, ?> nameBuild) {
         nameBuild.build("")
                  .map(GuiDataManager::cleanPath)
                  .forEach(GuiDataManager::addVariable);
@@ -62,14 +62,14 @@ public class GuiDataManager {
         return true;
     }
     public static void addDefaultVariables () {
-        addNamespace(new NamespaceCapBuilder<>("energy", CapabilityEnergy.ENERGY,
-                CapabilityEnergy.ENERGY.getDefaultInstance())
+        addNamespace(new NamespaceCapBuilder<IEnergyStorage>("energy", CapabilityEnergy.ENERGY,
+                    () -> null)
                         .addVariable("energyStored", IEnergyStorage::getEnergyStored)
                         .addVariable("maxEnergyStored", IEnergyStorage::getMaxEnergyStored)
                         .addVariable("fractionStored", (IEnergyStorage e) ->
                                 (float) e.getEnergyStored() / e.getMaxEnergyStored()));
-        addNamespace(new NamespaceCapBuilder<>("machine", CapabilityMachine.MACHINE_CAPABILITY,
-                CapabilityMachine.MACHINE_CAPABILITY.getDefaultInstance())
+        addNamespace(new NamespaceCapBuilder<IMachineCapability>("machine", CapabilityMachine.MACHINE_CAPABILITY,
+                () -> null)
                         .addVariable("energyToCompletion", IMachineCapability::energyToCompletion)
                         .addVariable("energyRequired", IMachineCapability::energyRequired)
                         .addVariable("fractionComplete", (IMachineCapability m) ->
@@ -129,12 +129,12 @@ public class GuiDataManager {
                             .reduce(l.stream(), Stream::concat);
         }
     }
-    public static class NamespaceCapBuilder <T> extends NamespaceBuilder<TileEntity, T> {
+    public static class NamespaceCapBuilder <T> extends NamespaceBuilder<BlockEntity, T> {
         public NamespaceCapBuilder (String name, Capability<T> cap, T defaultVal) {
-            super(name, (TileEntity te) -> te.getCapability(cap).orElse(defaultVal));
+            super(name, (BlockEntity te) -> te.getCapability(cap).orElse(defaultVal));
         }
         public NamespaceCapBuilder (String name, Capability<T> cap, NonNullSupplier<T> defaultSupplier) {
-            super(name, (TileEntity te) -> te.getCapability(cap).orElseGet(defaultSupplier));
+            super(name, (BlockEntity te) -> te.getCapability(cap).orElseGet(defaultSupplier));
         }
     }
 }

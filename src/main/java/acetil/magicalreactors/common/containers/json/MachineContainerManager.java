@@ -1,17 +1,14 @@
 package acetil.magicalreactors.common.containers.json;
 
-import acetil.magicalreactors.common.containers.GuiContainer;
 import acetil.magicalreactors.common.containers.GuiContainerFactory;
 import acetil.magicalreactors.common.constants.Constants;
+import acetil.magicalreactors.common.containers.GuiContainer;
 import com.google.gson.Gson;
 import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.utils.FileUtils;
-import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.Level;
@@ -28,8 +25,8 @@ import java.util.stream.Collectors;
 
 public class MachineContainerManager {
     private static Map<String, MachineContainerJson> registry = new HashMap<>();
-    public static DeferredRegister<ContainerType<?>> CONTAINERS = new DeferredRegister<>(ForgeRegistries.CONTAINERS, Constants.MODID);
-    public static List<RegistryObject<ContainerType<GuiContainer>>> CONTAINER_LIST = new ArrayList<>();
+    public static DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, Constants.MODID);
+    public static List<RegistryObject<MenuType<GuiContainer>>> CONTAINER_LIST = new ArrayList<>();
     public static void registerContainerJson (String key, MachineContainerJson containerJson) {
         registry.put(key, containerJson);
     }

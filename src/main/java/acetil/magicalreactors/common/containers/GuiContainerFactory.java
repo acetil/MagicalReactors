@@ -2,10 +2,10 @@ package acetil.magicalreactors.common.containers;
 
 import acetil.magicalreactors.common.containers.json.MachineContainerJson;
 import acetil.magicalreactors.common.constants.Constants;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.IContainerFactory;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraftforge.fmllegacy.network.IContainerFactory;
 
 public class GuiContainerFactory implements IContainerFactory<GuiContainer> {
     MachineContainerJson json;
@@ -15,7 +15,7 @@ public class GuiContainerFactory implements IContainerFactory<GuiContainer> {
         this.registry = new ResourceLocation(Constants.MODID, json.name);
     }
     @Override
-    public GuiContainer create(int windowId, PlayerInventory inv, PacketBuffer data) {
+    public GuiContainer create(int windowId, Inventory inv, FriendlyByteBuf data) {
         return new GuiContainer(json, registry.toString(), windowId, inv, data);
     }
 }

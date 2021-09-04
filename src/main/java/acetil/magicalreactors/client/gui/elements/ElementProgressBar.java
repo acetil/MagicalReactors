@@ -3,7 +3,7 @@ package acetil.magicalreactors.client.gui.elements;
 import acetil.magicalreactors.client.gui.ContainerGui;
 import acetil.magicalreactors.client.gui.data.GuiDataManager;
 import acetil.magicalreactors.common.capabilities.CapabilityMachine;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -19,8 +19,8 @@ public class ElementProgressBar extends ElementPercentBar {
     public IGuiElement applyJson (GuiElementJson json) {
         super.applyJson(json);
         setDirection(BarDirection.RIGHT);
-        setProgressFunction((ContainerGui gui, TileEntity te) ->
-                ((Function<TileEntity, Float>) GuiDataManager.getVariable("machine.fractionComplete")).apply(te));
+        setProgressFunction((ContainerGui gui, BlockEntity te) ->
+                ((Function<BlockEntity, Float>) GuiDataManager.getVariable("machine.fractionComplete")).apply(te));
         return this;
     }
 }

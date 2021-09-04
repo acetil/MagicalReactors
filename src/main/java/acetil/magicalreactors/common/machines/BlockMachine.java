@@ -1,8 +1,5 @@
 package acetil.magicalreactors.common.machines;
 
-import acetil.magicalreactors.common.containers.GuiContainer;
-import acetil.magicalreactors.common.containers.json.MachineContainerManager;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -15,9 +12,6 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-import acetil.magicalreactors.common.constants.Constants;
 
 import javax.annotation.Nullable;
 

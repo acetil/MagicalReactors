@@ -1,28 +1,24 @@
 package acetil.magicalreactors.common.containers;
 
-import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.containers.json.MachineContainerJson;
 import acetil.magicalreactors.common.containers.json.MachineSlotJson;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.Level;
 
+import javax.annotation.Nullable;
 
-public class GuiContainer extends Container {
+public class GuiContainer extends AbstractContainerMenu {
     private static final int INVENTORY_ROWS = 3;
     private static final int INVENTORY_COLS = 9;
     private static final int HOTBAR_SIZE = 9;
@@ -31,22 +27,30 @@ public class GuiContainer extends Container {
     private BlockPos tePos;
     private IItemHandler itemHandler;
     private int ownSize;
-    public GuiContainer (MachineContainerJson json, String containerTypeName, int windowId, PlayerInventory inv, PacketBuffer data) {
+
+    public GuiContainer (MachineContainerJson json, String containerTypeName, int windowId, Inventory inv, FriendlyByteBuf data) {
         super(ForgeRegistries.CONTAINERS.getValue(new ResourceLocation(containerTypeName)), windowId);
         tePos = data.readBlockPos();
-        this.itemHandler = inv.player.world.getTileEntity(tePos)
-                                           .getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-                                           .orElse(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.getDefaultInstance());
+        this.itemHandler = inv.player.level.getBlockEntity(tePos)
+                .getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+                .orElseThrow(() -> new RuntimeException("Bad optional!")); // TODO
         addSlots(itemHandler, inv, json);
     }
-    public GuiContainer (MachineContainerJson json, String containerTypeName, int windowId, PlayerInventory inv, IItemHandler handler,
+
+    public GuiContainer (MachineContainerJson json, String containerTypeName, int windowId, Inventory inv, IItemHandler handler,
                          BlockPos pos) {
         super(ForgeRegistries.CONTAINERS.getValue(new ResourceLocation(containerTypeName)), windowId);
-        addSlots(handler, inv, json);
         this.itemHandler = handler;
         this.tePos = pos;
+        addSlots(handler, inv, json);
     }
-    public void addSlots (IItemHandler handler, PlayerInventory inv, MachineContainerJson json) {
+
+    @Override
+    public boolean stillValid (Player pPlayer) {
+        return true;
+    }
+
+    public void addSlots (IItemHandler handler, Inventory inv, MachineContainerJson json) {
         ownSize = json.inputsSlots.size() + json.outputSlots.size();
         addOwnSlots(handler, json);
         addPlayerSlots(inv, json);
@@ -62,7 +66,7 @@ public class GuiContainer extends Container {
             slotNum++;
         }
     }
-    private void addPlayerSlots (PlayerInventory inv, MachineContainerJson json) {
+    private void addPlayerSlots (Inventory inv, MachineContainerJson json) {
         for (int i = 0; i< INVENTORY_ROWS; i++) {
             for (int j = 0; j < INVENTORY_COLS; j++) {
                 int x = json.inventoryStartX + j * INVENTORY_SLOT_SIZE;
@@ -75,17 +79,39 @@ public class GuiContainer extends Container {
                     json.inventoryStartY + HOTBAR_OFFSET));
         }
     }
-    @Override
-    public boolean canInteractWith(PlayerEntity playerIn) {
-        return true;
-    }
     public IItemHandler getItemHandler () {
         return itemHandler;
     }
     public BlockPos getTileEntityPosition () {
         return tePos;
     }
+
     @Override
+    public ItemStack quickMoveStack (Player pPlayer, int pIndex) {
+        System.out.println("Transferring stack in slot!");
+        ItemStack stack = ItemStack.EMPTY;
+        Slot slot = getSlot(pIndex);
+        if (slot.hasItem()) {
+            ItemStack stack1 = slot.getItem();
+            stack = stack1.copy();
+            if (pIndex < ownSize) {
+                if (!this.moveItemStackTo(stack1, ownSize, slots.size(), true)) {
+                    System.out.println("Merged stack!");
+                    return ItemStack.EMPTY;
+                }
+            } else if (!this.moveItemStackTo(stack1, 0, ownSize, false)) {
+                return ItemStack.EMPTY;
+            }
+            if (stack1.isEmpty()) {
+                slot.set(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
+            }
+        }
+        return stack;
+    }
+
+    /*@Override
     public ItemStack transferStackInSlot (PlayerEntity playerIn, int index) {
         System.out.println("Transferring stack in slot!");
         ItemStack stack = ItemStack.EMPTY;
@@ -108,5 +134,5 @@ public class GuiContainer extends Container {
             }
         }
         return stack;
-    }
+    }*/
 }
