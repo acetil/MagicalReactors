@@ -1,13 +1,13 @@
 package acetil.magicalreactors.common.multiblock;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
 
 /*
     Abstract representation of a multiblock structure
  */
 public interface IMultiblock {
-    IMultiblockValidator getMultiblockValidator (World worldIn, BlockPos pos);
+    IMultiblockValidator getMultiblockValidator (LevelReader worldIn, BlockPos pos);
     boolean allowsFilledAirBlocks ();
     String getType ();
 }

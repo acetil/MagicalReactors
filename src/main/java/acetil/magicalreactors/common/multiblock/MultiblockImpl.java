@@ -1,14 +1,12 @@
 package acetil.magicalreactors.common.multiblock;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.Tag;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import acetil.magicalreactors.common.MagicalReactors;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.Level;
 
@@ -41,7 +39,7 @@ public class MultiblockImpl implements IMultiblock {
         }
     }
     @Override
-    public IMultiblockValidator getMultiblockValidator(World worldIn, BlockPos pos) {
+    public IMultiblockValidator getMultiblockValidator(LevelReader worldIn, BlockPos pos) {
         return new MultiblockValidatorImpl(offsets, worldIn, pos);
     }
     @Override
@@ -77,10 +75,10 @@ public class MultiblockImpl implements IMultiblock {
         // TODO: update to more than just blocks
         if (key.charAt(0) == '#') {
             // tag
-            return (BlockState state) -> BlockTags.getCollection().getOrCreate(new ResourceLocation(key.substring(1)))
+            return (BlockState state) -> BlockTags.getAllTags().getTag(new ResourceLocation(key.substring(1)))
                                                                   .contains(state.getBlock());
         }
-        Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key));
+        var b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key));
         System.out.println(String.format("Key: %s, name: %s", key, b.getRegistryName()));
         if (b == Blocks.AIR && allowsFilledAirBlocks) {
             return (BlockState state) -> true;

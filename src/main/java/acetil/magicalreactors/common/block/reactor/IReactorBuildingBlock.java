@@ -1,9 +1,9 @@
 package acetil.magicalreactors.common.block.reactor;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.state.BlockState;
 
 public interface IReactorBuildingBlock {
-    void updateMultiblockState (BlockState state, World worldIn, BlockPos pos, boolean isMultiblock);
+    void updateMultiblockState (BlockState state, LevelReader worldIn, BlockPos pos, boolean isMultiblock);
 }

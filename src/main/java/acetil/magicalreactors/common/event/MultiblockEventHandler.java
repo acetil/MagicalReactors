@@ -1,18 +1,17 @@
 package acetil.magicalreactors.common.event;
 
 import acetil.magicalreactors.common.MagicalReactors;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.*;
 
 public class MultiblockEventHandler {
-    private static Map<IWorld, List<IUpdateListener>> listenerMap = new HashMap<>();
-    private static void updateController (IWorld world, BlockPos pos, BlockState state) {
+    private static Map<LevelReader, List<IUpdateListener>> listenerMap = new HashMap<>();
+    private static void updateController (LevelReader world, BlockPos pos, BlockState state) {
         if (listenerMap.containsKey(world)) {
             for (IUpdateListener listener : listenerMap.get(world)) {
                 if (listener.isTracking(pos)) {
@@ -27,9 +26,9 @@ public class MultiblockEventHandler {
     }
     public static void blockBreakEvent (BlockEvent.BreakEvent event) {
         MagicalReactors.LOGGER.debug("On block break!");
-        updateController(event.getWorld(), event.getPos(), Blocks.AIR.getDefaultState());
+        updateController(event.getWorld(), event.getPos(), Blocks.AIR.defaultBlockState());
     }
-    public static void addListener (IWorld world, IUpdateListener listener) {
+    public static void addListener (LevelReader world, IUpdateListener listener) {
         if (!listenerMap.containsKey(world)) {
             listenerMap.put(world, new ArrayList<>());
             MagicalReactors.LOGGER.debug("Added listener!");
@@ -37,7 +36,7 @@ public class MultiblockEventHandler {
         listenerMap.get(world).add(listener);
         listener.initialCheck();
     }
-    public static void removeListener (IWorld world, IUpdateListener listener) {
+    public static void removeListener (LevelReader world, IUpdateListener listener) {
         if (listenerMap.containsKey(world)) {
             listenerMap.get(world).remove(listener);
             MagicalReactors.LOGGER.debug("Removed listener!");

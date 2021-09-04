@@ -1,11 +1,11 @@
 package acetil.magicalreactors.common.multiblock;
 
 import acetil.magicalreactors.common.MagicalReactors;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 
 import java.util.*;
@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 
 public class MultiblockValidatorImpl implements IMultiblockValidator {
     private List<LockedValidator> validators;
-    private World world;
+    private LevelReader world;
     private BlockPos offsetPos;
     private boolean valid;
     private Orientation orientation = Orientation.NONE;
     private Set<BlockPos> positions;
-    public MultiblockValidatorImpl (List<MultiblockImpl.BlockOffset> offsets, World worldIn, BlockPos pos) {
+    public MultiblockValidatorImpl (List<MultiblockImpl.BlockOffset> offsets, LevelReader worldIn, BlockPos pos) {
         this.world = worldIn;
         this.offsetPos = pos;
         this.valid = false;
@@ -85,8 +85,8 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
     public List<BlockPos> getPositionsWithCapability(Capability<?> capability, Direction side) {
         return getOrientation().predicates
                                .stream()
-                               .filter((BlockPredicate pred) -> world.getTileEntity(pred.pos) != null &&
-                                       world.getTileEntity(pred.pos).getCapability(capability, side).isPresent())
+                               .filter((BlockPredicate pred) -> world.getBlockEntity(pred.pos) != null &&
+                                       world.getBlockEntity(pred.pos).getCapability(capability, side).isPresent())
                                .map(BlockPredicate::getPos)
                                .collect(Collectors.toList());
     }
@@ -152,13 +152,13 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
 
     private static class LockedValidator {
         List<BlockPredicate> predicates;
-        World world;
+        LevelReader world;
         BlockPos offsetPos;
         Orientation orientation;
         List<BlockPos> incorrectBlocks;
         int numIncorrectBlocks;
         boolean valid;
-        LockedValidator(List<MultiblockImpl.BlockOffset> offsets, World worldIn, BlockPos pos, Orientation orientation) {
+        LockedValidator(List<MultiblockImpl.BlockOffset> offsets, LevelReader worldIn, BlockPos pos, Orientation orientation) {
             predicates = offsets.stream()
                                 .map((MultiblockImpl.BlockOffset offset) ->
                                         new BlockPredicate(worldIn, offset.getBlockPos(pos), offset.getPredicate()))
@@ -209,10 +209,10 @@ public class MultiblockValidatorImpl implements IMultiblockValidator {
         }
     }
     public static class BlockPredicate {
-        World world;
+        LevelReader world;
         BlockPos pos;
         Predicate<BlockState> statePredicate;
-        BlockPredicate(World worldIn, BlockPos pos, Predicate<BlockState> statePredicate) {
+        BlockPredicate(LevelReader worldIn, BlockPos pos, Predicate<BlockState> statePredicate) {
             this.world = worldIn;
             this.pos = pos;
             this.statePredicate = statePredicate;

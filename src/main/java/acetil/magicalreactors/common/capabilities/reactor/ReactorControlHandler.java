@@ -65,7 +65,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
 
     @Override
     public void update() {
-        if (world.isRemote) {
+        if (world.isClientSide()) {
             return;
         }
         // TODO: refactor
@@ -119,7 +119,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
     @Override
     public void checkMultiblock() {
         // TODO: refactor
-        if (world.isRemote) {
+        if (world.isClientSide()) {
             return;
         }
         boolean isValid = false;
@@ -152,13 +152,13 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
         if (isValid) {
             reactorInterfaceHandlers = currentValidator.getPositionsWithCapability(CapabilityReactorInterface.REACTOR_INTERFACE, null)
                     .stream()
-                    .map((BlockPos p) -> world.getTileEntity(p)
-                            .getCapability(CapabilityReactorInterface.REACTOR_INTERFACE, null).orElse(CapabilityReactorInterface.REACTOR_INTERFACE.getDefaultInstance()))
+                    .map((BlockPos p) -> world.getBlockEntity(p)
+                            .getCapability(CapabilityReactorInterface.REACTOR_INTERFACE, null).orElseThrow(() -> new RuntimeException("Bad optional!"))) // TODO
                     .collect(Collectors.toList());
-            reactorHandler = world.getTileEntity(currentValidator.getPositionsWithCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
+            reactorHandler = world.getBlockEntity(currentValidator.getPositionsWithCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
                     .get(0))
                     .getCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
-                    .orElse(CapabilityReactor.CAPABILITY_REACTOR.getDefaultInstance());
+                    .orElseThrow(() -> new RuntimeException("Bad optional!")); // TODO
             if (!isMulti) {
 
             }
@@ -217,11 +217,11 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
                 reactorInterfaceHandlers = currentValidator.getPositionsWithCapability(CapabilityReactorInterface.REACTOR_INTERFACE, null)
                         .stream()
                         .map((BlockPos p) -> world.getBlockEntity(p)
-                                .getCapability(CapabilityReactorInterface.REACTOR_INTERFACE, null).orElse(CapabilityReactorInterface.REACTOR_INTERFACE.getDefaultInstance()))
+                                .getCapability(CapabilityReactorInterface.REACTOR_INTERFACE, null).orElseThrow(() -> new RuntimeException("Bad optional!"))) // TODO
                         .collect(Collectors.toList());
                 reactorHandler = world.getBlockEntity(currentValidator.getPositionsWithCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
                         .get(0))
-                        .getCapability(CapabilityReactor.CAPABILITY_REACTOR, null);
+                        .getCapability(CapabilityReactor.CAPABILITY_REACTOR, null).orElseThrow(() -> new RuntimeException("Bad optional!")); // TODO
             }
             for (BlockPos p : currentValidator.getPositionsOfType(IReactorBuildingBlock.class)) {
                 ((IReactorBuildingBlock)world.getBlockState(p).getBlock())
