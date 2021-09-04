@@ -5,7 +5,9 @@ import acetil.magicalreactors.common.network.PacketHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -99,7 +101,7 @@ public class EnergyHandler implements IEnergyStorage {
     public void sync (LevelReader world, BlockPos pos) {
         updateEnergyChange();
         if (energyChange != lastEnergyChange) {
-            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunk(pos)),
+            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> (LevelChunk) world.getChunk(pos)),
                     new MessageEnergyUpdate(pos, energy, energyChange));
             System.out.println("Sending energy update!");
         }

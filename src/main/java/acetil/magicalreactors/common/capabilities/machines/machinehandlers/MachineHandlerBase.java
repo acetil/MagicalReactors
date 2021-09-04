@@ -277,7 +277,7 @@ public class MachineHandlerBase implements IMachineCapability {
     @Override
     public void sync(LevelReader world, BlockPos pos) {
         if (shouldSendPacket || energyPerTick != pastEnergyPerTick) {
-            PacketHandler.send(PacketDistributor.TRACKING_CHUNK.with(() -> (LevelChunk)world.getChunk(pos)),
+            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> (LevelChunk)world.getChunk(pos)),
                     new MessageMachineUpdate(pos, isOn,
                             energyPerTick, energyToCompletion, totalEnergyRequired));
             shouldSendPacket = false;

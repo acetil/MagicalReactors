@@ -3,12 +3,9 @@ package acetil.magicalreactors.common.network;
 import acetil.magicalreactors.common.capabilities.CapabilityMachine;
 import acetil.magicalreactors.common.capabilities.EnergyHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -30,7 +27,7 @@ public class MessageMachineUpdate implements IMessage {
         this.isOn = isOn;
         this.pos = pos;
     }
-    public static MessageMachineUpdate fromBytes (PacketBuffer buf) {
+    public static MessageMachineUpdate fromBytes (FriendlyByteBuf buf) {
         BlockPos pos = buf.readBlockPos();
         boolean isOn = buf.readBoolean();
         int energyPerTick = buf.readInt();
@@ -42,12 +39,12 @@ public class MessageMachineUpdate implements IMessage {
     @Override
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-           World world = Minecraft.getInstance().world;
-           if (world.isAreaLoaded(pos, 2) && world.getTileEntity(pos) != null &&
-                   world.getTileEntity(pos).getCapability(CapabilityMachine.MACHINE_CAPABILITY).isPresent()) {
-               world.getTileEntity(pos)
+           var world = Minecraft.getInstance().level;
+           if (world.isAreaLoaded(pos, 2) && world.getBlockEntity(pos) != null &&
+                   world.getBlockEntity(pos).getCapability(CapabilityMachine.MACHINE_CAPABILITY).isPresent()) {
+               world.getBlockEntity(pos)
                        .getCapability(CapabilityMachine.MACHINE_CAPABILITY)
-                       .orElseGet(CapabilityMachine.MACHINE_CAPABILITY::getDefaultInstance)
+                       .orElseThrow(() -> new RuntimeException("Bad Optional!")) // TODO
                        .handlePacket(isOn, energyPerTick, energyToCompletion, totalEnergyRequired);
            }
         });
@@ -55,7 +52,7 @@ public class MessageMachineUpdate implements IMessage {
     }
 
     @Override
-    public void toBytes(PacketBuffer buf) {
+    public void toBytes(FriendlyByteBuf buf) {
         buf.writeBlockPos(pos);
         buf.writeBoolean(isOn);
         buf.writeInt(energyPerTick);
