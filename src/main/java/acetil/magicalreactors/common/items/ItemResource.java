@@ -1,6 +1,6 @@
 package acetil.magicalreactors.common.items;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 public class ItemResource extends Item {
     public ItemResource (String name) {

@@ -1,14 +1,13 @@
 package acetil.magicalreactors.common.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.fluid.FlowingFluid;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Material;
 
 import java.util.function.Supplier;
 
-public class FlowingEthanolBlock extends FlowingFluidBlock {
+public class FlowingEthanolBlock extends LiquidBlock {
     public FlowingEthanolBlock(Supplier<? extends FlowingFluid> supplier, Properties properties) {
-        super(supplier, Properties.create(Material.WATER));
+        super(supplier, Properties.of(Material.WATER));
     }
 }

@@ -1,8 +1,8 @@
 package acetil.magicalreactors.common.reactor;
 
 import acetil.magicalreactors.common.items.ModItems;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 
 public class ReactorFuelBasic implements IReactorFuel {
     int durability = 20;
@@ -35,7 +35,7 @@ public class ReactorFuelBasic implements IReactorFuel {
     }
 
     @Override
-    public void readNBT(CompoundNBT nbt) {
+    public void readNBT(CompoundTag nbt) {
 
     }
 
@@ -50,7 +50,7 @@ public class ReactorFuelBasic implements IReactorFuel {
     }
 
     @Override
-    public CompoundNBT writeNBT() {
+    public CompoundTag writeNBT() {
         return null;
     }
 }

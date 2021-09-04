@@ -1,9 +1,9 @@
 package acetil.magicalreactors.common.reactor;
 
 import acetil.magicalreactors.common.MagicalReactors;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import acetil.magicalreactors.common.capabilities.reactor.ReactorFuelProvider;
 import acetil.magicalreactors.common.constants.Constants;

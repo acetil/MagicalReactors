@@ -27,27 +27,25 @@ public class TileTestEnergySource extends BlockEntity {
     }
 
     public void tickServer () {
-        if (!level.isClientSide()) {
-            HashMap<Direction, BlockEntity> tiles = new HashMap<>();
-            for (Direction side : Direction.values()) {
-                var te = level.getBlockEntity(pos.offset(side.getNormal()));
-                if (te != null && te.getCapability(CapabilityEnergy.ENERGY, side).isPresent()) {
-                    tiles.put(side, te);
-                }
+        HashMap<Direction, BlockEntity> tiles = new HashMap<>();
+        for (Direction side : Direction.values()) {
+            var te = level.getBlockEntity(pos.offset(side.getNormal()));
+            if (te != null && te.getCapability(CapabilityEnergy.ENERGY, side).isPresent()) {
+                tiles.put(side, te);
             }
-            if (tiles.size() <= 0) {
-                return;
-            }
-            int energyPerSide = 1000000;
-            int extraEnergy = 0;
-            for (Map.Entry<Direction, BlockEntity> entry : tiles.entrySet()) {
-                Direction side = entry.getKey();
-                BlockEntity te = entry.getValue();
-                int energyGiven = te.getCapability(CapabilityEnergy.ENERGY, side).orElse(energyHandler)
-                        .receiveEnergy(energyPerSide, false);
-                if (energyGiven < energyPerSide) {
-                    extraEnergy += energyPerSide - energyGiven;
-                }
+        }
+        if (tiles.size() <= 0) {
+            return;
+        }
+        int energyPerSide = 1000000;
+        int extraEnergy = 0;
+        for (Map.Entry<Direction, BlockEntity> entry : tiles.entrySet()) {
+            Direction side = entry.getKey();
+            BlockEntity te = entry.getValue();
+            int energyGiven = te.getCapability(CapabilityEnergy.ENERGY, side).orElse(energyHandler)
+                    .receiveEnergy(energyPerSide, false);
+            if (energyGiven < energyPerSide) {
+                extraEnergy += energyPerSide - energyGiven;
             }
         }
     }

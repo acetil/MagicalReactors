@@ -9,7 +9,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -18,7 +21,7 @@ import acetil.magicalreactors.common.constants.Constants;
 
 import javax.annotation.Nullable;
 
-public class BlockMachine extends Block {
+public class BlockMachine extends Block implements EntityBlock {
     protected String machineName;
     public BlockMachine (String machineName, Properties properties) {
         super(properties);
@@ -75,8 +78,9 @@ public class BlockMachine extends Block {
         }
         var entity = pLevel.getBlockEntity(pPos);
         if (entity instanceof TileMachineBase) {
-
+            return InteractionResult.SUCCESS; // TODO
         }
+        return InteractionResult.SUCCESS;
     }
 
     @SuppressWarnings("deprecation")
@@ -117,5 +121,29 @@ public class BlockMachine extends Block {
     }*/
     public String getMachineName () {
         return machineName;
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity (BlockPos pPos, BlockState pState) {
+        return new TileMachineBase(machineName, pPos, pState);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker (Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+        if (pLevel.isClientSide()) {
+            return (lvl, pos, state, tile) -> {
+                if (tile instanceof TileMachineBase) {
+                    ((TileMachineBase) tile).tickClient();
+                }
+            };
+        } else {
+            return (lvl, pos, state, tile) -> {
+                if (tile instanceof TileMachineBase) {
+                    ((TileMachineBase) tile).tickServer();
+                }
+            };
+        }
     }
 }
