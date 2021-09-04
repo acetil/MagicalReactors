@@ -3,8 +3,8 @@ package acetil.magicalreactors.common.recipes;
 import com.google.gson.Gson;
 import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.utils.FileUtils;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.material.Fluid;
 
 import java.io.*;
 import java.net.URI;

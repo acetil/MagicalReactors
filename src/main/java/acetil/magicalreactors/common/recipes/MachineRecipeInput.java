@@ -1,12 +1,11 @@
 package acetil.magicalreactors.common.recipes;
 
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
 import acetil.magicalreactors.common.MagicalReactors;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.Level;
 
@@ -71,8 +70,8 @@ public class MachineRecipeInput {
                 if (m.tag != null || tag != null) {
                     // God help us if both aren't null
                     String oreDict = m.tag == null ? tag : m.tag;
-                    return ItemTags.getCollection()
-                                   .getOrCreate(new ResourceLocation(oreDict))
+                    return ItemTags.getAllTags()
+                                   .getTag(new ResourceLocation(oreDict))
                                    .contains(m.tag == null ? m.itemInput : itemInput);
                 } else {
                     return itemInput == m.itemInput;
