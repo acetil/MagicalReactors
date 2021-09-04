@@ -1,8 +1,9 @@
 package acetil.magicalreactors.common.capabilities.machines.machinehandlers;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.LevelReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.ItemStackHandler;
@@ -34,5 +35,8 @@ public interface IMachineCapability {
     void handlePacket (boolean isOn, int energyPerTick, int energyToCompletion, int totalEnergyRequired);
     @OnlyIn(Dist.CLIENT)
     void updateClient ();
-    void sync (World world, BlockPos pos);
+    void sync (LevelReader world, BlockPos pos);
+
+    void readNBT (CompoundTag nbt);
+    CompoundTag writeNBT ();
 }

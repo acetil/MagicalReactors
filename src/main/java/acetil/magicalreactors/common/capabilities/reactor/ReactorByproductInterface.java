@@ -1,6 +1,6 @@
 package acetil.magicalreactors.common.capabilities.reactor;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class ReactorByproductInterface implements IReactorInterfaceHandler{
@@ -10,7 +10,7 @@ public class ReactorByproductInterface implements IReactorInterfaceHandler{
     }
     @Override
     public void updateInterface(IReactorHandlerNew reactorHandler, IReactorControlCapability reactorControl) {
-        ItemStack stack = reactorHandler.getNextOutput(true);
+        var stack = reactorHandler.getNextOutput(true);
         while (!stack.isEmpty() && canInsertStack(stack)) {
             System.out.println("Extracting byproduct!");
             insertStack(reactorHandler.getNextOutput(false));

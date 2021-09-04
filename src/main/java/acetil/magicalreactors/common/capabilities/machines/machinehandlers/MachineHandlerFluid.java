@@ -2,10 +2,13 @@ package acetil.magicalreactors.common.capabilities.machines.machinehandlers;
 
 import acetil.magicalreactors.common.recipes.MachineRecipe;
 import acetil.magicalreactors.common.recipes.MachineRecipeInput;
-import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemStackHandler;
 import acetil.magicalreactors.common.capabilities.machines.MachineFluidHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,4 +116,50 @@ public class MachineHandlerFluid extends MachineHandlerBase {
         this.recipeFluidOutputs = recipeFluidOutputs;
     }
 
+    @Override
+    public CompoundTag writeNBT () {
+        var nbt = super.writeNBT();
+
+        var outputNBT = nbt.getCompound("output");
+        outputNBT.putBoolean("has_fluid", true);
+        outputNBT.putInt("num_fluid_outputs", getRecipeFluidOutputs().size());
+
+        var fluidNBT = new CompoundTag();
+        for (int i = 0; i < getRecipeFluidOutputs().size(); i++) {
+            FluidStack stack = getRecipeFluidOutputs().get(i);
+            var fluidStackCompound = new CompoundTag();
+            fluidStackCompound.putString("fluid", stack.getFluid().getRegistryName().toString());
+            fluidStackCompound.putInt("amount", stack.getAmount());
+            if (stack.getTag() != null) {
+                fluidStackCompound.put("nbt", stack.getTag());
+            }
+            fluidNBT.put("fluid" + i, fluidStackCompound);
+        }
+
+        outputNBT.put("fluids", fluidNBT);
+        nbt.put("output", outputNBT);
+
+        return nbt;
+    }
+
+    @Override
+    public void readNBT (CompoundTag nbt) {
+        super.readNBT(nbt);
+        if (nbt.getBoolean("has_fluid")) {
+            List<FluidStack> fluidRecipeOutputs = new ArrayList<>();
+
+            var outputNBT = nbt.getCompound("output");
+            int fluidsCount = outputNBT.getInt("num_fluid_outputs");
+            CompoundTag fluidsNBT = outputNBT.getCompound("fluids");
+            for (int i = 0; i < fluidsCount; i++) {
+                CompoundTag fluidStackNBT = fluidsNBT.getCompound("fluid" + i);
+                FluidStack stack = new FluidStack(ForgeRegistries.FLUIDS.getValue(new ResourceLocation(fluidStackNBT.getString("fluid"))),
+                        fluidStackNBT.getInt("amount"));
+                if (fluidStackNBT.contains("nbt")) {
+                    stack.setTag(fluidStackNBT.getCompound("nbt"));
+                }
+            }
+           setRecipeFluidOutputs(fluidRecipeOutputs);
+        }
+    }
 }

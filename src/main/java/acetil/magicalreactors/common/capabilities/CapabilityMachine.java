@@ -1,15 +1,9 @@
 package acetil.magicalreactors.common.capabilities;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import acetil.magicalreactors.common.capabilities.machines.machinehandlers.IMachineCapability;
@@ -26,8 +20,9 @@ import java.util.List;
 public class CapabilityMachine {
     @CapabilityInject(IMachineCapability.class)
     public static Capability<IMachineCapability> MACHINE_CAPABILITY = null;
-    public static void register () {
-        CapabilityManager.INSTANCE.register(IMachineCapability.class, new Capability.IStorage<IMachineCapability>() {
+    public static void register (RegisterCapabilitiesEvent event) {
+        event.register(IMachineCapability.class);
+        /*CapabilityManager.INSTANCE.register(IMachineCapability.class, new Capability.IStorage<IMachineCapability>() {
             @Nullable
             @Override
             public INBT writeNBT(Capability<IMachineCapability> capability, IMachineCapability instance, Direction side) {
@@ -130,8 +125,8 @@ public class CapabilityMachine {
                     }
                     ((MachineHandlerFluid)instance).setRecipeFluidOutputs(fluidRecipeOutputs);
                 }
-            }
 
+            }*/
             /*@Nonnull
             @Override
             public NBTBase writeNBT(Capability<IMachineCapability> capability, IMachineCapability instance, EnumFacing side) {
@@ -233,7 +228,7 @@ public class CapabilityMachine {
                     }
                     ((MachineHandlerFluid)instance).setRecipeFluidOutputs(fluidRecipeOutputs);
                 }
-            } */
-        }, () -> new MachineHandlerBase("centrifuge", () -> 40, 1, 2));
+            }
+        }, () -> new MachineHandlerBase("centrifuge", () -> 40, 1, 2));*/
     }
 }

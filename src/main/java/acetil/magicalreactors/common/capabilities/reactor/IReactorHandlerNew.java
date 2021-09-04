@@ -1,9 +1,9 @@
 package acetil.magicalreactors.common.capabilities.reactor;
 
 import acetil.magicalreactors.common.reactor.IReactorFuel;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
@@ -14,11 +14,11 @@ public interface IReactorHandlerNew {
     void update ();
     void cool (int cooling);
     boolean finished ();
-    CompoundNBT writeNBT ();
-    void readNBT (CompoundNBT nbt);
+    CompoundTag writeNBT ();
+    void readNBT (CompoundTag nbt);
     void setFuels (List<IReactorFuel> fuels);
     void setNumSlots (int numSlots);
     // TODO: update
     ItemStack getNextOutput (boolean simulate);
-    void debugMessage (PlayerEntity player);
+    void debugMessage (Player player);
 }

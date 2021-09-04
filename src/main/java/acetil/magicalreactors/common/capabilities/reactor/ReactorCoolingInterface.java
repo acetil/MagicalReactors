@@ -1,7 +1,7 @@
 package acetil.magicalreactors.common.capabilities.reactor;
 
 import acetil.magicalreactors.common.reactor.ReactorCoolingRegistry;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class ReactorCoolingInterface implements IReactorInterfaceHandler {

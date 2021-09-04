@@ -2,13 +2,13 @@ package acetil.magicalreactors.common.capabilities;
 
 import acetil.magicalreactors.common.network.MessageEnergyUpdate;
 import acetil.magicalreactors.common.network.PacketHandler;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.LevelReader;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.function.Supplier;
+import java.util.logging.Level;
 
 public class EnergyHandler implements IEnergyStorage {
     private Supplier<Integer> capacity;
@@ -74,14 +74,14 @@ public class EnergyHandler implements IEnergyStorage {
         return canReceive;
     }
 
-    public void readNBT (CompoundNBT nbt) {
+    public void readNBT (CompoundTag nbt) {
         this.energy = nbt.getInt("stored_energy");
         lastEnergy = energy;
         energyChange = 0;
         lastEnergyChange = 0;
     }
-    public CompoundNBT writeNBT () {
-        CompoundNBT nbt = new CompoundNBT();
+    public CompoundTag writeNBT () {
+        var nbt = new CompoundTag();
         nbt.putInt("stored_energy", this.energy);
         return nbt;
     }
@@ -96,10 +96,10 @@ public class EnergyHandler implements IEnergyStorage {
         energyChange = energy - lastEnergy;
         lastEnergy = energy;
     }
-    public void sync (World world, BlockPos pos) {
+    public void sync (LevelReader world, BlockPos pos) {
         updateEnergyChange();
         if (energyChange != lastEnergyChange) {
-            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)),
+            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunk(pos)),
                     new MessageEnergyUpdate(pos, energy, energyChange));
             System.out.println("Sending energy update!");
         }

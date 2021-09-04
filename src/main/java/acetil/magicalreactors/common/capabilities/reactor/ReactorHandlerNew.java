@@ -3,14 +3,15 @@ package acetil.magicalreactors.common.capabilities.reactor;
 import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.reactor.IReactorFuel;
 import acetil.magicalreactors.common.reactor.ReactorFuelRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 import org.apache.logging.log4j.Level;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ReactorHandlerNew implements IReactorHandlerNew {
     private int heat;
@@ -106,13 +107,13 @@ public class ReactorHandlerNew implements IReactorHandlerNew {
     }
 
     @Override
-    public CompoundNBT writeNBT() {
-        CompoundNBT nbt = new CompoundNBT();
+    public CompoundTag writeNBT() {
+        var nbt = new CompoundTag();
         nbt.putInt("heat", heat);
         nbt.putInt("energy_produced", energyProduced);
         nbt.putBoolean("finished", finished);
         nbt.putInt("num_slots", numSlots);
-        CompoundNBT slotCompound = new CompoundNBT();
+        var slotCompound = new CompoundTag();
         for (int i = 0; i < numSlots; i++) {
             if (slots[i] == null) {
                 slotCompound.putString("slot" + i, "null");
@@ -125,7 +126,7 @@ public class ReactorHandlerNew implements IReactorHandlerNew {
     }
 
     @Override
-    public void readNBT(CompoundNBT nbt) {
+    public void readNBT(CompoundTag nbt) {
         heat = nbt.getInt("heat");
         energyProduced = nbt.getInt("energy_produced");
         finished = nbt.getBoolean("finished");
@@ -133,7 +134,7 @@ public class ReactorHandlerNew implements IReactorHandlerNew {
         if (numSlots > nbt.getInt("num_slots")) {
             tempNumSlots = nbt.getInt("num_slots");
         }
-        CompoundNBT slotCompound = nbt.getCompound("slots");
+        var slotCompound = nbt.getCompound("slots");
         for (int i = 0; i < tempNumSlots; i++) {
             if (slotCompound.getString("slot" + i).equals("null")) {
                 slots[i] = null;
@@ -171,8 +172,8 @@ public class ReactorHandlerNew implements IReactorHandlerNew {
     }
 
     @Override
-    public void debugMessage (PlayerEntity player) {
-        player.sendMessage(new StringTextComponent("Heat: " + heat + ", energy production: " + energyProduced));
+    public void debugMessage (Player player) {
+        player.sendMessage(new TextComponent("Heat: " + heat + ", energy production: " + energyProduced), player.getUUID()); // TODO
     }
 
     @Override

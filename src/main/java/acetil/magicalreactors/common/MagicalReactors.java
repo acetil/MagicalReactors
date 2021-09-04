@@ -21,6 +21,7 @@ import acetil.magicalreactors.common.reactor.ReactorFuelRegistry;
 import acetil.magicalreactors.common.recipes.MachineRecipeManager;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -85,7 +86,7 @@ public class MagicalReactors {
     private void processIMC (final InterModProcessEvent event) {
 
     }
-    private void registerCapabilities () {
+    private void registerCapabilities (RegisterCapabilitiesEvent event) {
         CapabilityMachine.register();
         CapabilityReactor.register();
         CapabilityReactorController.register();

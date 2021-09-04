@@ -239,7 +239,8 @@ public class TileMachineBase extends BlockEntity {
         }
         if (nbt.contains("machine")) {
             // TODO: change to have its own method (matching others)
-            CapabilityMachine.MACHINE_CAPABILITY.readNBT(machineHandler, null, nbt.getCompound("machine"));
+            //CapabilityMachine.MACHINE_CAPABILITY.readNBT(machineHandler, null, nbt.getCompound("machine"));
+            machineHandler.readNBT(nbt.getCompound("machine"));
             machineHandler.updateItems(itemHandler, machineFluidHandler);
         }
         if (nbt.contains("fluids")) {
@@ -249,15 +250,16 @@ public class TileMachineBase extends BlockEntity {
 
     @Override
     public CompoundTag serializeNBT () {
-        return super.serializeNBT();
-        CompoundTag nbt = new CompoundTag();
+        var nbt =  super.serializeNBT();
         nbt.put("items", itemHandler.serializeNBT());
         nbt.put("energy", energyHandler.writeNBT());
-        nbt.put("machine", CapabilityMachine.MACHINE_CAPABILITY.writeNBT(machineHandler, null));
+        //nbt.put("machine", CapabilityMachine.MACHINE_CAPABILITY.writeNBT(machineHandler, null));
+        nbt.put("machine", machineHandler.writeNBT());
         if (machineFluidHandler != null) {
             nbt.put("fluids", machineFluidHandler.writeNBT());
         }
         nbt.putString("machine_name", machine);
+        return nbt;
     }
 
     @Nonnull

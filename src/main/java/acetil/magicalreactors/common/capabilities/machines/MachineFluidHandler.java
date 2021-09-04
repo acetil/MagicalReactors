@@ -1,7 +1,7 @@
 package acetil.magicalreactors.common.capabilities.machines;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -63,14 +63,14 @@ public class MachineFluidHandler implements IFluidHandler {
     public FluidStack getFluid (int slot) {
         return fluidStacks[slot];
     }
-    public void readNBT (CompoundNBT nbt) {
+    public void readNBT (CompoundTag nbt) {
         if (nbt.getInt("num_inputs") != inputSlots && nbt.getInt("num_outputs") != outputSlots) {
             throw new IllegalArgumentException("Wrong number of inputs or outputs, probably a different tile entity!");
         }
-        CompoundNBT fluids = nbt.getCompound("fluids");
+        CompoundTag fluids = nbt.getCompound("fluids");
         for (int i = 0; i < inputSlots + outputSlots; i++) {
             if (fluids.contains("fluid" + i)) {
-                CompoundNBT fluidTag = fluids.getCompound("fluid" + i);
+                CompoundTag fluidTag = fluids.getCompound("fluid" + i);
                 fluidStacks[i] = new FluidStack(ForgeRegistries.FLUIDS.getValue(new ResourceLocation(fluidTag.getString("name"))),
                         fluidTag.getInt("amount"));
                 if (fluidTag.contains("nbt")) {
@@ -79,16 +79,16 @@ public class MachineFluidHandler implements IFluidHandler {
             }
         }
     }
-    public CompoundNBT writeNBT () {
-        CompoundNBT nbt = new CompoundNBT();
+    public CompoundTag writeNBT () {
+        var nbt = new CompoundTag();
         nbt.putInt("num_inputs", inputSlots + outputSlots);
-        CompoundNBT fluids = new CompoundNBT();
+        var fluids = new CompoundTag();
         for (int i = 0; i < inputSlots + outputSlots; i++) {
             FluidStack stack = fluidStacks[i];
             if (stack == FluidStack.EMPTY) {
                 continue;
             }
-            CompoundNBT fluidTag = new CompoundNBT();
+            var fluidTag = new CompoundTag();
             fluidTag.putString("name", stack.getFluid().getRegistryName().toString());
             fluidTag.putInt("amount", stack.getAmount());
             if (stack.getTag() != null) {

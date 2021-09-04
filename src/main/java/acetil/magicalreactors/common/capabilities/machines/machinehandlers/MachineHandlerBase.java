@@ -5,14 +5,19 @@ import acetil.magicalreactors.common.network.PacketHandler;
 import acetil.magicalreactors.common.recipes.MachineRecipe;
 import acetil.magicalreactors.common.recipes.MachineRecipeInput;
 import acetil.magicalreactors.common.recipes.MachineRecipeManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import net.minecraftforge.items.ItemStackHandler;
 import acetil.magicalreactors.common.capabilities.machines.MachineFluidHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -270,13 +275,87 @@ public class MachineHandlerBase implements IMachineCapability {
     }
 
     @Override
-    public void sync(World world, BlockPos pos) {
+    public void sync(LevelReader world, BlockPos pos) {
         if (shouldSendPacket || energyPerTick != pastEnergyPerTick) {
-            PacketHandler.INSTANCE.send(PacketDistributor.TRACKING_CHUNK.with(() -> world.getChunkAt(pos)),
+            PacketHandler.send(PacketDistributor.TRACKING_CHUNK.with(() -> (LevelChunk)world.getChunk(pos)),
                     new MessageMachineUpdate(pos, isOn,
                             energyPerTick, energyToCompletion, totalEnergyRequired));
             shouldSendPacket = false;
         }
+    }
+
+    @Override
+    public void readNBT (CompoundTag nbt) {
+        setEnergyToCompletion(nbt.getInt("energyToCompletion"));
+        int redstone = nbt.getInt("redstoneRequirement");
+        switch (redstone) {
+            case 1:
+                setRedstoneRequirement(MachineRedstone.REQUIRED_POWERED);
+                break;
+            case 2:
+                setRedstoneRequirement(MachineRedstone.REQUIRED_UNPOWERED);
+                break;
+            default:
+                setRedstoneRequirement(MachineRedstone.NONE);
+                break;
+        }
+        setIsInRecipe(nbt.getBoolean("inRecipe"));
+
+        List<ItemStack> recipeOutputs = new ArrayList<>();
+        CompoundTag outputNBT = ((CompoundTag) nbt).getCompound("output");
+        int itemsCount = outputNBT.getInt("num_item_outputs");
+        CompoundTag itemsNBT = outputNBT.getCompound("items");
+        for (int i = 0; i < itemsCount; i++) {
+            CompoundTag itemStackNBT = itemsNBT.getCompound("item" + i);
+            ItemStack stack = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemStackNBT.getString("item"))),
+                    itemStackNBT.getInt("count"));
+            if (itemStackNBT.contains("nbt")) {
+                stack.setTag(itemStackNBT.getCompound("nbt"));
+            }
+            recipeOutputs.add(stack);
+        }
+        setRecipeOutputs(recipeOutputs);
+    }
+
+    @Override
+    public CompoundTag writeNBT () {
+        var nbt = new CompoundTag();
+        nbt.putInt("energyToCompletion", energyToCompletion());
+        int redstone;
+        switch (getRedstoneRequirement()) {
+            case REQUIRED_POWERED: {
+                redstone = 1;
+            }
+            break;
+            case REQUIRED_UNPOWERED: {
+                redstone = 2;
+            }
+            break;
+            default: {
+                redstone = 0;
+            }
+        }
+        nbt.putInt("redstoneRequirement", redstone);
+        nbt.putBoolean("inRecipe", isInRecipe());
+        var outputNBT = new CompoundTag();
+        outputNBT.putInt("num_item_outputs", getRecipeOutputs().size());
+        var itemsNBT = new CompoundTag();
+        for (int i = 0; i < getRecipeOutputs().size(); i++) {
+            ItemStack stack = getRecipeOutputs().get(i);
+            var itemStackCompound = new CompoundTag();
+            itemStackCompound.putString("item", stack.getItem().getRegistryName().toString());
+            itemStackCompound.putInt("count", stack.getCount());
+            if (stack.getTag() != null) {
+                itemStackCompound.put("nbt", stack.getTag());
+            }
+            itemsNBT.put("item" + i, itemStackCompound);
+        }
+
+        outputNBT.put("items", itemsNBT);
+        outputNBT.putBoolean("hasFluid", false);
+
+        nbt.put("output", outputNBT);
+        return nbt;
     }
 
 }

@@ -9,12 +9,11 @@ import acetil.magicalreactors.common.multiblock.IMultiblock;
 import acetil.magicalreactors.common.multiblock.IMultiblockValidator;
 import acetil.magicalreactors.common.multiblock.MultiblockRegistry;
 import acetil.magicalreactors.common.reactor.IReactorFuel;
-import jdk.nashorn.internal.codegen.CompileUnit;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.Level;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
     private boolean isUpdateTick;
     private boolean isMulti = false;
     private BlockPos pos;
-    private World world;
+    private LevelReader world;
     private IReactorHandlerNew reactorHandler;
     private List<IMultiblock> multiblocks;
     private List<IReactorInterfaceHandler> reactorInterfaceHandlers = new ArrayList<>();
@@ -43,7 +42,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
     }
 
     @Override
-    public void setPosition(World worldIn, BlockPos pos) {
+    public void setPosition(LevelReader worldIn, BlockPos pos) {
         world = worldIn;
         this.pos = pos;
         validators = multiblocks.stream()
@@ -168,22 +167,22 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
     }
 
     @Override
-    public void debugPrint (PlayerEntity player) {
+    public void debugPrint (Player player) {
         if (reactorHandler != null) {
             reactorHandler.debugMessage(player);
         }
     }
 
     @Override
-    public void readNBT (CompoundNBT nbt) {
+    public void readNBT (CompoundTag nbt) {
         isPowered = nbt.getBoolean("is_powered");
         isUpdateTick = nbt.getBoolean("is_update_tick");
     }
 
 
     @Override
-    public CompoundNBT writeNBT () {
-        CompoundNBT compound = new CompoundNBT();
+    public CompoundTag writeNBT () {
+        var compound = new CompoundTag();
         compound.putBoolean("is_powered", isPowered);
         compound.putBoolean("is_update_tick", isUpdateTick);
         return compound;
@@ -191,7 +190,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
 
     private void checkBlock (BlockPos pos, BlockState state) {
         // TODO: consider refactor
-        if (world.isRemote()) {
+        if (world.isClientSide()) {
             return;
         }
         boolean isValid = false;
@@ -217,13 +216,12 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
             if (isValid) {
                 reactorInterfaceHandlers = currentValidator.getPositionsWithCapability(CapabilityReactorInterface.REACTOR_INTERFACE, null)
                         .stream()
-                        .map((BlockPos p) -> world.getTileEntity(p)
+                        .map((BlockPos p) -> world.getBlockEntity(p)
                                 .getCapability(CapabilityReactorInterface.REACTOR_INTERFACE, null).orElse(CapabilityReactorInterface.REACTOR_INTERFACE.getDefaultInstance()))
                         .collect(Collectors.toList());
-                reactorHandler = world.getTileEntity(currentValidator.getPositionsWithCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
+                reactorHandler = world.getBlockEntity(currentValidator.getPositionsWithCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
                         .get(0))
-                        .getCapability(CapabilityReactor.CAPABILITY_REACTOR, null)
-                        .orElse(CapabilityReactor.CAPABILITY_REACTOR.getDefaultInstance());
+                        .getCapability(CapabilityReactor.CAPABILITY_REACTOR, null);
             }
             for (BlockPos p : currentValidator.getPositionsOfType(IReactorBuildingBlock.class)) {
                 ((IReactorBuildingBlock)world.getBlockState(p).getBlock())
@@ -252,12 +250,12 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
         checkMultiblock(); // TODO: update
     }
     public void onCreation () {
-        if (!world.isRemote) {
+        if (!world.isClientSide()) {
             MultiblockEventHandler.addListener(world, this);
         }
     }
     public void onDestruction () {
-        if (!world.isRemote) {
+        if (!world.isClientSide()) {
             MultiblockEventHandler.removeListener(world, this);
             for (BlockPos p : currentValidator.getPositionsOfType(IReactorBuildingBlock.class)) {
                 ((IReactorBuildingBlock)world.getBlockState(p).getBlock())

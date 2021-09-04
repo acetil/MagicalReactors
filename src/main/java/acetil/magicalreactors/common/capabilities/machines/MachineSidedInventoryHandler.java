@@ -1,7 +1,7 @@
 package acetil.magicalreactors.common.capabilities.machines;
 
 import acetil.magicalreactors.common.recipes.MachineRecipeManager;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
