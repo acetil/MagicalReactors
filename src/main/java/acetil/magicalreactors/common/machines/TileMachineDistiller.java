@@ -2,8 +2,10 @@ package acetil.magicalreactors.common.machines;
 
 import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.capabilities.CapabilityMachine;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -20,12 +22,12 @@ public class TileMachineDistiller extends TileMachineBase {
     private LazyOptional<IFluidHandler> bottomOptional = LazyOptional.empty();
     private LazyOptional<IFluidHandler> topOptional = LazyOptional.empty();
     private int bottomSlots;
-    public TileMachineDistiller(String machine, int bottomSlots) {
-        super(machine, MachineBlocks.MACHINE_DISTILLER.get());
+    public TileMachineDistiller(String machine, int bottomSlots, BlockPos pos, BlockState state) {
+        super(machine, MachineBlocks.MACHINE_DISTILLER.get(), pos, state);
         this.bottomSlots = bottomSlots;
     }
-    public TileMachineDistiller () {
-        super(MachineBlocks.MACHINE_DISTILLER.get());
+    public TileMachineDistiller (BlockPos pos, BlockState state) {
+        super(MachineBlocks.MACHINE_DISTILLER.get(), pos, state);
     }
     @Override
     protected void initHandlers (MachineRegistryItem registryItem) {
@@ -34,9 +36,9 @@ public class TileMachineDistiller extends TileMachineBase {
         topOptional  = LazyOptional.of(() -> new MachineFluidDistillHandler(machineFluidHandler, bottomSlots, true));
     }
     @Override
-    public void tick() {
+    public void tickServer() {
         if (distillState == EnumDistillState.BOTTOM) {
-            super.tick();
+            super.tickServer();
         }
     }
     @Override
@@ -71,7 +73,7 @@ public class TileMachineDistiller extends TileMachineBase {
         this.bottomSlots = bottomSlots;
         return this;
     }
-    @Override
+    /*@Override
     public void read (CompoundNBT nbt) {
         super.read(nbt);
         if (nbt.contains("bottom_slots")) {
@@ -82,5 +84,20 @@ public class TileMachineDistiller extends TileMachineBase {
     public CompoundNBT write (CompoundNBT nbt) {
         nbt.putInt("bottoms_slots", bottomSlots);
         return super.write(nbt);
+    }*/
+
+    @Override
+    public CompoundTag serializeNBT () {
+        var nbt =  super.serializeNBT();
+        nbt.putInt("bottom_slots", bottomSlots);
+        return nbt;
+    }
+
+    @Override
+    public void deserializeNBT (CompoundTag nbt) {
+        super.deserializeNBT(nbt);
+        if (nbt.contains("bottom_slots")) {
+            setBottomSlots(nbt.getInt("bottom_slots"));
+        }
     }
 }

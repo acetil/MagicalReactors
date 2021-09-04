@@ -7,11 +7,13 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.event.RegistryEvent;
 import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.lib.LibGui;
 import acetil.magicalreactors.common.constants.Constants;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.ObjectHolder;
 
 @ObjectHolder(Constants.MODID)
@@ -40,9 +42,9 @@ public class MachineBlocks {
     private static RegistryObject<Item> DISTILLER_ITEM = ModBlocks.ITEMS.register("distiller", () -> new BlockItem(DISTILLER.get(), new Item.Properties().group(MagicalReactors.ITEM_GROUP)));
     private static RegistryObject<Item> DISSOLVER_ITEM = ModBlocks.ITEMS.register("dissolver", () -> new BlockItem(DISSOLVER.get(), new Item.Properties().group(MagicalReactors.ITEM_GROUP)));
 
-    public static RegistryObject<TileEntityType<?>> MACHINE_BASE = ModBlocks.TILE_ENTITIES.register("machine_base",
+    public static RegistryObject<BlockEntityType<?>> MACHINE_BASE = ModBlocks.TILE_ENTITIES.register("machine_base",
             () -> ModBlocks.createTEType(TileMachineBase::new, CENTRIFUGE, RECRYSTALISER, FERMENTER, REACTOR_VESSEL, CONDENSER, DISSOLVER));
-    public static RegistryObject<TileEntityType<?>> MACHINE_DISTILLER = ModBlocks.TILE_ENTITIES.register("machine_distiller",
+    public static RegistryObject<BlockEntityType<?>> MACHINE_DISTILLER = ModBlocks.TILE_ENTITIES.register("machine_distiller",
             () -> ModBlocks.createTEType(TileMachineDistiller::new, DISTILLER));
 
     public static void registerMachines () {

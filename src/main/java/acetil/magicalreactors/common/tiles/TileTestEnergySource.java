@@ -2,9 +2,10 @@ package acetil.magicalreactors.common.tiles;
 
 import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.capabilities.EnergyHandler;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -13,22 +14,23 @@ import net.minecraftforge.energy.IEnergyStorage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TileTestEnergySource extends TileEntity implements ITickableTileEntity {
+public class TileTestEnergySource extends BlockEntity {
     private LazyOptional<IEnergyStorage> energyOptional;
     private EnergyHandler energyHandler;
-    public TileTestEnergySource () {
-        super(ModBlocks.TEST_ENERGY_SOURCE_TILE.get());
+    private BlockPos pos;
+    public TileTestEnergySource (BlockPos pos, BlockState state) {
+        super(ModBlocks.TEST_ENERGY_SOURCE_TILE.get(), pos, state);
         energyHandler = new EnergyHandler(() -> 10000000, () -> 0, () -> 1000000, false, true);
         energyOptional = LazyOptional.of(() -> energyHandler);
 
+        this.pos = pos;
     }
 
-    @Override
-    public void tick() {
-        if (!world.isRemote) {
-            HashMap<Direction, TileEntity> tiles = new HashMap<>();
+    public void tickServer () {
+        if (!level.isClientSide()) {
+            HashMap<Direction, BlockEntity> tiles = new HashMap<>();
             for (Direction side : Direction.values()) {
-                TileEntity te = world.getTileEntity(pos.offset(side));
+                var te = level.getBlockEntity(pos.offset(side.getNormal()));
                 if (te != null && te.getCapability(CapabilityEnergy.ENERGY, side).isPresent()) {
                     tiles.put(side, te);
                 }
@@ -38,9 +40,9 @@ public class TileTestEnergySource extends TileEntity implements ITickableTileEnt
             }
             int energyPerSide = 1000000;
             int extraEnergy = 0;
-            for (Map.Entry<Direction, TileEntity> entry : tiles.entrySet()) {
+            for (Map.Entry<Direction, BlockEntity> entry : tiles.entrySet()) {
                 Direction side = entry.getKey();
-                TileEntity te = entry.getValue();
+                BlockEntity te = entry.getValue();
                 int energyGiven = te.getCapability(CapabilityEnergy.ENERGY, side).orElse(energyHandler)
                         .receiveEnergy(energyPerSide, false);
                 if (energyGiven < energyPerSide) {

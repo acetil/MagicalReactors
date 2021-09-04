@@ -2,22 +2,16 @@ package acetil.magicalreactors.common.machines;
 
 import acetil.magicalreactors.common.containers.GuiContainer;
 import acetil.magicalreactors.common.containers.json.MachineContainerManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import acetil.magicalreactors.common.constants.Constants;
@@ -30,7 +24,7 @@ public class BlockMachine extends Block {
         super(properties);
         this.machineName = machineName;
     }
-    @Override
+    /*@Override
     public boolean hasTileEntity (BlockState state) {
         return true;
     }
@@ -39,8 +33,8 @@ public class BlockMachine extends Block {
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         System.out.println("Created tile entity!");
         return new TileMachineBase(machineName);
-    }
-    @Override
+    }*/
+   /* @Override
     @SuppressWarnings("deprecation")
     public boolean onBlockActivated (BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
                                      BlockRayTraceResult rayTrace) {
@@ -70,10 +64,23 @@ public class BlockMachine extends Block {
             }
         }, pos);
         return true;
-    }
+    }*/
 
     @SuppressWarnings("deprecation")
     @Override
+    public InteractionResult use (BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        var result =  super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
+        if (pLevel.isClientSide()) {
+            return result;
+        }
+        var entity = pLevel.getBlockEntity(pPos);
+        if (entity instanceof TileMachineBase) {
+
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    /*@Override
     public void onBlockAdded(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (!worldIn.isRemote) {
             boolean isOn = worldIn.isBlockPowered(pos);
@@ -82,8 +89,8 @@ public class BlockMachine extends Block {
             }
         }
         super.onBlockAdded(state, worldIn, pos, oldState, isMoving);
-    }
-    @Override
+    }*/
+    /*@Override
     @SuppressWarnings("deprecation")
     public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         if (!worldIn.isRemote) {
@@ -91,8 +98,8 @@ public class BlockMachine extends Block {
                 ((TileMachineBase)worldIn.getTileEntity(pos)).setPoweredState(worldIn.isBlockPowered(pos));
             }
         }
-    }
-    @Override
+    }*/
+    /*@Override
     @SuppressWarnings("deprecation")
     public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.hasTileEntity() && state.getBlock() != newState.getBlock()) {
@@ -107,7 +114,7 @@ public class BlockMachine extends Block {
             worldIn.updateComparatorOutputLevel(pos, this);
         }
         super.onReplaced(state, worldIn, pos, newState, isMoving);
-    }
+    }*/
     public String getMachineName () {
         return machineName;
     }

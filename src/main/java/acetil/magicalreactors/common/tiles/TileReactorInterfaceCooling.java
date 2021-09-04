@@ -3,9 +3,11 @@ package acetil.magicalreactors.common.tiles;
 import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.capabilities.CapabilityReactorInterface;
 import acetil.magicalreactors.common.capabilities.reactor.IReactorInterfaceHandler;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -14,17 +16,17 @@ import net.minecraftforge.items.ItemStackHandler;
 import acetil.magicalreactors.common.capabilities.reactor.ReactorCoolingInterface;
 import acetil.magicalreactors.common.lib.LibReactor;
 
-public class TileReactorInterfaceCooling extends TileEntity {
+public class TileReactorInterfaceCooling extends BlockEntity {
     private ItemStackHandler itemHandler;
     private ReactorCoolingInterface interfaceHandler;
     private LazyOptional<IItemHandler> itemOptional;
     private LazyOptional<IReactorInterfaceHandler> interfaceOptional;
-    public TileReactorInterfaceCooling () {
-        super(ModBlocks.COOLING_INTERFACE_TILE.get());
+    public TileReactorInterfaceCooling (BlockPos pos, BlockState state) {
+        super(ModBlocks.COOLING_INTERFACE_TILE.get(), pos, state);
         itemHandler = new ItemStackHandler(LibReactor.COOLING_INVENTORY_SIZE) {
             @Override
             protected void onContentsChanged (int slot) {
-                TileReactorInterfaceCooling.this.markDirty();
+                TileReactorInterfaceCooling.this.setChanged();
             }
         };
         interfaceHandler = new ReactorCoolingInterface(itemHandler);
@@ -40,7 +42,7 @@ public class TileReactorInterfaceCooling extends TileEntity {
         }
         return super.getCapability(capability, facing);
     }
-    @Override
+/*  @Override
     public void read (CompoundNBT nbt) {
         super.read(nbt);
         if (nbt.contains("items")) {
@@ -52,5 +54,20 @@ public class TileReactorInterfaceCooling extends TileEntity {
         super.write(nbt);
         nbt.put("items", itemHandler.serializeNBT());
         return nbt;
+    }*/
+
+    @Override
+    public CompoundTag serializeNBT () {
+        var nbt =  super.serializeNBT();
+        nbt.put("items", itemHandler.serializeNBT());
+        return nbt;
+    }
+
+    @Override
+    public void deserializeNBT (CompoundTag nbt) {
+        super.deserializeNBT(nbt);
+        if (nbt.contains("items")) {
+            itemHandler.deserializeNBT(nbt.getCompound("items"));
+        }
     }
 }

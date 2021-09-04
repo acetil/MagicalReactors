@@ -3,10 +3,10 @@ package acetil.magicalreactors.common.tiles;
 import acetil.magicalreactors.common.MagicalReactors;
 import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.capabilities.EnergyHandler;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -16,11 +16,11 @@ import net.minecraftforge.energy.IEnergyStorage;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileTestBattery extends TileEntity implements ITickableTileEntity {
+public class TileTestBattery extends BlockEntity {
     private EnergyHandler energyHandler;
     private LazyOptional<IEnergyStorage> energyStorage = LazyOptional.empty();
-    public TileTestBattery() {
-        super(ModBlocks.TEST_BATTERY_TILE.get());
+    public TileTestBattery (BlockPos pos, BlockState state) {
+        super(ModBlocks.TEST_BATTERY_TILE.get(), pos, state);
         energyHandler = new EnergyHandler(() -> 1000000, () -> 10000, () ->1000, true, true);
         energyStorage = LazyOptional.of(() -> energyHandler);
     }
@@ -33,9 +33,7 @@ public class TileTestBattery extends TileEntity implements ITickableTileEntity {
         }
         return super.getCapability(cap, side);
     }
-
-    @Override
-    public void tick() {
+    public void tickServer () {
 
     }
 }

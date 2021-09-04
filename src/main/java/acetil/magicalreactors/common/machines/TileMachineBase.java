@@ -5,12 +5,19 @@ import acetil.magicalreactors.common.capabilities.EnergyHandler;
 import acetil.magicalreactors.common.capabilities.machines.MachineFluidHandler;
 import acetil.magicalreactors.common.capabilities.machines.MachineGuiItemHandler;
 import acetil.magicalreactors.common.capabilities.machines.MachineSidedInventoryHandler;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.TickingBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -26,7 +33,7 @@ import acetil.magicalreactors.common.capabilities.machines.machinehandlers.IMach
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileMachineBase extends TileEntity implements ITickableTileEntity {
+public class TileMachineBase extends BlockEntity {
     ItemStackHandler itemHandler;
     EnergyHandler energyHandler;
     IMachineCapability machineHandler;
@@ -40,19 +47,22 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
     private int guiId = 2;
     private int pastEnergyTickRate = 0;
     protected static final double TRACKING_RANGE = 30;
-    public TileMachineBase () {
-        this(MachineBlocks.MACHINE_BASE.get());
+    private BlockPos pos;
+    public TileMachineBase (BlockPos pos, BlockState state) {
+        this(MachineBlocks.MACHINE_BASE.get(), pos, state);
     }
-    public TileMachineBase (String machine) {
-        this(machine, MachineBlocks.MACHINE_BASE.get());
+    public TileMachineBase (String machine, BlockPos pos, BlockState state) {
+        this(machine, MachineBlocks.MACHINE_BASE.get(), pos, state);
     }
-    public TileMachineBase(String machine, TileEntityType<?> type) {
-        super(MachineBlocks.MACHINE_BASE.get());
+    public TileMachineBase(String machine, BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
+        this.pos = pos;
         this.machine = machine;
         initHandlers(MachineRegistry.getMachine(machine));
     }
-    public TileMachineBase (TileEntityType<?> type) {
-        super(type);
+    public TileMachineBase (BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
+        this.pos = pos;
         itemHandler = null;
         energyHandler = null;
         machineHandler = null;
@@ -68,7 +78,7 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
                     machineRegistry.fluidCapacity) {
                 @Override
                 protected void onContentsChanged(int slot, int amount) {
-                    TileMachineBase.this.markDirty();
+                    TileMachineBase.this.setChanged();
                     if (amount != 0) {
                         machineHandler.updateItems(itemHandler, this);
 
@@ -80,7 +90,7 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
         itemHandler = new ItemStackHandler(machineRegistry.inputSlots + machineRegistry.outputSlots) {
             @Override
             protected void onContentsChanged (int slot) {
-                TileMachineBase.this.markDirty();
+                TileMachineBase.this.setChanged();
                 machineHandler.updateItems(this, machineFluidHandler);
             }
         };
@@ -97,7 +107,24 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
         }
         guiId = machineRegistry.guiId;
     }
-    @Override
+
+    public void tickServer () {
+        if (machineHandler.isOn()) {
+            var energyUsed = machineHandler.addEnergy(Math.min(machineHandler.getEnergyUseRate(), energyHandler.getEnergyStored()));
+            energyHandler.extractEnergy(energyUsed, false);
+            if (machineHandler.shouldUpdateWork()) {
+                machineHandler.updateWork(itemHandler, machineFluidHandler);
+                this.setChanged();
+            }
+        }
+        machineHandler.sync(level, pos);
+    }
+
+    public void tickClient () {
+        machineHandler.updateClient();
+        energyHandler.syncClient();
+    }
+    /*@Override
     public void tick () {
         if (world.isRemote) {
             machineHandler.updateClient();
@@ -117,7 +144,13 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
         }
         machineHandler.sync(world, pos);
         energyHandler.sync(world, pos);
+    }*/
+
+    /*@Override
+    public BlockPos getPos () {
+        return null;
     }
+
     @Override
     public <T> LazyOptional<T> getCapability (Capability<T> capability, @Nullable Direction facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
@@ -174,7 +207,7 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
     }
     public boolean canInteractWith (PlayerEntity player) {
         return player.getDistanceSq(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f) <= 64D;
-    }
+    }*/
     public void setPoweredState (boolean powered) {
         if (machineHandler != null) {
             machineHandler.updateRedstone(powered);
@@ -189,4 +222,63 @@ public class TileMachineBase extends TileEntity implements ITickableTileEntity {
     public ItemStackHandler getItemHandler () {
         return itemHandler;
     }
+
+    @Override
+    public void deserializeNBT (CompoundTag nbt) {
+        super.deserializeNBT(nbt);
+        if (nbt.contains("machine_name") && itemHandler == null && energyHandler == null && machineHandler == null) {
+            this.machine = nbt.getString("machine_name");
+            initHandlers(MachineRegistry.getMachine(nbt.getString("machine_name")));
+        }
+        if (nbt.contains("items")) {
+            itemHandler.deserializeNBT(nbt.getCompound("items"));
+        }
+        if (nbt.contains("energy")) {
+            // TODO: match others by reading the child tag
+            energyHandler.readNBT(nbt);
+        }
+        if (nbt.contains("machine")) {
+            // TODO: change to have its own method (matching others)
+            CapabilityMachine.MACHINE_CAPABILITY.readNBT(machineHandler, null, nbt.getCompound("machine"));
+            machineHandler.updateItems(itemHandler, machineFluidHandler);
+        }
+        if (nbt.contains("fluids")) {
+            machineFluidHandler.readNBT(nbt.getCompound("fluids"));
+        }
+    }
+
+    @Override
+    public CompoundTag serializeNBT () {
+        return super.serializeNBT();
+        CompoundTag nbt = new CompoundTag();
+        nbt.put("items", itemHandler.serializeNBT());
+        nbt.put("energy", energyHandler.writeNBT());
+        nbt.put("machine", CapabilityMachine.MACHINE_CAPABILITY.writeNBT(machineHandler, null));
+        if (machineFluidHandler != null) {
+            nbt.put("fluids", machineFluidHandler.writeNBT());
+        }
+        nbt.putString("machine_name", machine);
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability (@Nonnull Capability<T> capability, Direction facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            if (facing == null) {
+                return guiItemOptional.cast();
+            } else {
+                return sidedItemOptional.cast();
+            }
+        } else if (capability == CapabilityEnergy.ENERGY) {
+            return energyOptional.cast();
+        } else if (capability == CapabilityMachine.MACHINE_CAPABILITY) {
+            return machineOptional.cast();
+        } else if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            return fluidOptional.cast();
+        } else {
+            return super.getCapability(capability, facing);
+        }
+    }
+
+
 }

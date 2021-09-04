@@ -1,16 +1,13 @@
 package acetil.magicalreactors.common.machines;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 import javax.annotation.Nullable;
 
@@ -25,7 +22,7 @@ public class BlockDistiller extends Block {
         this.bottomSlots = bottomSlots;
     }
 
-    @SuppressWarnings("deprecation")
+    /*@SuppressWarnings("deprecation")
     @Override
     public BlockState updatePostPlacement (BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn,
                                            BlockPos currentPos, BlockPos facingPos) {
@@ -61,6 +58,7 @@ public class BlockDistiller extends Block {
         return newState;
     }
 
+
     @Override
     protected void fillStateContainer (StateContainer.Builder<Block, BlockState> builder) {
         builder.add(BLOCK_POSITION);
@@ -70,18 +68,20 @@ public class BlockDistiller extends Block {
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileMachineDistiller(machineName, bottomSlots);
-    }
-} enum EnumDistillState implements IStringSerializable {
+    }*/
+
+} enum EnumDistillState implements StringRepresentable {
     NONE("none"), BOTTOM("bottom"), TOP("top");
     private String name;
     EnumDistillState(String name) {
         this.name = name;
     }
-    @Override
-    public String getName() {
-        return name;
-    }
     public boolean isSameState (EnumDistillState state) {
-        return state.getName().equals(name);
+        return state.getSerializedName().equals(name);
+    }
+
+    @Override
+    public String getSerializedName () {
+        return name;
     }
 }

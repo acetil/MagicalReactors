@@ -15,11 +15,15 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import acetil.magicalreactors.common.constants.Constants;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ObjectHolder;
@@ -38,7 +42,7 @@ public class ModBlocks {
     // TODO: cleanup
     public static DeferredRegister<Block> BLOCKS = new DeferredRegister<>(ForgeRegistries.BLOCKS, Constants.MODID);
     public static DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, Constants.MODID);
-    public static DeferredRegister<TileEntityType<?>> TILE_ENTITIES = new DeferredRegister<>(ForgeRegistries.TILE_ENTITIES, Constants.MODID);
+    public static DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Constants.MODID);
 
     public static RegistryObject<Block> TEMP_ORE1 = BLOCKS.register("temp_ore", () ->
             new BlockOre(Block.Properties.create(Material.ROCK)));
@@ -90,17 +94,17 @@ public class ModBlocks {
     private static RegistryObject<Item> TEST_ENERGY_SOURCE_ITEM = ITEMS.register("test_energy_source", () -> new BlockItem(TEST_ENERGY_SOURCE.get(), new Item.Properties().group(MagicalReactors.ITEM_GROUP)));
     private static RegistryObject<Item> TEST_BATTERY_ITEM = ITEMS.register("test_battery", () -> new BlockItem(TEST_BATTERY.get(), new Item.Properties().group(MagicalReactors.ITEM_GROUP)));
 
-    public static RegistryObject<TileEntityType<?>> REACTOR_TILE_ENTITY = TILE_ENTITIES.register("reactor", () -> createTEType(TileReactor::new, REACTOR_BLOCK));
-    public static RegistryObject<TileEntityType<?>> REACTOR_CONTROLLER_TILE = TILE_ENTITIES.register("reactor_controller", () -> createTEType(TileReactorController::new, REACTOR_CONTROLLER));
-    public static RegistryObject<TileEntityType<?>> BYPRODUCT_INTERFACE_TILE = TILE_ENTITIES.register("byproduct_interface", () -> createTEType(TileReactorInterfaceByproduct::new, BYPRODUCT_INTERFACE));
-    public static RegistryObject<TileEntityType<?>> COOLING_INTERFACE_TILE = TILE_ENTITIES.register("cooling_interface", () -> createTEType(TileReactorInterfaceCooling::new, COOLING_INTERFACE));
-    public static RegistryObject<TileEntityType<?>> ENERGY_INTERFACE_TILE = TILE_ENTITIES.register("energy_interface", () -> createTEType(TileReactorInterfaceEnergy::new, ENERGY_INTERFACE));
-    public static RegistryObject<TileEntityType<?>> FUEL_INTERFACE_TILE = TILE_ENTITIES.register("fuel_interface", () -> createTEType(TileReactorInterfaceFuelLoader::new, FUEL_INTERFACE));
-    public static RegistryObject<TileEntityType<?>> TEST_ENERGY_SOURCE_TILE = TILE_ENTITIES.register("test_energy_source", () -> createTEType(TileTestEnergySource::new, TEST_ENERGY_SOURCE));
-    public static RegistryObject<TileEntityType<?>> REDSTONE_INTERFACE_TILE = TILE_ENTITIES.register("redstone_interface", () -> createTEType(TileReactorInterfaceRedstone::new, REDSTONE_INTERFACE));
-    public static RegistryObject<TileEntityType<?>> TEST_BATTERY_TILE = TILE_ENTITIES.register("test_battery", () -> createTEType(TileTestBattery::new, TEST_BATTERY));
+    public static RegistryObject<BlockEntityType<?>> REACTOR_TILE_ENTITY = TILE_ENTITIES.register("reactor", () -> createTEType(TileReactor::new, REACTOR_BLOCK));
+    public static RegistryObject<BlockEntityType<?>> REACTOR_CONTROLLER_TILE = TILE_ENTITIES.register("reactor_controller", () -> createTEType(TileReactorController::new, REACTOR_CONTROLLER));
+    public static RegistryObject<BlockEntityType<?>> BYPRODUCT_INTERFACE_TILE = TILE_ENTITIES.register("byproduct_interface", () -> createTEType(TileReactorInterfaceByproduct::new, BYPRODUCT_INTERFACE));
+    public static RegistryObject<BlockEntityType<?>> COOLING_INTERFACE_TILE = TILE_ENTITIES.register("cooling_interface", () -> createTEType(TileReactorInterfaceCooling::new, COOLING_INTERFACE));
+    public static RegistryObject<BlockEntityType<?>> ENERGY_INTERFACE_TILE = TILE_ENTITIES.register("energy_interface", () -> createTEType(TileReactorInterfaceEnergy::new, ENERGY_INTERFACE));
+    public static RegistryObject<BlockEntityType<?>> FUEL_INTERFACE_TILE = TILE_ENTITIES.register("fuel_interface", () -> createTEType(TileReactorInterfaceFuelLoader::new, FUEL_INTERFACE));
+    public static RegistryObject<BlockEntityType<?>> TEST_ENERGY_SOURCE_TILE = TILE_ENTITIES.register("test_energy_source", () -> createTEType(TileTestEnergySource::new, TEST_ENERGY_SOURCE));
+    public static RegistryObject<BlockEntityType<?>> REDSTONE_INTERFACE_TILE = TILE_ENTITIES.register("redstone_interface", () -> createTEType(TileReactorInterfaceRedstone::new, REDSTONE_INTERFACE));
+    public static RegistryObject<BlockEntityType<?>> TEST_BATTERY_TILE = TILE_ENTITIES.register("test_battery", () -> createTEType(TileTestBattery::new, TEST_BATTERY));
 
-    public static TileEntityType<?> createTEType (Supplier<? extends TileEntity> factory, RegistryObject<? extends Block>... blocks) {
-        return TileEntityType.Builder.create(factory, Arrays.stream(blocks).map(RegistryObject::get).toArray(Block[]::new)).build(null);
+    public static BlockEntityType<?> createTEType (BlockEntityType.BlockEntitySupplier<? extends BlockEntity> factory, RegistryObject<? extends Block>... blocks) {
+        return BlockEntityType.Builder.of(factory, (Block[])Arrays.stream(blocks).map(RegistryObject::get).toArray(Block[]::new)).build(null);
     }
 }
