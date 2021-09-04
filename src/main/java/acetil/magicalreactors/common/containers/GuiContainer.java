@@ -43,6 +43,7 @@ public class GuiContainer extends AbstractContainerMenu {
         this.itemHandler = handler;
         this.tePos = pos;
         addSlots(handler, inv, json);
+
     }
 
     @Override

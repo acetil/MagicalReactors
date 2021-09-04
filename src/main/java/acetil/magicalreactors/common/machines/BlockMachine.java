@@ -1,9 +1,18 @@
 package acetil.magicalreactors.common.machines;
 
+import acetil.magicalreactors.common.MagicalReactors;
+import acetil.magicalreactors.common.constants.Constants;
+import acetil.magicalreactors.common.containers.GuiContainer;
+import acetil.magicalreactors.common.containers.json.MachineContainerManager;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -12,6 +21,8 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
 
@@ -72,9 +83,25 @@ public class BlockMachine extends Block implements EntityBlock {
         }
         var entity = pLevel.getBlockEntity(pPos);
         if (entity instanceof TileMachineBase) {
+            MagicalReactors.LOGGER.debug("Starting gui!");
+            Component localisedName = this.getName();
+            NetworkHooks.openGui((ServerPlayer) pPlayer, new MenuProvider() {
+                @Override
+                public Component getDisplayName () {
+                    return localisedName;
+                }
+
+                @Nullable
+                @Override
+                public AbstractContainerMenu createMenu (int pContainerId, Inventory pInventory, Player pPlayer) {
+                    IItemHandler handler = ((TileMachineBase) entity).getItemHandler();
+                    return new GuiContainer(MachineContainerManager.getContainerJson(machineName),
+                            Constants.MODID + ":" + machineName, pContainerId, pInventory, handler, pPos);
+                }
+            }, pPos);
             return InteractionResult.SUCCESS; // TODO
         }
-        return InteractionResult.SUCCESS;
+        return InteractionResult.PASS;
     }
 
     @SuppressWarnings("deprecation")
