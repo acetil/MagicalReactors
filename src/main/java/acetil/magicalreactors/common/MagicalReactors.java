@@ -19,9 +19,8 @@ import acetil.magicalreactors.common.multiblock.MultiblockLoader;
 import acetil.magicalreactors.common.network.PacketHandler;
 import acetil.magicalreactors.common.reactor.ReactorFuelRegistry;
 import acetil.magicalreactors.common.recipes.MachineRecipeManager;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -47,11 +46,16 @@ public class MagicalReactors {
 
 
     public static final Logger LOGGER = LogManager.getLogger();
-    public static final ItemGroup ITEM_GROUP = new ItemGroup(MODID) {
+    public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab(MODID) {
         @Override
-        public ItemStack createIcon () {
+        public ItemStack makeIcon () {
             return new ItemStack(ModItems.ITEM_TEMP2.get());
         }
+       /* @Override
+        public ItemStack makeIcon () {
+            return new ItemStack(ModItems.ITEM_TEMP2.get());
+        }*/
+
     };
 
     public MagicalReactors () {

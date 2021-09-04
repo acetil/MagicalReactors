@@ -128,5 +128,6 @@ public class TileReactorInterfaceEnergy extends BlockEntity {
             energyOutputRate = energyCompound.getInt("output_rate");
             energyHandler.readNBT(energyCompound.getCompound("handler"));
 
+        }
     }
 }

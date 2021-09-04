@@ -26,8 +26,8 @@ public class TileReactorController extends BlockEntity {
         reactorOptional = LazyOptional.of(() -> reactorhandler);
         this.pos = pos;
     }
-    @Override
-    public void tick () {
+
+    public void tickServer () {
         if (first) {
             // no forge onload >:(
             reactorhandler.onCreation();
