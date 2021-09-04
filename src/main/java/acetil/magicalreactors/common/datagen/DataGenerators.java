@@ -9,13 +9,13 @@ import acetil.magicalreactors.common.fluid.ModFluids;
 import acetil.magicalreactors.common.items.ModItems;
 import acetil.magicalreactors.common.machines.BlockMachine;
 import acetil.magicalreactors.common.machines.MachineBlocks;
-import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.*;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import org.apache.logging.log4j.Level;
 
 public class DataGenerators {
@@ -50,6 +50,7 @@ public class DataGenerators {
                     getModelLocation(ModBlocks.RUNE_BASIC.get(), RUNE_TEXTURE_PREFIX, RUNE_BASIC_TEXTURE),
                     getModelLocation(ModBlocks.RUNE_BASIC.get(), RUNE_TEXTURE_PREFIX, RUNE_BASIC_MULTI_TEXTURE));
 
+
             registerRuneTop(ModBlocks.RUNE_LOCUS.get(),
                     getModelLocation(ModBlocks.RUNE_LOCUS.get(), RUNE_TEXTURE_PREFIX, "wip-rune-locus"));
             registerRuneTop(ModBlocks.RUNE_STABILISATION.get(),
@@ -81,7 +82,7 @@ public class DataGenerators {
         protected void registerMachine (BlockMachine machineBlock) {
             simpleBlock(machineBlock,
                     new ModelFile.ExistingModelFile(getModelLocation(machineBlock, MACHINE_MODEL_PREFIX),
-                    existingFileHelper));
+                    models().existingFileHelper));
         }
         protected ResourceLocation getModelLocation (Block b, String prefix) {
             return getModelLocation(b, prefix, b.getRegistryName().getPath());
@@ -98,11 +99,11 @@ public class DataGenerators {
         protected ModelFile getSpecialRuneTopModel (Block rune, boolean isMulti, ResourceLocation topTex) {
             ResourceLocation runeLoc = rune.getRegistryName();
             if (isMulti) {
-                return cubeTop(runeLoc.toString() + MULTIBLOCK_SUFFIX, getModelLocation(rune, RUNE_TEXTURE_PREFIX, RUNE_BASIC_MULTI_TEXTURE),
+                return models().cubeTop(runeLoc.toString() + MULTIBLOCK_SUFFIX, getModelLocation(rune, RUNE_TEXTURE_PREFIX, RUNE_BASIC_MULTI_TEXTURE),
                         topTex);
             }
             else {
-                return cubeTop(runeLoc.toString(), getModelLocation(rune, RUNE_TEXTURE_PREFIX, RUNE_BASIC_TEXTURE),
+                return models().cubeTop(runeLoc.toString(), getModelLocation(rune, RUNE_TEXTURE_PREFIX, RUNE_BASIC_TEXTURE),
                         topTex);
             }
         }
@@ -113,16 +114,16 @@ public class DataGenerators {
             registerRune(rune, getSpecialRuneTopModel(rune, false, topTex), getSpecialRuneTopModel(rune, true, topTexMulti));
         }
         protected void registerRuneAll (Block rune, ResourceLocation allTex, ResourceLocation allTexMulti) {
-            registerRune(rune, cubeAll(rune.getRegistryName().toString(), allTex),
-                    cubeAll(rune.getRegistryName().toString() + MULTIBLOCK_SUFFIX, allTexMulti));
+            registerRune(rune, models().cubeAll(rune.getRegistryName().toString(), allTex),
+                    models().cubeAll(rune.getRegistryName().toString() + MULTIBLOCK_SUFFIX, allTexMulti));
         }
         protected void registerRune (Block rune, ModelFile model, ModelFile modelMulti) {
             getVariantBuilder(rune).forAllStates(state -> ConfiguredModel.builder()
-                .modelFile(state.get(BlockRuneBase.MULTIBLOCK_STATE) ? modelMulti : model).build());
+                .modelFile(state.getValue(BlockRuneBase.MULTIBLOCK_STATE) ? modelMulti : model).build());
         }
         protected void registerFluid (Block fluidBlock, FluidEthanol fluid) {
             getVariantBuilder(fluidBlock).forAllStates(state ->
-                    ConfiguredModel.allRotations(getBuilder(fluidBlock.getRegistryName().toString()).texture("particle", fluid.getStillTexture()), false));
+                    ConfiguredModel.allRotations(models().getBuilder(fluidBlock.getRegistryName().toString()).texture("particle", fluid.getStillTexture()), false));
         }
     }
 
@@ -145,11 +146,6 @@ public class DataGenerators {
 
         private void registerItemModel (Item item, String texture) {
             singleTexture(item.getRegistryName().toString(), ITEM_PARENT, ITEM_TEX_KEY, new ResourceLocation(modid, ITEM_PATH + texture));
-        }
-
-        @Override
-        public String getName () {
-            return null;
         }
     }
 }

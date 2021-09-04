@@ -2,12 +2,12 @@ package acetil.magicalreactors.common.fluid;
 
 import acetil.magicalreactors.common.block.ModBlocks;
 import acetil.magicalreactors.common.constants.Constants;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.IFluidState;
-import net.minecraft.item.Rarity;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 public abstract class FluidEthanol extends ForgeFlowingFluid {
@@ -24,7 +24,7 @@ public abstract class FluidEthanol extends ForgeFlowingFluid {
                         .viscosity(1230)
                         .color(colour)
                         .translationKey(name))
-                        .block(() -> (FlowingFluidBlock) ModBlocks.ETHANOL_BLOCK.get()));
+                        .block(() -> (LiquidBlock) ModBlocks.ETHANOL_BLOCK.get()));
         this.stillTex = new ResourceLocation(Constants.MODID, stillTex);
         this.flowingTex = new ResourceLocation(Constants.MODID, flowingTex);
         this.isSource = isSource;
@@ -51,12 +51,12 @@ public abstract class FluidEthanol extends ForgeFlowingFluid {
         }
 
         @Override
-        public boolean isSource(IFluidState state) {
+        public boolean isSource (FluidState pState) {
             return true;
         }
 
         @Override
-        public int getLevel(IFluidState p_207192_1_) {
+        public int getAmount (FluidState pState) {
             return 8;
         }
     }
@@ -68,20 +68,22 @@ public abstract class FluidEthanol extends ForgeFlowingFluid {
         public Flowing (String name, int colour) {
             super(name, false, colour);
         }
+
+
         @Override
-        protected void fillStateContainer(StateContainer.Builder<Fluid, IFluidState> builder) {
-            super.fillStateContainer(builder);
-            builder.add(LEVEL_1_8);
+        protected void createFluidStateDefinition (StateDefinition.Builder<Fluid, FluidState> pBuilder) {
+            super.createFluidStateDefinition(pBuilder);
+            pBuilder.add(LEVEL);
         }
 
         @Override
-        public boolean isSource(IFluidState state) {
+        public boolean isSource (FluidState pState) {
             return false;
         }
 
         @Override
-        public int getLevel(IFluidState state) {
-            return state.get(LEVEL_1_8);
+        public int getAmount (FluidState pState) {
+            return pState.getValue(LEVEL);
         }
     }
 }

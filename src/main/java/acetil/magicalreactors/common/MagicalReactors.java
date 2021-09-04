@@ -21,7 +21,9 @@ import acetil.magicalreactors.common.reactor.ReactorFuelRegistry;
 import acetil.magicalreactors.common.recipes.MachineRecipeManager;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -97,11 +99,12 @@ public class MagicalReactors {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerCapabilities);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(MultiblockEventHandler::blockBreakEvent);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(MultiblockEventHandler::blockPlaceEvent);
+        //FMLJavaModLoadingContext.get().getModEventBus().addListener(MultiblockEventHandler::blockBreakEvent);
+        //FMLJavaModLoadingContext.get().getModEventBus().addListener(MultiblockEventHandler::blockPlaceEvent);
 
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ReactorFuelRegistry::attachCapabilities);
+        MinecraftForge.EVENT_BUS.addGenericListener(ItemStack.class, ReactorFuelRegistry::attachCapabilities);
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(DataGenerators::generateData);
 

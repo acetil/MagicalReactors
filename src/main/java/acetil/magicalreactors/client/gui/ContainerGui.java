@@ -7,6 +7,7 @@ import acetil.magicalreactors.client.gui.json.MachineGuiJson;
 import acetil.magicalreactors.common.containers.GuiContainer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -15,7 +16,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContainerGui extends AbstractContainerScreen {
+public class ContainerGui extends AbstractContainerScreen<GuiContainer> {
     private List<IGuiElement> guiElements;
     private BlockEntity tileEntity;
     private ResourceLocation background;

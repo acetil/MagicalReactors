@@ -12,9 +12,9 @@ import acetil.magicalreactors.common.reactor.IReactorFuel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
-import org.apache.logging.log4j.Level;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -26,7 +26,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
     private boolean isUpdateTick;
     private boolean isMulti = false;
     private BlockPos pos;
-    private LevelReader world;
+    private Level world;
     private IReactorHandlerNew reactorHandler;
     private List<IMultiblock> multiblocks;
     private List<IReactorInterfaceHandler> reactorInterfaceHandlers = new ArrayList<>();
@@ -42,7 +42,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
     }
 
     @Override
-    public void setPosition(LevelReader worldIn, BlockPos pos) {
+    public void setPosition(Level worldIn, BlockPos pos) {
         world = worldIn;
         this.pos = pos;
         validators = multiblocks.stream()
@@ -119,7 +119,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
     @Override
     public void checkMultiblock() {
         // TODO: refactor
-        if (world.isClientSide()) {
+        if (world.isClientSide) {
             return;
         }
         boolean isValid = false;
@@ -127,12 +127,12 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
             validator.updateAll();
             if (validator.isValid()) {
                 currentValidator = validator;
-                MagicalReactors.LOGGER.log(Level.INFO, "Multilock is valid!");
+                MagicalReactors.LOGGER.info("Multilock is valid!");
                 isValid = true;
                 break;
             } else {
                 for (BlockPos pos : validator.getInvalidBlocks()) {
-                    MagicalReactors.LOGGER.log(Level.INFO, String.format("Invalid block: (%d, %d, %d)", pos.getX(), pos.getY(), pos.getZ()));
+                    MagicalReactors.LOGGER.info(String.format("Invalid block: (%d, %d, %d)", pos.getX(), pos.getY(), pos.getZ()));
                 }
             }
         }
@@ -142,7 +142,7 @@ public class ReactorControlHandler implements IReactorControlCapability, Multibl
                                          .get();
         }
         if (!isValid) {
-            MagicalReactors.LOGGER.log(Level.INFO, "Multiblock is invalid!");
+            MagicalReactors.LOGGER.info("Multiblock is invalid!");
         }
         for (BlockPos pos : currentValidator.getPositionsOfType(IReactorBuildingBlock.class)) {
             ((IReactorBuildingBlock) world.getBlockState(pos)

@@ -3,10 +3,11 @@ package acetil.magicalreactors.common.capabilities.reactor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 
 public interface IReactorControlCapability {
-    void setPosition (LevelReader worldIn, BlockPos pos);
+    void setPosition (Level worldIn, BlockPos pos);
     BlockPos getPosition ();
     void setIsPowered (boolean isPowered);
     void update ();
