@@ -5,6 +5,7 @@ import acetil.magicalreactors.client.gui.json.GuiElementFactory;
 import acetil.magicalreactors.client.gui.json.GuiElementJson;
 import acetil.magicalreactors.client.gui.json.MachineGuiJson;
 import acetil.magicalreactors.common.containers.GuiContainer;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
@@ -46,7 +47,7 @@ public class ContainerGui extends AbstractContainerScreen<GuiContainer> {
     }*/
     @Override
     protected void renderBg (PoseStack pPoseStack, float pPartialTicks, int pMouseX, int pMouseY) {
-        minecraft.getTextureManager().bindForSetup(background);
+        RenderSystem.setShaderTexture(0, background);
         blit(pPoseStack, getGuiLeft(), getGuiTop(), 0, 0, width, height);
         for (var element : guiElements) {
             element.draw(pPoseStack, this, tileEntity);

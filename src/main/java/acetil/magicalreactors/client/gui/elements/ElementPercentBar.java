@@ -1,6 +1,7 @@
 package acetil.magicalreactors.client.gui.elements;
 
 import acetil.magicalreactors.client.gui.ContainerGui;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -38,7 +39,8 @@ public class ElementPercentBar implements IGuiElement {
     @Override
     public void draw (PoseStack matStack, ContainerGui gui, BlockEntity te) {
         float progress = percentFunction.getFilled(gui, te);
-        gui.getMinecraft().getTextureManager().bindForSetup(texture);
+        //gui.getMinecraft().getTextureManager().bindForSetup(texture);
+        RenderSystem.setShaderTexture(0, texture);
         int width = this.width;
         int height = this.height;
         int startX = x;
