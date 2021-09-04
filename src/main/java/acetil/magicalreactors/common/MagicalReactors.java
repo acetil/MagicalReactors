@@ -69,7 +69,6 @@ public class MagicalReactors {
 
     }
     private void setup (final FMLCommonSetupEvent event) {
-        registerCapabilities();
         ModItems.registerFuels();
         ModItems.registerCoolants();
         MachineRecipeManager.readRecipes("assets/magicalreactors/machine_recipes");
@@ -86,12 +85,12 @@ public class MagicalReactors {
     private void processIMC (final InterModProcessEvent event) {
 
     }
-    private void registerCapabilities (RegisterCapabilitiesEvent event) {
-        CapabilityMachine.register();
-        CapabilityReactor.register();
-        CapabilityReactorController.register();
-        CapabilityReactorFuel.register();
-        CapabilityReactorInterface.register();
+    private void registerCapabilities (final RegisterCapabilitiesEvent event) {
+        CapabilityMachine.register(event);
+        CapabilityReactor.register(event);
+        CapabilityReactorController.register(event);
+        CapabilityReactorFuel.register(event);
+        CapabilityReactorInterface.register(event);
     }
     private void registerEventListeners () {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
