@@ -106,8 +106,8 @@ public class TileReactorInterfaceEnergy extends BlockEntity {
     }*/
 
     @Override
-    public CompoundTag serializeNBT () {
-        var nbt = super.serializeNBT();
+    public CompoundTag save (CompoundTag nbt) {
+        nbt = super.save(nbt);
 
         var energyCompound = new CompoundTag();
         energyCompound.putInt("capacity", capacity);
@@ -119,8 +119,8 @@ public class TileReactorInterfaceEnergy extends BlockEntity {
     }
 
     @Override
-    public void deserializeNBT (CompoundTag nbt) {
-        super.deserializeNBT(nbt);
+    public void load (CompoundTag nbt) {
+        super.load(nbt);
 
         if (nbt.contains("energy")) {
             var energyCompound = nbt.getCompound("energy");

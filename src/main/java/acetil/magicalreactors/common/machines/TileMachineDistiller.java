@@ -87,15 +87,15 @@ public class TileMachineDistiller extends TileMachineBase {
     }*/
 
     @Override
-    public CompoundTag serializeNBT () {
-        var nbt =  super.serializeNBT();
+    public CompoundTag save (CompoundTag nbt) {
+        nbt =  super.save(nbt);
         nbt.putInt("bottom_slots", bottomSlots);
         return nbt;
     }
 
     @Override
-    public void deserializeNBT (CompoundTag nbt) {
-        super.deserializeNBT(nbt);
+    public void load (CompoundTag nbt) {
+        super.load(nbt);
         if (nbt.contains("bottom_slots")) {
             setBottomSlots(nbt.getInt("bottom_slots"));
         }

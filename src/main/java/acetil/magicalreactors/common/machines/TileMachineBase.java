@@ -59,6 +59,7 @@ public class TileMachineBase extends BlockEntity {
         this.pos = pos;
         this.machine = machine;
         initHandlers(MachineRegistry.getMachine(machine));
+        setChanged();
     }
     public TileMachineBase (BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -224,7 +225,8 @@ public class TileMachineBase extends BlockEntity {
     }
 
     @Override
-    public void deserializeNBT (CompoundTag nbt) {
+    public void load (CompoundTag nbt) {
+        MagicalReactors.LOGGER.debug("NBT deserialised!");
         super.deserializeNBT(nbt);
         if (nbt.contains("machine_name") && itemHandler == null && energyHandler == null && machineHandler == null) {
             this.machine = nbt.getString("machine_name");
@@ -249,8 +251,9 @@ public class TileMachineBase extends BlockEntity {
     }
 
     @Override
-    public CompoundTag serializeNBT () {
-        var nbt =  super.serializeNBT();
+    public CompoundTag save (CompoundTag nbt) {
+        MagicalReactors.LOGGER.debug("Serialising nbt!");
+        nbt = super.save(nbt);
         nbt.put("items", itemHandler.serializeNBT());
         nbt.put("energy", energyHandler.writeNBT());
         //nbt.put("machine", CapabilityMachine.MACHINE_CAPABILITY.writeNBT(machineHandler, null));
@@ -261,6 +264,8 @@ public class TileMachineBase extends BlockEntity {
         nbt.putString("machine_name", machine);
         return nbt;
     }
+
+
 
     @Nonnull
     @Override

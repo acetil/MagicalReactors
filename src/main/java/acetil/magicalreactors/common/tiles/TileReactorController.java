@@ -78,14 +78,14 @@ public class TileReactorController extends BlockEntity {
     }*/
 
     @Override
-    public CompoundTag serializeNBT () {
-        var nbt =  super.serializeNBT();
+    public CompoundTag save (CompoundTag nbt) {
+        nbt =  super.save(nbt);
         nbt.put("handler", reactorhandler.writeNBT());
         return nbt;
     }
 
     @Override
-    public void deserializeNBT (CompoundTag nbt) {
+    public void load (CompoundTag nbt) {
         super.deserializeNBT(nbt);
         if (nbt.contains("handler")) {
             reactorhandler.readNBT(nbt.getCompound("handler"));
